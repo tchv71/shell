@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{46E1C877-E20C-4C13-91A0-247FA0D2E3BE}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <NMakeOutput>shell.rkl</NMakeOutput>
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeBuildCommandLine>make clean
+make all</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>make clean</NMakeCleanCommandLine>
+    <IncludePath>D:\RK\sd_src\c8080\Include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <NMakeOutput>shell.exe</NMakeOutput>
+    <NMakePreprocessorDefinitions>_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <IncludePath>D:\RK\sd_src\c8080\Include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <NMakeOutput>shell.rk</NMakeOutput>
+    <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeBuildCommandLine>make all</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>make clean
+make all</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>make clean</NMakeCleanCommandLine>
+    <IncludePath>D:\RK\sd_src\c8080\Include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <NMakeOutput>shell.rk</NMakeOutput>
+    <NMakePreprocessorDefinitions>NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeBuildCommandLine>make all</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>make clean
+make all</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>make clean</NMakeCleanCommandLine>
+    <IncludePath>D:\RK\sd_src\c8080\Include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="make-rka.js" />
+    <None Include="Makefile" />
+    <None Include="shell.asm" />
+    <None Include="shell.lst" />
+    <None Include="stdlib8080.inc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\c8080\Include\Radio86rk\charAddr.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\clrscr.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\crctape.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\directCursor.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\getmemtop.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\gettape.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\gotoxy.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\kbhit.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\print.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\print2.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\print2cn.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\print2m.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\print2n.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\printcn.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\printm.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\printn.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\putch.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\puthex.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\puttape.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screen0.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screen0B.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screen1.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screen1B.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screen2A.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screen2B.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screen2C.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screenvars.c" />
+    <ClCompile Include="..\c8080\Include\Radio86rk\waithorzsync.c" />
+    <ClCompile Include="cmd_copymove.c" />
+    <ClCompile Include="cmd_delete.c" />
+    <ClCompile Include="cmd_freespace.c" />
+    <ClCompile Include="cmd_new.c" />
+    <ClCompile Include="cmd_sel.c" />
+    <ClCompile Include="fs.c" />
+    <ClCompile Include="interface.c" />
+    <ClCompile Include="shell.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\c8080\Include\Radio86rk\bios.h" />
+    <ClInclude Include="..\c8080\Include\Radio86rk\screen_constrcutor.h" />
+    <ClInclude Include="..\c8080\Include\Radio86rk\video.h" />
+    <ClInclude Include="fs.h" />
+    <ClInclude Include="interface.h" />
+    <ClInclude Include="shell.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

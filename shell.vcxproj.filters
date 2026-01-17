@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\radio86rk">
+      <UniqueIdentifier>{d02a7d16-77e4-4268-88f9-d54e2e68d6a3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile" />
+    <None Include="stdlib8080.inc">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="make-rka.js" />
+    <None Include="shell.asm">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="shell.lst">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cmd_copymove.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cmd_delete.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cmd_freespace.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cmd_new.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cmd_sel.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="interface.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shell.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\charAddr.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\clrscr.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\crctape.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\directCursor.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\getmemtop.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\gettape.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\gotoxy.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\kbhit.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\print.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\print2.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\print2cn.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\print2m.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\print2n.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\printcn.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\printm.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\printn.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\putch.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\puthex.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\puttape.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screen0.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screen0B.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screen1.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screen1B.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screen2A.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screen2B.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screen2C.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\radio8screenvars.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\c8080\Include\Radio86rk\waithorzsync.c">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="fs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\c8080\Include\Radio86rk\bios.h">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\c8080\Include\Radio86rk\screen_constrcutor.h">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\c8080\Include\Radio86rk\video.h">
+      <Filter>Source Files\radio86rk</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
