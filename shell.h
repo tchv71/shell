@@ -5,7 +5,7 @@
 #include <fs/fs.h>
 #include "interface.h"
 
-#define START_FILE_BUFFER 0x3400
+#define START_FILE_BUFFER 0x3500
 #define ERR_USER 128 // Прервано пользователем
 
 typedef struct {

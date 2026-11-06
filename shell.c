@@ -341,7 +341,7 @@ char getNextSelected(char* name) {
 
 //---------------------------------------------------------------------------
 
-#define SORT_STACK_MAX 32
+#define SORT_STACK_MAX 128
 
 uchar cmpFileInfo(FileInfo* a, FileInfo* b) {
   register uchar i, j;

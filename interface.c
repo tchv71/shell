@@ -55,7 +55,7 @@ void initPalmiraScreen() {
     OUT  98h+1
     mvi  A,80h+1
     OUT  98h+1
-    EI
+    ;EI
     ret
   }
 }
@@ -115,7 +115,7 @@ void drawInit() {
   clrscr();
   initPalmiraScreen();
   
-  maxFiles = getMemTop() - START_FILE_BUFFER;
+  maxFiles = /*getMemTop()*/0xC000 - START_FILE_BUFFER;
   maxFiles /= sizeof(FileInfo)*2;
   activePanel = 0;
   fileCursorAddr = 0;  

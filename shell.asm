@@ -1141,7 +1141,7 @@ l68:
   jz l79
   ; 377 if(stc != SORT_STACK_MAX) *st = low, ++st, *st = j, ++st, ++stc;
   lda sort_stc
-  cpi 32
+  cpi 128
   jz l80
   ; 377 *st = low, ++st, *st = j, ++st, ++stc;
   lhld sort_1
@@ -2416,7 +2416,7 @@ main:
   ; 880 drawInit();  
   call drawInit
   ; 883 panelA.files1 = ((FileInfo*)START_FILE_BUFFER);
-  lxi h, 13312
+  lxi h, 13568
   shld panelA
   ; 884 panelB.files1 = ((FileInfo*)START_FILE_BUFFER)+maxFiles;
   lhld maxFiles
@@ -2429,7 +2429,7 @@ main:
   dad h
   dad h
   ; Сложение
-  lxi d, 13312
+  lxi d, 13568
   dad d
   shld panelB
   ; 887 panelA.path1[0] = 0;
@@ -4184,7 +4184,7 @@ initPalmiraScreen:
     OUT  98h+1
     mvi  A,80h+1
     OUT  98h+1
-    EI
+    ;EI
     ret
   
   ret
@@ -4200,11 +4200,8 @@ drawInit:
   call clrscr
   ; 116 initPalmiraScreen();
   call initPalmiraScreen
-  ; 118 maxFiles = getMemTop() - START_FILE_BUFFER;
-  call 63536
-  ; Сложение
-  lxi d, 52224
-  dad d
+  ; 118 maxFiles = /*getMemTop()*/0xC000 - START_FILE_BUFFER;
+  lxi h, 35584
   shld maxFiles
   ; 119 maxFiles /= sizeof(FileInfo)*2;
   lxi d, 40
@@ -6589,7 +6586,7 @@ sort_j:
 sort_x:
  .ds 2
 sort_st_:
- .ds 128
+ .ds 512
 sort_st:
  .ds 2
 sort_stc:
