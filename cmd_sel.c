@@ -2,6 +2,7 @@
 // (c) 12-05-2014 vinxru (aleksey.f.morozov@gmail.com)
 
 #include "shell.h"
+#include "string.h"
 
 char compareMask1(char* fileName, char* mask, uchar i) {
   register char m;
@@ -30,9 +31,9 @@ void cmd_sel(char add) {
   char buf[11];
 
   // Спросить у пользователя
-  strcpy(cmdLine, "*.*");
+  strcpy(cmdline, "*.*");
   if(inputBox(" pometitx fajly ")) {
-    packName(buf, cmdLine);
+    packName(buf, cmdline);
 
     for(i=panelA.cnt, f=panelA.files1; i; --i, ++f) {
       if(f->fattrib & 0x10) {

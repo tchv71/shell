@@ -5,9 +5,15 @@
 
 
 #include "shell.h"
+#include "n.h"
+#include <string.h>
 #include "interface.h"
-#include <radio86rk/video.h>
-#include <radio86rk/bios.h>
+#include "radio86rk/video.h"
+#include "radio86rk/bios.h"
+#include "radio86rk/radio8screenvars.h"
+#include "stdlib.h"
+#include "Radio86rk/radio8screenvars.h"
+#include "32.h"
 
 uchar  activePanel;
 uchar* fileCursorAddr;
@@ -462,7 +468,7 @@ void drawFileInfo2(char* buf) {
 // Рисуем командную строку и путь в ней
 
 void drawCmdLineWithPath() {
-  register ushort o, l, old;
+  register ushort o, l;// , old;
 
   print(1, ROWS_CNT+6, getPalmiraModeStr());
 
@@ -484,7 +490,7 @@ void drawCmdLineWithPath() {
 // Рисуем окно
 
 void drawWindow(const char* title) { 
-  register uchar i; 
+  //register uchar i; 
 
   hideTextCursor();
   
@@ -510,7 +516,7 @@ void drawEscButton() {
 //---------------------------------------------------------------------------
 // Рисуем текст в окне
 
-void drawWindowText(uchar ox, uchar oy, char* text) {
+void drawWindowText(uchar ox, uchar oy, const char* text) {
   printn(WINDOW_X+ox, WINDOW_Y+oy, 40-ox, text);
 }
 
@@ -532,7 +538,7 @@ void drawCmdLine() {
 // Рисуем поле ввода
 
 void drawInput(uchar x, uchar y, uchar max) {
-  register ushort c, c1, old;
+  register ushort /*c,*/ c1/*, old*/;
   uint cmdline_offset;
   uint cmdline_pos;
  
@@ -566,5 +572,105 @@ char getch1() {
 //---------------------------------------------------------------------------
 
 char bioskey1() {
-  return bioskey();
+	return bioskey();
+}
+
+void print(uchar x, uchar y,const char* text)
+{
+	print2(charAddr(x, y), text);
+}
+
+void printm(uchar x, uchar y, uchar len,const char* text)
+{
+	print2m(charAddr(x, y), len, text);
+}
+
+void i2s(char* buf, uint v, uint n, uchar spc) {
+	buf += n;
+	*buf = 0;
+	while (1) {
+		v /= 10;
+		--buf;
+		*buf = "0123456789ABCDEF"[v % 10];
+		--n;
+		if (n == 0) return;
+		if (v == 0) break;
+	}
+	while (1) {
+		--buf;
+		*buf = spc;
+		if (--n == 0) break;
+	}
+}
+
+uchar* charAddr(uchar x, uchar y) {
+	return radio86rkVideoMem + y * radio86rkVideoBpl + x;
+}
+
+void div32_16(ulong* a, ushort b) {
+	//uint tmp;
+
+	//((ushort*)a)[1] = ((ushort*)a)[1] / b;
+
+	//((uchar*)&tmp)[1] = op_div16_mod;
+	//((uchar*)&tmp)[0] = ((uchar*)a)[1];
+	//((uchar*)a)[1] = tmp / b;
+
+	//((uchar*)&tmp)[1] = op_div16_mod;
+	//((uchar*)&tmp)[0] = ((uchar*)a)[0];
+	//((uchar*)a)[0] = tmp / b;
+  *a /= b;
+}
+
+void i2s32(char* buf, ulong* src, uint n, uchar spc) {
+	ulong v;
+  ulong v1;
+	set32(&v, src);
+
+	buf += n;
+	*buf = 0;
+
+	while (1) {
+    v1 = v;
+		//div32_16(&v, 10);
+    v /= 10;
+		--buf;
+		*buf = "0123456789ABCDEF"[/*op_div16_mod*/v1 % 10];
+		if (--n == 0) return;
+		if (((ushort*)&v)[0] == 0 && ((ushort*)&v)[1] == 0) break;
+	}
+
+	while (1) {
+		--buf;
+		*buf = spc;
+		if (--n == 0) break;
+	}
+}
+
+
+char cmp32_32(ulong* a, ulong* b)
+{
+  if (*a == *b)
+    return 0;
+  return (*a > *b) ? 1 : -1;
+}
+
+void sub32_32(ulong* a, ulong* b)
+{
+  *a -= *b;
+}
+
+void sub32_16(ulong* a, ushort b)
+{
+	*a -= b;
+}
+
+void printn(uchar x, uchar y, uchar len, const char* text)
+{
+	print2n(charAddr(x, y), len, text);
+}
+
+void printcn(uchar x, uchar y, uchar len, char c)
+{
+	print2cn(charAddr(x, y), len, c);
 }

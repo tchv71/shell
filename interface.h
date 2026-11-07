@@ -1,6 +1,6 @@
 // Shell for Computer "Radio 86RK"
 // (c) 12-05-2014 vinxru (aleksey.f.morozov@gmail.com)
-
+#include "fs/fs.h"
 #define VIDEO_BPL 80//75
 #define WINDOW_X 13
 #define WINDOW_Y 11
@@ -33,7 +33,7 @@ void drawCmdLineWithPath();
 void drawWindow(const char* title);
 void drawAnyKeyButton();
 void drawEscButton();
-void drawWindowText(uchar ox, uchar oy, char* text);
+void drawWindowText(uchar ox, uchar oy, const char* text);
 void drawWindowProgress(uchar ox, uchar oy, uchar n, char chr);
 void drawInput(uchar x, uchar y, uchar max);
 void drawFilesCountInt(ulong* total, uint filesCnt);

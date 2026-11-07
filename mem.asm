@@ -1,0 +1,294 @@
+;void memswap(void* arg1, void* arg2, uint arg3) {
+_memswap:
+    push bc
+    ; bc = count
+    ; hl = from
+    ; de = to
+memswap_l1:
+    ; if(cnt==0) return
+    ld a, b
+    or c
+    jp z, memswap_l2
+    ; *dest = *src
+    ld a,(bc)
+    ld (memswap_v1),a
+    ld a, (hl)
+    ld (de), a
+    .db 36h ; mvi m, 0
+memswap_v1:
+    .db 0    
+    ; dest++, src++, cnt--
+    inc hl
+    inc de
+    dec bc
+    ; loop
+    jp memswap_l1
+memswap_l2:
+    pop bc
+    ret
+;}
+
+;void memcpy_back(void* arg1, void* arg2, uint arg3) {
+;  asm {
+_memcpy_back:
+    ; if(cnt==0) return
+    ld a, b
+    or c
+    ret z
+    ; start
+    push bc
+    ; bc = count
+    ; de = from
+    push hl
+    ex  de, hl
+    add hl,bc
+    ld e, l
+    ld d, h
+    pop hl
+    ; hl = to
+    add hl,bc
+    ; enter loop
+    inc b
+    xor a
+    or  c
+    jp  z, memcpy_back_l2
+memcpy_back_l1:
+    ; dest--, src--
+    dec hl
+    dec de
+    ; *dest = *src
+    ld  a, (de)
+    ld  (hl), a
+    ; while(cnt)
+    dec c
+    jp  nz, memcpy_back_l1
+memcpy_back_l2:
+    dec b
+    jp  nz, memcpy_back_l1
+    pop bc
+    ret
+;  }
+;}
+
+;void print2(uchar* dest, char* text) {
+;  asm {
+_print2:
+    di
+    ld   a,l
+    out  (98h+1), a
+    ld   a,h
+    or   40h
+    out  (98h+1), a
+    ei
+print2_loop:
+    ld  a, (de)
+    or  a
+    ret z
+    out (98h), a
+    inc de
+    jp  print2_loop
+;  }
+;}
+
+;void set32(ulong* a, ulong* b) {  
+;  asm {
+_set32:
+    ld  a, (de)
+    ld  (hl), a
+    inc hl
+    inc de
+    ld  a, (de)
+    ld  (hl), a
+    inc hl
+    inc de
+    ld  a, (de)
+    ld  (hl), a
+    inc hl
+    inc de
+    ld  a, (de)
+    ld  (hl), a
+    ret
+;  }
+;}  
+
+;void add32_16(ulong* a, ushort b) {
+;  asm {
+_add32_16:
+    ; hl = *to
+    ld  c, (hl)
+    inc hl
+    ld  b, (hl)
+    dec hl
+
+    ; hl = de + from
+    ex  de, hl
+    add hl, bc
+
+    ; *hl = de
+    ex  de, hl
+    ld  (hl), e
+    inc hl
+    ld  (hl), d     
+
+    ; …б«Ё ЇҐаҐЇ®«­Ґ­ЁҐ, в® гўҐ«ЁзЁў Ґ¬ ўҐае­Ё© а §ап¤
+    ret nc
+    inc hl
+    inc (hl)    
+
+    ; …б«Ё ЇҐаҐЇ®«­Ґ­ЁҐ, в® гўҐ«ЁзЁў Ґ¬ ўҐае­Ё© а §ап¤
+    ret nz
+    inc hl
+    inc (hl)
+    ret
+;  }
+;}
+
+;void print2m(uchar* dest, uchar len, char* text) {
+;  asm {
+_print2m:
+    ld   b, a
+    ld   a,l
+    out  (98h + 1), a
+    ld   a,h
+    or   40h
+    out  (98h + 1), a
+print2m_loop:
+    ld   a, (de)
+    or   a
+    jp   z, print2m_ret
+    inc  de
+print2m_ret:
+    out  (98h), a
+    dec  b
+    jp   nz, print2m_loop
+    ret 
+;  }
+;}
+
+;void print2n(uchar* dest, uchar len, char* text) {
+;  asm {
+_print2n:
+    ld   b, a
+    ld   a,l
+    out  (98h + 1), a
+    ld   a,h
+    or   40h
+    out  (98h + 1), a
+print2n_loop:
+    ld   a, (de)
+    or   a
+    jp   z, print2n_ret
+    out  (98h), a
+    inc  de
+    dec  b
+    jp   nz, print2n_loop 
+print2n_ret:
+    ret
+;  }
+;}
+
+;void print2cn(uchar* dest, uchar len, char c) {
+;  asm {
+_print2cn:
+    ld   d, a
+    ld   a,l
+    out  (98h + 1), a
+    ld   a,h
+    or   40h
+    out  (98h + 1), a
+    ld   a, e
+print2cn_loop:
+    out  (98h), a
+    dec  d
+    jp   nz, print2cn_loop
+;  }
+;}
+
+;void fs_init() {
+;  asm {
+_fs_init:
+    LD   (_fs_cmdLine), hl
+    ex   de,hl
+    ld   (_fs_selfName), hl
+    ld   h, b
+    ld   l, c
+    ld   (fs_entry_n+1), hl
+    ret
+;  }
+;}
+
+;void fs_entry() {
+;  asm {
+_fs_entry:
+fs_entry_n:
+    JP 0000h
+;  }
+;}
+
+;uchar fs_findfirst(const char* path, FileInfo* dest, uint size) {
+;  if(path[0] == '/') path++;
+;  asm {
+_fs_findfirst:
+    ld   a,(hl)
+    cp   '/'
+    jp   nz, fs_ff0
+    inc  hl
+fs_ff0:
+    ; hl = fs_findfirst_3
+    push de
+    push bc
+    pop  de
+    pop  bc
+    ld   a, 1
+    CALL _fs_entry
+    ld   (_fs_low), hl
+    ret
+;  }
+;}
+
+;uchar fs_open0(const char* name, uchar mode) {
+;  asm {      
+_fs_open0:
+    ; a = fs_open0_2
+    ld   D, A 
+    ld   A, 2
+    jp   _fs_entry
+
+
+;uchar fs_write(const void* buf, uint size) {
+;  asm {
+_fs_write:
+    ; hl = fs_write_2
+    ex   de, hl
+    LD   A, 5
+    jp   _fs_entry ; HL-размер, DE-адрес / A-код ошибки
+
+;uchar fs_seek(uint low, uint high, uchar mode) {
+;  asm {
+_fs_seek:
+    ; a = fs_seek_3
+    ld   B, A
+    ld   A, 3
+    CALL _fs_entry ; B-режим, DE:HL-имя файла / A-код ошибки, DE:HL-позиция
+    ld   (_fs_low), hl
+    ex   de,hl
+    ld   (_fs_high), hl
+    ret
+
+;uchar fs_read(void* buf, uint size) {
+;  asm {
+_fs_read:
+    ; hl = fs_read_2
+    ex   de, hl
+    ld   A, 4
+    CALL _fs_entry ; HL-размер, DE-адрес / HL-сколько загрузили, A-код ошибки
+    ld   (_fs_low), hl
+    ret
+
+;uchar fs_move(const char* from, const char* to) {
+;  asm {
+_fs_move:
+    ld  A, 6
+    jp  _fs_entry ; HL-из, DE-в / A-код ошибки
+
+

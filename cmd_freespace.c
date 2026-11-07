@@ -2,6 +2,8 @@
 // (c) 12-05-2014 vinxru (aleksey.f.morozov@gmail.com)
 
 #include "shell.h"
+#include "mem.h"
+#include "string.h"
 
 void cmd_freespace_1(uchar y, const char* text) {
   char buf[17];

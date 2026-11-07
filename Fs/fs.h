@@ -1,5 +1,7 @@
 // Shell for Computer "Radio 86RK" / "Apogee BK01"
 // (c) 12-05-2014 vinxru (aleksey.f.morozov@gmail.com)
+#pragma once
+#include "../n.h"
 
 extern const char* fs_cmdLine;
 extern const char* fs_selfName;

@@ -1,1 +1,0 @@
-EXCEPTION: interface.c(257,3): Синтаксическая ошибка (hLine)

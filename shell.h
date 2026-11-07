@@ -1,8 +1,10 @@
+#pragma once
 // Shell for Computer "Radio 86RK" / "Apogee BK01"
 // (c) 12-05-2014 vinxru (aleksey.f.morozov@gmail.com)
 
 //#include "fs.h"
-#include <fs/fs.h>
+#include "n.h"
+#include "fs/fs.h"
 #include "interface.h"
 
 #define START_FILE_BUFFER 0x3500
@@ -20,8 +22,8 @@ extern Panel panelA;
 extern Panel panelB;
 extern char  cmdline[256];
 extern uint  maxFiles;
-extern char  editorApp[1];
-extern char  viewerApp[1];
+extern char  editorApp[];
+extern char  viewerApp[];
 
 FileInfo* getSel();
 FileInfo* getSelNoBack();
@@ -34,7 +36,7 @@ void unpackName(char* d, const char* s);
 char catPathAndUnpack(char* str, char* fileName);
 char getFirstSelected(char* name);
 char getNextSelected(char* name);
-void packName(char* buf, char *path);
+void packName(char* buf, const char *path);
 void getFiles();
 char absolutePath(char* str);
 const char* getName(const char* name);
@@ -55,3 +57,5 @@ void cmd_delete();
 
 // ֲ פאיכו cmd_sel.c
 void cmd_sel(char add);
+void swapPanels();
+char* getPalmiraModeStr();

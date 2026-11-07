@@ -2,10 +2,12 @@
 // (c) 12-05-2014 vinxru (aleksey.f.morozov@gmail.com)
 
 #include "shell.h"
+#include "string.h"
+#include "mem.h"
 
 char cmd_new1(uchar dir) {
   // Очищаем ком строку
-  cmdLine[0] = 0;
+  cmdline[0] = 0;
 
   // Ввод имени файла
   if(!inputBox(dir ? " sozdatx papku " : " sozdatx fajl ") && cmdline[0]!=0) return 0;
@@ -21,7 +23,7 @@ char cmd_new1(uchar dir) {
     cmdline[0] = '*';
 
     // Запуск редактора (внутри вызывается drawScreen)
-    run(editorApp, cmdLine);
+    run(editorApp, cmdline);
     return 0;
   }
 

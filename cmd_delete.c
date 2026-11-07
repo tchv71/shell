@@ -35,10 +35,10 @@ char cmd_deleteFolder() {
     // Удлаяем всё, пока оно удаляется
     e = 0;
     for(p=panelB.files1, i=panelB.cnt; i; --i, ++p) {
-      if(catPathAndUnpack(cmdLine, p->fname)) return ERR_RECV_STRING;
+      if(catPathAndUnpack(cmdline, p->fname)) return ERR_RECV_STRING;
       e = cmd_deleteFile();
       if(e == ERR_DIR_NOT_EMPTY) break;
-      dropPathInt(cmdLine, 0);
+      dropPathInt(cmdline, 0);
       // Если ошибка, выходим
       if(e) return e;
     }
@@ -59,7 +59,7 @@ char cmd_deleteFolder() {
     // Выходим из папки
     if(level == 0) return 0;
     --level;
-    dropPathInt(cmdLine, 0);
+    dropPathInt(cmdline, 0);
   }
 }
 
@@ -73,7 +73,7 @@ void cmd_delete() {
     needRefresh2 = 0;
 
     // Поместить в буфер имя без пути
-    if(getFirstSelected(cmdLine)) {
+    if(getFirstSelected(cmdline)) {
       for(;;) {
         if(!absolutePath(cmdline)) { e = ERR_RECV_STRING; break; }
 
@@ -88,7 +88,7 @@ void cmd_delete() {
         if(e) break;
 
         // Следующий файл
-        if(!getNextSelected(cmdLine)) break;
+        if(!getNextSelected(cmdline)) break;
       }
 
       // Вывод ошибок

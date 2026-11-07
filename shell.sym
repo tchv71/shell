@@ -1,912 +1,1089 @@
-absolutePath      0acb
-applyMask1        138e
-applyMask         1519
-add32_32          2447
-add32_16          26d9
-absolutePath_1    2ecb
-absolutePath_l    2ecd
-applyMask1_1      2f23
-applyMask1_2      2f25
-applyMask1_3      2f27
-applyMask_1       2f42
-applyMask_2       2f44
-activePanel       30a0
-attrHidden        30b1
-attrShow          30b2
-add32_32_1        3122
-add32_32_2        3124
-add32_16_1        3179
-add32_16_2        317b
-bioskey1          2321
-buf               30bd
-confirm           0532
-catPathAndUnpack  05c7
-cmpFileInfo       06bf
-cursor_left       0bbc
-cursor_right      0c0a
-cursor_up         0cac
-cursor_down       0cdf
-cmd_tab           0d30
-cmd_editview      0ecc
-cmd_enter         0f05
-cmd_esc           0f65
-cmd_inverseOne    0f76
-cmd_inverseAll    0f9f
-cmd_copyFile      11a9
-cmd_copyFolder    13c8
-cmd_copymove1     1546
-cmd_copymove      1743
-cmd_new1          176b
-cmd_new           17f3
-cmd_freespace_1   1805
-cmd_freespace     1892
-cmd_deleteFile    18e7
-cmd_deleteFolder  1910
-cmd_delete        19e4
-compareMask1      1a53
-compareMask       1a98
-cmd_sel           1acc
-cmp32_32          26f4
-cmp32_32_l0       271c
-clrscr            27a1
-charAddr          27a7
-cmdline           2b23
-confirm_1         2c67
-confirm_2         2c69
-catPathAndUnpack_1  2c6f
-catPathAndUnpack_2  2c71
-catPathAndUnpack_len  2c73
-cmpFileInfo_1     2c92
-cmpFileInfo_2     2c94
-cursor_right_w    2ee4
-cmd_editview_1    2eee
-cmd_editview_f    2ef0
-cmd_enter_d       2ef2
-cmd_enter_i       2ef4
-cmd_enter_f       2ef5
-cmd_enter_l       2ef7
-cmd_enter_o       2ef9
-cmd_inverseOne_f  2efb
-cmd_inverseAll_f  2efd
-cmd_inverseAll_i  2eff
-cmd_copyFile_1    2f01
-cmd_copyFile_2    2f03
-cmd_copyFile_buf  2f05
-cmd_copyFile_e    2f15
-cmd_copyFile_progress_i  2f16
-cmd_copyFile_progress  2f17
-cmd_copyFile_progress_x  2f1b
-cmd_copyFile_progress_step  2f1f
-cmd_copyFolder_1  2f28
-cmd_copyFolder_2  2f2a
-cmd_copyFolder_e  2f2c
-cmd_copyFolder_i  2f2d
-cmd_copyFolder_level  2f2f
-cmd_copyFolder_stack  2f30
-cmd_copyFolder_f  2f40
-cmd_copymove1_1   2f46
-cmd_copymove1_2   2f47
-cmd_copymove1_name  2f48
-cmd_copymove1_e   2f4a
-cmd_copymove1_f   2f4b
-cmd_copymove1_sourceFile  2f4d
-cmd_copymove1_mask  304d
-cmd_copymove1_forMask  3058
-cmd_copymove1_type  3063
-cmd_copymove1_i   3064
-cmd_copymove_1    3066
-cmd_copymove_2    3067
-cmd_new1_1        3068
-cmd_new_1         3069
-cmd_freespace_1_1  306a
-cmd_freespace_1_2  306b
-cmd_freespace_1_buf  306d
-cmd_freespace_e   307e
-cmd_deleteFolder_level  307f
-cmd_deleteFolder_e  3080
-cmd_deleteFolder_p  3081
-cmd_deleteFolder_i  3083
-cmd_delete_e      3085
-cmd_delete_needRefresh2  3086
-compareMask1_1    3087
-compareMask1_2    3089
-compareMask1_3    308b
-compareMask_1     308c
-compareMask_2     308e
-cmd_sel_1         3090
-cmd_sel_f         3091
-cmd_sel_i         3093
-cmd_sel_buf       3095
-cmp32_32_1        317d
-cmp32_32_2        317f
-charAddr_1        3194
-charAddr_2        3195
-drawFiles         0142
-drawFileInfo      01c8
-drawFilesCount    030c
-drawFiles2        036d
-drawScreen        0385
-drawError         03da
-dropPathInt       0b73
-dropPath          0baa
-dupFiles          0d7a
-drawInit          1b81
-drawSwapPanels    1ba9
-drawRect          1c97
-drawFilesCountInt  1d62
-drawPanel         1e42
-drawScreenInt     1e99
-drawPanelTitle    1ee5
-drawFile2         1f95
-drawColumn        1ff5
-drawFile          2089
-drawFileInfo1     20b3
-drawFileInfoDir   20cb
-drawFileInfo2     20d1
-drawCmdLineWithPath  20e9
-drawWindow        216b
-drawAnyKeyButton  21c7
-drawEscButton     21d7
-drawWindowText    21e7
-drawWindowProgress  2209
-drawCmdLine       2230
-drawInput         224a
-drawWindowInput   2304
-div32_16          266f
-drawFileInfo_f    2c3f
-drawFileInfo_buf  2c41
-drawFilesCount_total  2c53
-drawFilesCount_i  2c57
-drawFilesCount_filesCnt  2c59
-drawFilesCount_p  2c5b
-drawError_1       2c5e
-drawError_2       2c60
-drawError_buf     2c61
-dropPathInt_1     2ed3
-dropPathInt_2     2ed5
-dropPathInt_p     2ed7
-dropPath_buf      2ed9
-dupFiles_1        2ee6
-drawRect_1        30b3
-drawRect_2        30b5
-drawRect_3        30b6
-drawRect_i        30b7
-drawFilesCountInt_1  30cd
-drawFilesCountInt_2  30cf
-drawFilesCountInt_v  30d1
-drawFilesCountInt_a  30d2
-drawPanel_1       30d4
-drawPanelTitle_1  30d6
-drawPanelTitle_p  30d7
-drawPanelTitle_l  30d9
-drawPanelTitle_x  30db
-drawFile2_1       30dc
-drawFile2_2       30de
-drawColumn_1      30e0
-drawColumn_a      30e1
-drawColumn_y      30e3
-drawColumn_f      30e4
-drawFile_1        30e6
-drawFile_2        30e7
-drawFile_3        30e8
-drawFileInfo1_1   30ea
-drawFileInfo2_1   30ec
-drawCmdLineWithPath_l  30ee
-drawCmdLineWithPath_old  30f0
-drawWindow_1      30f2
-drawWindowText_1  30f4
-drawWindowText_2  30f5
-drawWindowText_3  30f6
-drawWindowProgress_1  30f8
-drawWindowProgress_2  30f9
-drawWindowProgress_3  30fa
-drawWindowProgress_4  30fb
-drawInput_1       30fc
-drawInput_2       30fd
-drawInput_3       30fe
-drawInput_c1      30ff
-drawInput_old     3101
-drawInput_cmdline_offset  3103
-drawInput_cmdline_pos  3105
-drawWindowInput_1  3107
-drawWindowInput_2  3108
-drawWindowInput_3  3109
-div32_16_1        3173
-div32_16_2        3175
-div32_16_tmp      3177
-editorApp         28f5
-fillRect          1d33
-fillRect_l1       1d48
-fillRect_l0       1d54
-fs_findfirst      250f
-fs_open           25ee
-fs_read           25f9
-fs_create         260c
-fs_write          2618
-fs_exec           262b
-fs_init           2639
-fs_entry          2646
-fs_entry_n        2646
-fs_getsize        264a
-fs_swap           26cd
-fs_delete         273f
-fs_mkdir          274b
-fs_move           2757
-fs_getfree        2766
-fs_gettotal       2775
-fs_open0          28a5
-fs_seek           28b4
-fileCursorAddr    30a1
-fillRect_1        30b8
-fillRect_2        30ba
-fillRect_3        30bb
-fillRect_4        30bc
-fs_findfirst_1    313b
-fs_findfirst_2    313d
-fs_findfirst_3    313f
-fs_open_1         3154
-fs_read_1         3156
-fs_read_2         3158
-fs_create_1       315a
-fs_write_1        315c
-fs_write_2        315e
-fs_exec_1         3160
-fs_exec_2         3162
-fs_cmdLine        3164
-fs_selfName       3167
-fs_low            316a
-fs_high           316c
-fs_addr           316e
-fs_delete_1       3185
-fs_mkdir_1        3187
-fs_move_1         3189
-fs_move_2         318b
-fs_open0_1        31b5
-fs_open0_2        31b7
-fs_seek_1         31b8
-fs_seek_2         31ba
-fs_seek_3         31bc
-getPalmiraMode    0103
-getPalmiraModeStr  011d
-getSel            0163
-getSelNoBack      01b5
-getFirstSelected  0606
-getNextSelected   0652
-getFiles          08fa
-getName           0b4a
-getch1            231d
-gotoxy            2784
-getSel_n          2c3b
-getSelNoBack_f    2c3d
-getFirstSelected_1  2c8d
-getFirstSelected_type  2c8f
-getNextSelected_1  2c90
-getFiles_f        2ea8
-getFiles_st       2eaa
-getFiles_n        2eac
-getFiles_i        2eae
-getFiles_j        2eaf
-getFiles_dir      2eb1
-getName_1         2ecf
-getName_p         2ed1
-gotoxy_1          318d
-gotoxy_2          318e
-hideTextCursor    1ba1
-hLine             1bc7
-hLine_l0          1bdd
-hideFileCursor    1c0a
-hLine_1           30a9
-hLine_2           30ab
-hLine_3           30ac
-inputBox          04ba
-initPalmiraScreen  1b67
-i2s32             2361
-i2s               23d7
-inputBox_1        2c65
-i2s32_1           3110
-i2s32_2           3112
-i2s32_3           3114
-i2s32_4           3116
-i2s32_v           3117
-i2s_1             311b
-i2s_2             311d
-i2s_3             311f
-l1                0131
-i2s_4             3121
-l2                0135
-l3                0139
-l4                013d
-l0                0141
-l5                0198
-l6                01b1
-l7                01c7
-l8                01de
-l9                01ff
-l10               0226
-l11               0300
-l12               0324
-l15               033d
-l14               034d
-l13               0361
-l17               03ad
-l16               03b6
-l19               03c9
-l18               03d8
-l20               03e2
-l22               0430
-l23               0439
-l24               0442
-l25               044b
-l26               0454
-l27               045d
-l28               0466
-l29               046f
-l30               0478
-l31               0481
-l32               048a
-l21               04a8
-l33               04e3
-l35               04fd
-l36               0505
-l37               0512
-l38               051e
-l39               0529
-l34               0530
-l40               055b
-l43               056b
-l44               056e
-l42               0570
-l41               0573
-l45               057a
-l48               058f
-l49               05a4
-l47               05a4
-l46               05af
-l50               05c0
-l52               05e2
-l51               05f8
-l53               0626
-l54               0633
-l55               064f
-l56               0655
-l59               065f
-l58               067d
-l57               0680
-l61               06bc
-l62               06e5
-l63               06ed
-l64               0708
-l65               0718
-l67               074c
-l69               074c
-l70               076b
-l71               076b
-l72               078a
-l74               07bf
-l76               07d2
-l75               07d2
-l73               07ea
-l68               07fa
-l80               084a
-l79               084a
-l78               0853
-l81               086c
-l66               0898
-l83               08b5
-l86               08c0
-l87               08df
-l88               08f5
-l85               08f5
-l84               08f8
-l89               093a
-l90               0940
-l93               0968
-l95               0974
-l92               0978
-l91               097b
-l96               09a1
-l99               09bf
-l103              09d5
-l102              09dc
-l101              09dc
-l100              09ea
-l98               09ea
-l97               09fe
-l105              0a09
-l104              0a22
-l106              0a30
-l110              0a79
-l109              0a8e
-l108              0a8e
-l107              0a9c
-l111              0abf
-l112              0ae1
-l113              0af6
-l114              0b0a
-l115              0b47
-l116              0b50
-l119              0b62
-l118              0b62
-l117              0b6f
-l120              0b90
-l121              0ba4
-l122              0bca
-l125              0be8
-l126              0bf9
-l124              0bfc
-l128              0c07
-l127              0c07
-l123              0c07
-l130              0c33
-l132              0c44
-l131              0c45
-l134              0c86
-l135              0c8a
-l133              0c8a
-l129              0c8d
-l137              0ca5
-l138              0ca9
-l136              0ca9
-l139              0cba
-l141              0ccd
-l143              0cdc
-l142              0cdc
-l140              0cdc
-l145              0d01
-l144              0d02
-l146              0d11
-l148              0d23
-l149              0d2d
-l147              0d2d
-l150              0d52
-l151              0d6a
-l152              0d6d
-l153              0db1
-l154              0db8
-loadState         0dbe
-l156              0dcf
-l157              0df3
-l158              0e0f
-l160              0e58
-l161              0ea0
-l162              0ebd
-l163              0ee0
-l164              0ef9
-l165              0f0f
-l166              0f1d
-l167              0f36
-l168              0f59
-l169              0f73
-l170              0f82
-l171              0fab
-l174              0fce
-l175              0fd9
-l173              0fd9
-l172              0fed
-l176              1051
-l179              108f
-l180              1095
-l181              109c
-l182              10a5
-l183              10ae
-l184              10b4
-l185              10ba
-l186              10c0
-l187              10c6
-l188              10cc
-l189              10d2
-l178              10d8
-l192              1129
-l193              112f
-l194              1136
-l195              113f
-l196              1148
-l197              1153
-l198              115f
-l199              116a
-l200              1174
-l201              117c
-l202              1182
-l203              1188
-l204              118e
-l205              1196
-l191              119d
-l190              119d
-l177              11a7
-l206              11c1
-l207              11cf
-l208              1281
-l209              1292
-l210              12a1
-l213              12d6
-l214              12ed
-l215              12f7
-l216              1305
-l217              131c
-l218              1334
-l219              1371
-l220              1381
-l212              1381
-l211              1384
-l221              1392
-l224              139e
-l225              13a8
-l226              13b5
-l223              13c3
-l222              13c6
-l227              13dd
-l228              13e3
-l231              13f0
-l232              1413
-l234              1423
-l235              142c
-l233              145c
-l236              1481
-l237              1494
-l239              14ab
-l240              14d3
-l238              14dc
-l241              150e
-l230              150e
-l229              1518
-l243              155a
-l242              1569
-l245              157c
-l246              15a3
-l244              15a3
-l248              15b0
-l249              15b3
-l247              15c3
-l250              15d0
-l251              15fd
-l253              160f
-l252              160f
-l254              161e
-l255              161e
-l258              1630
-l259              1652
-l260              1665
-l263              1696
-l264              16a5
-l262              16a8
-l266              16fe
-l265              170d
-l261              1714
-l268              1734
-l257              1734
-l256              1737
-l269              1753
-l270              1756
-l272              177f
-l273              1782
-l271              1792
-l274              179f
-l276              17b6
-l275              17db
-l277              17ef
-l278              18c1
-l280              18de
-l279              18e4
-l281              1909
-l282              1914
-l284              1936
-l285              194c
-l288              1967
-l290              1989
-l287              1989
-l286              199d
-l291              19ac
-l293              19c7
-l294              19d0
-l283              19e3
-l297              1a02
-l300              1a14
-l301              1a2a
-l299              1a38
-l298              1a3b
-l296              1a50
-l295              1a50
-l304              1a57
-l307              1a65
-l308              1a76
-l309              1a85
-l306              1a93
-l305              1a96
-l310              1ab2
-l312              1afd
-l315              1b20
-l318              1b45
-l319              1b50
-l317              1b50
-l316              1b50
-l314              1b50
-l313              1b64
-l311              1b64
-l320              1c13
-l321              1cac
-l323              1cb8
-l322              1cbf
-l324              1cd4
-l326              1d02
-l325              1d09
-l327              1d1b
-l329              1d27
-l328              1d2e
-l330              1dd9
-l331              1e1a
-l332              1e1b
-l333              1e31
-l334              1e32
-l335              1e3c
-l336              1e3f
-l337              1f11
-l338              1f33
-l339              1f6c
-l340              1fc5
-l342              1fd7
-l343              1fd9
-l341              1fd9
-l344              2037
-l348              204c
-l347              205f
-l346              2076
-l345              2087
-l349              212c
-l350              212f
-l351              2214
-l352              2276
-l353              2288
-l354              22bc
-l355              237d
-l357              23a9
-l358              23b9
-l356              23bc
-l359              23bc
-l360              23d6
-l362              23e7
-l364              2413
-l363              241e
-l366              241e
-l367              2438
-l369              2522
-l370              2589
-l372              25a4
-l373              25b1
-l374              25bb
-l371              25c9
-loadState_i       2ee7
-main              0ff3
-memswap           2325
-memswap_l1        2332
-memswap_v1        233e
-memswap_l2        2345
-memcmp            2471
-memcmp_l1         2481
-memcmp_stop       2490
-memset            24d1
-memset_l1         24e0
-memset_l2         24e9
-memcpy            24eb
-memcpy_l1         2501
-memcpy_l2         2509
-memcpy_back       254e
-memcpy_back_l1    2566
-memcpy_back_l2    256e
-maxFiles          2c23
-mode              2c25
-memswap_1         310a
-memswap_2         310c
-memswap_3         310e
-memcmp_1          3128
-memcmp_2          312a
-memcmp_3          312c
-memset_1          3130
-memset_2          3132
-memset_3          3133
-memcpy_1          3135
-memcpy_2          3137
-memcpy_3          3139
-memcpy_back_1     3145
-memcpy_back_2     3147
-memcpy_back_3     3149
-noname._DIV0      24a2
-noname._DIV       24a2
-noname._DIV1      24a9
-noname._DIV2      24b5
-noname._DIV3      24b8
-noname._DIV4      24cc
-nextSelectedCnt   2c75
-nextSelectedFile  2c77
-op_mul            2347
-op_mul1           234f
-op_mul2           2355
-op_cmp16          235b
-op_shr16          2439
-op_shr16_l        243a
-op_div16          2496
-op_mod16          2536
-op_mul16          25ca
-op_mul16_1        25d2
-op_mul16_2        25e0
-op_mul16_3        25e1
-op_mod            27d9
-op_mod_1          27e0
-op_mod_2          27ea
-op_div16_mod      312e
-processInput      0392
-packName          0899
-pop_bc_ret        2359
-print2            27be
-print2_loop       27cf
-print             27f6
-printn            280e
-print2n           282c
-print2n_loop      2840
-print2n_ret       284c
-print2cn          284e
-print2cn_loop     2862
-printm            2869
-printcn           2887
-putch             28ce
-print2m           28d3
-print2m_loop      28e7
-print2m_ret       28ed
-panelA            290f
-panelB            2a19
-parentDir         2c27
-processInput_1    2c5d
-packName_1        2ea3
-packName_2        2ea5
-packName_i        2ea7
-print2_1          3196
-print2_2          3198
-print_1           319a
-print_2           319b
-print_3           319c
-printn_1          319e
-printn_2          319f
-printn_3          31a0
-printn_4          31a1
-print2n_1         31a3
-print2n_2         31a5
-print2n_3         31a6
-print2cn_1        31a8
-print2cn_2        31aa
-print2cn_3        31ab
-printm_1          31ac
-printm_2          31ad
-printm_3          31ae
-printm_4          31af
-printcn_1         31b1
-printcn_2         31b2
-printcn_3         31b3
-printcn_4         31b4
-putch_1           31bd
-print2m_1         31be
-print2m_2         31c0
-print2m_3         31c1
-reloadFiles       0a9e
-runCmdLine        0d45
-run               0e88
-reloadFiles_1     2ec9
-run_1             2ee9
-run_2             2eeb
-run_e             2eed
-radio86rkVideoMem  318f
-radio86rkVideoAttrMem  3191
-radio86rkVideoBpl  3193
-start             0100
-setPalmiraMode    0110
-swapPanels        014e
-showFileCursorAndDrawFileInfo  0306
-sort              070b
-selectFile        0a23
-saveState         0e43
-showTextCursor    1b72
-setaddr           1bb3
-setch             1bc1
-showFileCursor    1c47
-strlen            2462
-strlen_l1         2468
-strcpy            253d
-strcpy_l1         2544
-strchr            2574
-strchr_l1         257b
-strcmp            2586
-set32             2659
-sub32_32          2722
-setPalmiraMode_1  2c26
-sort_1            2c96
-sort_2            2c98
-sort_i            2c9a
-sort_j            2c9c
-sort_x            2c9e
-sort_st_          2ca0
-sort_st           2ea0
-sort_stc          2ea2
-selectFile_1      2ec5
-selectFile_f      2ec7
-showTextCursor_1  30a4
-showTextCursor_2  30a5
-setaddr_1         30a6
-setch_1           30a8
-strlen_1          3126
-strcpy_1          3141
-strcpy_2          3143
-strchr_1          314b
-strchr_2          314d
-strcmp_1          314e
-strcmp_2          3150
-strcmp_a          3152
-strcmp_b          3153
-set32_1           316f
-set32_2           3171
-sub32_32_1        3181
-sub32_32_2        3183
-string17          31c3
-string24          31c4
-string53          31c6
-string20          31d1
-string26          31df
-string34          31ec
-string35          31f0
-string4           31fd
-string28          3206
-string27          3223
-string45          323f
-string32          3250
-string31          325f
-string40          326f
-string41          327a
-string44          3284
-string19          3288
-string18          328c
-string25          3290
-string57          3292
-string2           32a3
-string1           32a8
-string0           32ad
-string54          32b2
-string3           32b4
-string50          32b9
-string51          32f9
-string55          32fb
-string56          3307
-string16          3316
-string52          3334
-string46          3336
-string11          3341
-string12          334f
-string8           335f
-string48          336e
-string47          3376
-string49          337d
-string15          3381
-string21          3386
-string10          338a
-string5           33a2
-string29          33b7
-string6           33ca
-string30          33dc
-string33          33ef
-string43          3405
-string37          3415
-string7           3423
-string13          3432
-string36          3449
-string14          3455
-string9           346e
-string23          347d
-string38          34a4
-string22          34af
-string39          34b2
-string42          34b9
-unpackName        0574
-unpackName_1      2c6b
-unpackName_2      2c6d
-vLine             1be4
-vLine_l0          1bf6
-viewerApp         2902
-vLine_1           30ad
-vLine_2           30af
-vLine_3           30b0
+__cmd_copymove___x80_spill_cmd_copyFile__lc: EQU 0x0000710E
+__cmd_copymove___x80_spill_cmd_copyFolder__lc: EQU 0x00007116
+__cmd_copymove___x80_spill_cmd_copymove1__lc: EQU 0x00007111
+__cmd_copymove_anon1: EQU 0x00001535
+__cmd_copymove_anon10: EQU 0x000015CE
+__cmd_copymove_anon11: EQU 0x000015D2
+__cmd_copymove_anon14: EQU 0x00001548
+__cmd_copymove_anon15: EQU 0x00001556
+__cmd_copymove_anon16: EQU 0x0000155A
+__cmd_copymove_anon17: EQU 0x0000155D
+__cmd_copymove_anon2: EQU 0x00001522
+__cmd_copymove_anon21: EQU 0x00001584
+__cmd_copymove_anon3: EQU 0x00001595
+__cmd_copymove_anon4: EQU 0x00001586
+__cmd_copymove_anon5: EQU 0x00001588
+__cmd_copymove_anon9: EQU 0x000015B1
+__cmd_copymove_applyMask1__lc: EQU 0x0000150C
+__cmd_copymove_applyMask1__lc.b0: EQU 0x0000150C
+__cmd_copymove_applyMask1__lc.b1: EQU 0x0000150D
+__cmd_copymove_applyMask1__lc.b2: EQU 0x00001521
+__cmd_copymove_applyMask1__lc.b3: EQU 0x00001511
+__cmd_copymove_applyMask1__lc.b4: EQU 0x00001516
+__cmd_copymove_applyMask1__lc.b5: EQU 0x00001517
+__cmd_copymove_applyMask1__lc.b7: EQU 0x00001519
+__cmd_copymove_cmd_copyFile__lc: EQU 0x000013D1
+__cmd_copymove_cmd_copyFile__lc.b0: EQU 0x000013D1
+__cmd_copymove_cmd_copyFile__lc.b11: EQU 0x0000148D
+__cmd_copymove_cmd_copyFile__lc.b13: EQU 0x00001498
+__cmd_copymove_cmd_copyFile__lc.b14: EQU 0x0000150A
+__cmd_copymove_cmd_copyFile__lc.b15: EQU 0x000014A0
+__cmd_copymove_cmd_copyFile__lc.b17: EQU 0x000014A5
+__cmd_copymove_cmd_copyFile__lc.b19: EQU 0x000014B1
+__cmd_copymove_cmd_copyFile__lc.b2: EQU 0x000013DC
+__cmd_copymove_cmd_copyFile__lc.b20: EQU 0x000014C5
+__cmd_copymove_cmd_copyFile__lc.b21: EQU 0x000014CD
+__cmd_copymove_cmd_copyFile__lc.b22: EQU 0x000014DB
+__cmd_copymove_cmd_copyFile__lc.b23: EQU 0x000014F9
+__cmd_copymove_cmd_copyFile__lc.b24: EQU 0x00001501
+__cmd_copymove_cmd_copyFile__lc.b25: EQU 0x0000150B
+__cmd_copymove_cmd_copyFile__lc.b4: EQU 0x000013E3
+__cmd_copymove_cmd_copyFile__lc.b6: EQU 0x00001455
+__cmd_copymove_cmd_copyFile__lc.b8: EQU 0x0000145D
+__cmd_copymove_cmd_copyFile__lc.b9: EQU 0x00001470
+__cmd_copymove_cmd_copymove1__lc: EQU 0x00001116
+__cmd_copymove_cmd_copymove1__lc.b0: EQU 0x00001116
+__cmd_copymove_cmd_copymove1__lc.b1: EQU 0x00001171
+__cmd_copymove_cmd_copymove1__lc.b10: EQU 0x00001153
+__cmd_copymove_cmd_copymove1__lc.b11: EQU 0x00001156
+__cmd_copymove_cmd_copymove1__lc.b12: EQU 0x0000115D
+__cmd_copymove_cmd_copymove1__lc.b14: EQU 0x00001164
+__cmd_copymove_cmd_copymove1__lc.b15: EQU 0x0000116E
+__cmd_copymove_cmd_copymove1__lc.b16: EQU 0x0000119A
+__cmd_copymove_cmd_copymove1__lc.b17: EQU 0x00001233
+__cmd_copymove_cmd_copymove1__lc.b18: EQU 0x000011AC
+__cmd_copymove_cmd_copymove1__lc.b19: EQU 0x00001245
+__cmd_copymove_cmd_copymove1__lc.b2: EQU 0x0000117A
+__cmd_copymove_cmd_copymove1__lc.b20: EQU 0x0000124A
+__cmd_copymove_cmd_copymove1__lc.b21: EQU 0x000011B3
+__cmd_copymove_cmd_copymove1__lc.b24: EQU 0x000011BD
+__cmd_copymove_cmd_copymove1__lc.b25: EQU 0x0000122E
+__cmd_copymove_cmd_copymove1__lc.b26: EQU 0x000011CA
+__cmd_copymove_cmd_copymove1__lc.b27: EQU 0x000011DE
+__cmd_copymove_cmd_copymove1__lc.b28: EQU 0x000011F4
+__cmd_copymove_cmd_copymove1__lc.b3: EQU 0x0000117D
+__cmd_copymove_cmd_copymove1__lc.b30: EQU 0x00001201
+__cmd_copymove_cmd_copymove1__lc.b31: EQU 0x00001251
+__cmd_copymove_cmd_copymove1__lc.b32: EQU 0x000012A0
+__cmd_copymove_cmd_copymove1__lc.b33: EQU 0x000012B8
+__cmd_copymove_cmd_copymove1__lc.b34: EQU 0x000012A8
+__cmd_copymove_cmd_copymove1__lc.b36: EQU 0x00001258
+__cmd_copymove_cmd_copymove1__lc.b37: EQU 0x00001358
+__cmd_copymove_cmd_copymove1__lc.b38: EQU 0x0000128F
+__cmd_copymove_cmd_copymove1__lc.b39: EQU 0x00001298
+__cmd_copymove_cmd_copymove1__lc.b4: EQU 0x0000111E
+__cmd_copymove_cmd_copymove1__lc.b40: EQU 0x0000129C
+__cmd_copymove_cmd_copymove1__lc.b41: EQU 0x0000120F
+__cmd_copymove_cmd_copymove1__lc.b42: EQU 0x00001222
+__cmd_copymove_cmd_copymove1__lc.b44: EQU 0x00001223
+__cmd_copymove_cmd_copymove1__lc.b45: EQU 0x000012B1
+__cmd_copymove_cmd_copymove1__lc.b46: EQU 0x000012C2
+__cmd_copymove_cmd_copymove1__lc.b47: EQU 0x000012C6
+__cmd_copymove_cmd_copymove1__lc.b48: EQU 0x000012D6
+__cmd_copymove_cmd_copymove1__lc.b49: EQU 0x0000135D
+__cmd_copymove_cmd_copymove1__lc.b50: EQU 0x000012EB
+__cmd_copymove_cmd_copymove1__lc.b51: EQU 0x000012F5
+__cmd_copymove_cmd_copymove1__lc.b52: EQU 0x00001311
+__cmd_copymove_cmd_copymove1__lc.b53: EQU 0x0000131F
+__cmd_copymove_cmd_copymove1__lc.b54: EQU 0x0000132A
+__cmd_copymove_cmd_copymove1__lc.b55: EQU 0x00001351
+__cmd_copymove_cmd_copymove1__lc.b56: EQU 0x00001397
+__cmd_copymove_cmd_copymove1__lc.b57: EQU 0x0000139D
+__cmd_copymove_cmd_copymove1__lc.b58: EQU 0x000013A5
+__cmd_copymove_cmd_copymove1__lc.b59: EQU 0x000013B9
+__cmd_copymove_cmd_copymove1__lc.b6: EQU 0x0000112D
+__cmd_copymove_cmd_copymove1__lc.b63: EQU 0x000013C3
+__cmd_copymove_cmd_copymove1__lc.b64: EQU 0x0000136C
+__cmd_copymove_cmd_copymove1__lc.b65: EQU 0x00001373
+__cmd_copymove_cmd_copymove1__lc.b66: EQU 0x00001354
+__cmd_copymove_cmd_copymove1__lc.b67: EQU 0x000013C8
+__cmd_copymove_cmd_copymove1__lc.b69: EQU 0x000013CC
+__cmd_copymove_cmd_copymove1__lc.b7: EQU 0x00001186
+__cmd_copymove_cmd_copymove1__lc.b71: EQU 0x0000114B
+__cmd_copymove_cmd_copymove1__lc.b72: EQU 0x0000114C
+__cmd_copymove_cmd_copymove1__lc.b73: EQU 0x000012D3
+__cmd_copymove_cmd_copymove1__lc.b8: EQU 0x00001142
+__cmd_copymove_cmd_copymove1__lc.b9: EQU 0x00001194
+__cmd_copymove_l0_stack: EQU 0x0000711C
+__cmd_copymove_l12_stack: EQU 0x00007227
+__cmd_copymove_l13_progress_step: EQU 0x00007265
+__cmd_copymove_l18_buf: EQU 0x0000724D
+__cmd_copymove_l19_progress: EQU 0x0000725D
+__cmd_copymove_l20_progress_x: EQU 0x00007261
+__cmd_copymove_l6_mask: EQU 0x00007237
+__cmd_copymove_l7_sourceFile: EQU 0x00007127
+__cmd_copymove_l8_forMask: EQU 0x00007242
+__cmd_delete___x80_spill_cmd_delete: EQU 0x0000710B
+__cmd_delete___x80_spill_cmd_deleteFolder__lc: EQU 0x00007108
+__cmd_delete_anon0: EQU 0x000018CE
+__cmd_delete_anon1: EQU 0x000018D8
+__cmd_delete_anon2: EQU 0x000018F3
+__cmd_delete_anon3: EQU 0x00001903
+__cmd_delete_cmd_deleteFile__lc: EQU 0x000018AB
+__cmd_delete_cmd_deleteFile__lc.b0: EQU 0x000018AB
+__cmd_delete_cmd_deleteFile__lc.b1: EQU 0x000018CB
+__cmd_delete_cmd_deleteFile__lc.b2: EQU 0x000018C5
+__cmd_delete_cmd_deleteFolder__lc: EQU 0x000017E8
+__cmd_delete_cmd_deleteFolder__lc.b0: EQU 0x000017E8
+__cmd_delete_cmd_deleteFolder__lc.b1: EQU 0x000017E9
+__cmd_delete_cmd_deleteFolder__lc.b10: EQU 0x00001830
+__cmd_delete_cmd_deleteFolder__lc.b11: EQU 0x00001887
+__cmd_delete_cmd_deleteFolder__lc.b12: EQU 0x00001842
+__cmd_delete_cmd_deleteFolder__lc.b13: EQU 0x0000187B
+__cmd_delete_cmd_deleteFolder__lc.b14: EQU 0x00001880
+__cmd_delete_cmd_deleteFolder__lc.b15: EQU 0x0000185B
+__cmd_delete_cmd_deleteFolder__lc.b16: EQU 0x0000186C
+__cmd_delete_cmd_deleteFolder__lc.b17: EQU 0x00001889
+__cmd_delete_cmd_deleteFolder__lc.b19: EQU 0x0000188E
+__cmd_delete_cmd_deleteFolder__lc.b2: EQU 0x00001872
+__cmd_delete_cmd_deleteFolder__lc.b20: EQU 0x000018A9
+__cmd_delete_cmd_deleteFolder__lc.b21: EQU 0x00001895
+__cmd_delete_cmd_deleteFolder__lc.b22: EQU 0x00001855
+__cmd_delete_cmd_deleteFolder__lc.b23: EQU 0x00001869
+__cmd_delete_cmd_deleteFolder__lc.b3: EQU 0x00001877
+__cmd_delete_cmd_deleteFolder__lc.b4: EQU 0x000017FF
+__cmd_delete_cmd_deleteFolder__lc.b5: EQU 0x0000180F
+__cmd_delete_cmd_deleteFolder__lc.b6: EQU 0x00001814
+__cmd_delete_cmd_deleteFolder__lc.b7: EQU 0x00001878
+__cmd_delete_cmd_deleteFolder__lc.b8: EQU 0x00001825
+__cmd_freespace___x80_spill_cmd_freespace_1__lc: EQU 0x0000710C
+__cmd_freespace_anon0: EQU 0x00001739
+__cmd_freespace_anon1: EQU 0x00001746
+__cmd_freespace_anon2: EQU 0x00001760
+__cmd_freespace_anon3: EQU 0x0000176B
+__cmd_freespace_anon4: EQU 0x00001752
+__cmd_freespace_anon6: EQU 0x00001772
+__cmd_freespace_cmd_freespace_1__lc: EQU 0x000016D5
+__cmd_freespace_cmd_freespace_1__lc.b0: EQU 0x000016D5
+__cmd_freespace_l5_buf: EQU 0x00007127
+__cmd_new___x80_spill_cmd_new1__lc: EQU 0x0000710D
+__cmd_new_anon0: EQU 0x00001661
+__cmd_new_anon1: EQU 0x00001687
+__cmd_new_anon2: EQU 0x00001677
+__cmd_new_cmd_new1__lc: EQU 0x000015E1
+__cmd_new_cmd_new1__lc.b0: EQU 0x000015E1
+__cmd_new_cmd_new1__lc.b1: EQU 0x00001613
+__cmd_new_cmd_new1__lc.b11: EQU 0x0000162F
+__cmd_new_cmd_new1__lc.b12: EQU 0x0000164B
+__cmd_new_cmd_new1__lc.b13: EQU 0x00001656
+__cmd_new_cmd_new1__lc.b14: EQU 0x0000165F
+__cmd_new_cmd_new1__lc.b15: EQU 0x000015ED
+__cmd_new_cmd_new1__lc.b16: EQU 0x000015EE
+__cmd_new_cmd_new1__lc.b17: EQU 0x00001649
+__cmd_new_cmd_new1__lc.b2: EQU 0x000015F5
+__cmd_new_cmd_new1__lc.b3: EQU 0x000015F8
+__cmd_new_cmd_new1__lc.b4: EQU 0x000015FF
+__cmd_new_cmd_new1__lc.b6: EQU 0x00001606
+__cmd_new_cmd_new1__lc.b7: EQU 0x00001610
+__cmd_new_cmd_new1__lc.b8: EQU 0x00001619
+__cmd_new_cmd_new1__lc.b9: EQU 0x00001620
+__cmd_sel___x80_spill_cmd_sel: EQU 0x00007104
+__cmd_sel_anon0: EQU 0x000019DE
+__cmd_sel_anon1: EQU 0x000019E2
+__cmd_sel_compareMask1__lc: EQU 0x000019AE
+__cmd_sel_compareMask1__lc.b0: EQU 0x000019AE
+__cmd_sel_compareMask1__lc.b1: EQU 0x000019AF
+__cmd_sel_compareMask1__lc.b2: EQU 0x000019C6
+__cmd_sel_compareMask1__lc.b3: EQU 0x000019B5
+__cmd_sel_compareMask1__lc.b4: EQU 0x000019C9
+__cmd_sel_compareMask1__lc.b5: EQU 0x000019DC
+__cmd_sel_compareMask1__lc.b6: EQU 0x000019BA
+__cmd_sel_compareMask1__lc.b8: EQU 0x000019BE
+__cmd_sel_l2_buf: EQU 0x00007127
+__fs___x80_spill_fs_findnext: EQU 0x000070AC
+__fs_anon0: EQU 0x000022DA
+__fs_anon1: EQU 0x000022D8
+__fs_anon2: EQU 0x000022CC
+__fs_anon3: EQU 0x000022CF
+__interface___x80_spill_cmp32_32: EQU 0x000070FB
+__interface___x80_spill_div32_16: EQU 0x000070F5
+__interface___x80_spill_drawColumn: EQU 0x000070D9
+__interface___x80_spill_drawFile2__lc: EQU 0x00007102
+__interface___x80_spill_drawFilesCountInt: EQU 0x000070E5
+__interface___x80_spill_drawInput__lc: EQU 0x000070DF
+__interface___x80_spill_drawPanelTitle: EQU 0x000070D8
+__interface___x80_spill_drawRect__lc: EQU 0x000070D1
+__interface___x80_spill_drawWindowProgress: EQU 0x000070E4
+__interface___x80_spill_drawWindowText: EQU 0x000070E3
+__interface___x80_spill_i2s: EQU 0x000070CB
+__interface___x80_spill_i2s32: EQU 0x000070CC
+__interface___x80_spill_printm__lc: EQU 0x000070EA
+__interface___x80_spill_printn__lc: EQU 0x000070E9
+__interface___x80_spill_sub32_16: EQU 0x000070EB
+__interface___x80_spill_sub32_32: EQU 0x000070EF
+__interface_anon0: EQU 0x00002268
+__interface_anon1: EQU 0x0000227A
+__interface_anon10: EQU 0x0000223A
+__interface_anon11: EQU 0x0000223C
+__interface_anon12: EQU 0x00002283
+__interface_anon13: EQU 0x00002287
+__interface_anon2: EQU 0x00002273
+__interface_anon23: EQU 0x000021E5
+__interface_anon24: EQU 0x000021D4
+__interface_anon3: EQU 0x00002259
+__interface_anon4: EQU 0x0000224D
+__interface_anon5: EQU 0x00002249
+__interface_anon6: EQU 0x0000224B
+__interface_anon7: EQU 0x0000223E
+__interface_anon8: EQU 0x000021F8
+__interface_anon9: EQU 0x00002238
+__interface_drawFile2__lc: EQU 0x00001E05
+__interface_drawFile2__lc.b0: EQU 0x00001E05
+__interface_drawFile2__lc.b1: EQU 0x00001E46
+__interface_drawFile2__lc.b2: EQU 0x00001E23
+__interface_drawFile2__lc.b3: EQU 0x00001E4C
+__interface_drawFile2__lc.b4: EQU 0x00001E29
+__interface_drawFile2__lc.b6: EQU 0x00001E2C
+__interface_drawInput__lc: EQU 0x00001CB1
+__interface_drawInput__lc.b0: EQU 0x00001CB1
+__interface_drawInput__lc.b1: EQU 0x00001D16
+__interface_drawInput__lc.b2: EQU 0x00001CCD
+__interface_drawInput__lc.b3: EQU 0x00001CD3
+__interface_drawPanel__lc: EQU 0x00001F0B
+__interface_drawPanel__lc.b0: EQU 0x00001F0B
+__interface_drawRect__lc: EQU 0x00001F6E
+__interface_drawRect__lc.b0: EQU 0x00001F6E
+__interface_drawRect__lc.b1: EQU 0x00001F90
+__interface_drawRect__lc.b2: EQU 0x00001F94
+__interface_drawRect__lc.b3: EQU 0x00001F9F
+__interface_drawRect__lc.b4: EQU 0x00001FAD
+__interface_drawRect__lc.b5: EQU 0x00001FB4
+__interface_drawRect__lc.b6: EQU 0x00001FDF
+__interface_drawRect__lc.b7: EQU 0x00001FED
+__interface_drawRect__lc.b8: EQU 0x00001FF1
+__interface_drawRect__lc.b9: EQU 0x00001FFC
+__interface_l14_a: EQU 0x000070C3
+__interface_l15_h: EQU 0x000070C5
+__interface_l16_a: EQU 0x000070C6
+__interface_l17_w: EQU 0x000070C8
+__interface_l18_h: EQU 0x000070C9
+__interface_l19_c: EQU 0x000070CA
+__interface_l20_a: EQU 0x000070C0
+__interface_l21_c: EQU 0x000070C2
+__interface_l22_v: EQU 0x00007269
+__libc_differ: EQU 0x00002498
+__libc_differ.b0: EQU 0x00002498
+__libc_differ.b1: EQU 0x000024A2
+__libc_differ.b2: EQU 0x0000249E
+__libc_differ.b3: EQU 0x000024A1
+__libc_frames: EQU 0x000070A8
+__shell___x80_spill_absolutePath: EQU 0x000075EE
+__shell___x80_spill_catPathAndUnpack: EQU 0x000075D9
+__shell___x80_spill_cmd_editview__lc: EQU 0x000075FE
+__shell___x80_spill_cmd_inverseAll__lc: EQU 0x000075FC
+__shell___x80_spill_cmpFileInfo__lc: EQU 0x000075DF
+__shell___x80_spill_cursor_down__lc: EQU 0x000075FA
+__shell___x80_spill_cursor_right__lc: EQU 0x000075F5
+__shell___x80_spill_drawError: EQU 0x000075CF
+__shell___x80_spill_drawFileInfo__lc: EQU 0x000075CD
+__shell___x80_spill_drawFilesCount__lc: EQU 0x000075C9
+__shell___x80_spill_dupFiles: EQU 0x000075F0
+__shell___x80_spill_getFiles: EQU 0x000075EB
+__shell___x80_spill_getNextSelected: EQU 0x000075DB
+__shell___x80_spill_inputBox: EQU 0x000075D4
+__shell___x80_spill_packName: EQU 0x000075DE
+__shell___x80_spill_reloadFiles__lc: EQU 0x000075F3
+__shell___x80_spill_run: EQU 0x000075D5
+__shell___x80_spill_selectFile__lc: EQU 0x000075F1
+__shell___x80_spill_sort__lc: EQU 0x000075E0
+__shell___x80_spill_unpackName: EQU 0x000075D8
+__shell_anon10: EQU 0x000010E3
+__shell_anon11: EQU 0x000010E8
+__shell_anon12: EQU 0x000010ED
+__shell_anon14: EQU 0x000010C0
+__shell_anon15: EQU 0x0000109D
+__shell_anon16: EQU 0x000010A2
+__shell_anon17: EQU 0x00000FDA
+__shell_anon19: EQU 0x00001037
+__shell_anon20: EQU 0x00000FF8
+__shell_anon21: EQU 0x00000FE3
+__shell_anon22: EQU 0x0000100A
+__shell_anon23: EQU 0x00001019
+__shell_anon24: EQU 0x00001028
+__shell_anon25: EQU 0x0000104F
+__shell_anon26: EQU 0x0000105D
+__shell_anon27: EQU 0x0000106D
+__shell_anon28: EQU 0x00001084
+__shell_anon3: EQU 0x000010FB
+__shell_anon4: EQU 0x000010F3
+__shell_anon6: EQU 0x000010F7
+__shell_anon7: EQU 0x000010F2
+__shell_anon9: EQU 0x000010DE
+__shell_cmd_editview__lc: EQU 0x00000330
+__shell_cmd_editview__lc.b0: EQU 0x00000330
+__shell_cmd_editview__lc.b2: EQU 0x0000033F
+__shell_cmd_editview__lc.b3: EQU 0x0000034F
+__shell_cmd_editview__lc.b4: EQU 0x0000035C
+__shell_cmd_enter__lc: EQU 0x000002A5
+__shell_cmd_enter__lc.b0: EQU 0x000002A5
+__shell_cmd_enter__lc.b1: EQU 0x000002D4
+__shell_cmd_enter__lc.b2: EQU 0x000002AC
+__shell_cmd_enter__lc.b3: EQU 0x000002D7
+__shell_cmd_enter__lc.b4: EQU 0x000002B5
+__shell_cmd_enter__lc.b5: EQU 0x000002C7
+__shell_cmd_enter__lc.b6: EQU 0x000002E6
+__shell_cmd_enter__lc.b7: EQU 0x000002F9
+__shell_cmd_enter__lc.b8: EQU 0x000002F0
+__shell_cmd_inverseAll__lc: EQU 0x00000248
+__shell_cmd_inverseAll__lc.b0: EQU 0x00000248
+__shell_cmd_inverseAll__lc.b1: EQU 0x00000255
+__shell_cmd_inverseAll__lc.b2: EQU 0x0000025D
+__shell_cmd_inverseAll__lc.b3: EQU 0x00000290
+__shell_cmd_inverseAll__lc.b4: EQU 0x0000026B
+__shell_cmd_inverseAll__lc.b5: EQU 0x0000026E
+__shell_cmd_inverseAll__lc.b6: EQU 0x00000281
+__shell_cmd_inverseAll__lc.b7: EQU 0x0000025A
+__shell_cmd_inverseAll__lc.b8: EQU 0x0000027D
+__shell_cmpFileInfo__lc: EQU 0x000009F7
+__shell_cmpFileInfo__lc.b0: EQU 0x000009F7
+__shell_cmpFileInfo__lc.b2: EQU 0x00000A10
+__shell_cmpFileInfo__lc.b4: EQU 0x00000A19
+__shell_cmpFileInfo__lc.b5: EQU 0x00000A2E
+__shell_cmpFileInfo__lc.b6: EQU 0x00000A2C
+__shell_cmpFileInfo__lc.b7: EQU 0x00000A29
+__shell_cursor_down__lc: EQU 0x00000404
+__shell_cursor_down__lc.b0: EQU 0x00000404
+__shell_cursor_down__lc.b2: EQU 0x00000431
+__shell_cursor_down__lc.b3: EQU 0x00000455
+__shell_cursor_down__lc.b4: EQU 0x00000437
+__shell_cursor_down__lc.b5: EQU 0x0000045C
+__shell_cursor_down__lc.b6: EQU 0x0000043C
+__shell_cursor_down__lc.b7: EQU 0x0000044F
+__shell_cursor_left__lc: EQU 0x00000502
+__shell_cursor_left__lc.b0: EQU 0x00000502
+__shell_cursor_left__lc.b1: EQU 0x0000051E
+__shell_cursor_left__lc.b2: EQU 0x00000509
+__shell_cursor_left__lc.b3: EQU 0x00000525
+__shell_cursor_left__lc.b4: EQU 0x00000544
+__shell_cursor_left__lc.b5: EQU 0x0000052E
+__shell_cursor_left__lc.b6: EQU 0x00000511
+__shell_cursor_left__lc.b7: EQU 0x0000054A
+__shell_cursor_left__lc.b8: EQU 0x00000518
+__shell_cursor_left__lc.b9: EQU 0x00000532
+__shell_cursor_right__lc: EQU 0x00000467
+__shell_cursor_right__lc.b0: EQU 0x00000467
+__shell_cursor_right__lc.b1: EQU 0x000004B1
+__shell_cursor_right__lc.b10: EQU 0x000004AB
+__shell_cursor_right__lc.b11: EQU 0x000004E6
+__shell_cursor_right__lc.b3: EQU 0x000004B7
+__shell_cursor_right__lc.b4: EQU 0x000004CB
+__shell_cursor_right__lc.b5: EQU 0x000004DF
+__shell_cursor_right__lc.b6: EQU 0x000004D8
+__shell_cursor_right__lc.b7: EQU 0x0000049F
+__shell_cursor_right__lc.b8: EQU 0x000004F8
+__shell_cursor_right__lc.b9: EQU 0x000004A7
+__shell_drawFileInfo__lc: EQU 0x00000DE5
+__shell_drawFileInfo__lc.b0: EQU 0x00000DE5
+__shell_drawFileInfo__lc.b1: EQU 0x00000EC3
+__shell_drawFileInfo__lc.b2: EQU 0x00000DF3
+__shell_drawFileInfo__lc.b3: EQU 0x00000E0B
+__shell_drawFileInfo__lc.b4: EQU 0x00000ECB
+__shell_drawFileInfo__lc.b5: EQU 0x00000ED7
+__shell_drawFileInfo__lc.b6: EQU 0x00000E1A
+__shell_drawFileInfo__lc.b7: EQU 0x00000EBD
+__shell_drawFiles2__lc: EQU 0x00000DA0
+__shell_drawFiles2__lc.b0: EQU 0x00000DA0
+__shell_drawFilesCount__lc: EQU 0x00000EDE
+__shell_drawFilesCount__lc.b0: EQU 0x00000EDE
+__shell_drawFilesCount__lc.b1: EQU 0x00000EFA
+__shell_drawFilesCount__lc.b2: EQU 0x00000F02
+__shell_drawFilesCount__lc.b3: EQU 0x00000F0F
+__shell_drawFilesCount__lc.b4: EQU 0x00000F10
+__shell_drawFilesCount__lc.b5: EQU 0x00000F4A
+__shell_getSel__lc: EQU 0x00000F5B
+__shell_getSel__lc.b0: EQU 0x00000F5B
+__shell_getSel__lc.b1: EQU 0x00000F9A
+__shell_getSel__lc.b2: EQU 0x00000F81
+__shell_getSel__lc.b3: EQU 0x00000FA8
+__shell_getSel__lc.b4: EQU 0x00000F96
+__shell_l0_buf: EQU 0x0000711C
+__shell_l13_md: EQU 0x00007588
+__shell_l18_buf: EQU 0x00007132
+__shell_l1_buf: EQU 0x0000711C
+__shell_l29_buf: EQU 0x00007132
+__shell_l2_buf: EQU 0x00007127
+__shell_l30_total: EQU 0x00007132
+__shell_l5_fs_selfName2: EQU 0x00007589
+__shell_l8_buf: EQU 0x0000711C
+__shell_loadState__lc: EQU 0x00000365
+__shell_loadState__lc.b0: EQU 0x00000365
+__shell_loadState__lc.b2: EQU 0x00000372
+__shell_loadState__lc.b4: EQU 0x00000386
+__shell_loadState__lc.b6: EQU 0x000003A4
+__shell_loadState__lc.b7: EQU 0x000003B4
+__shell_loadState__lc.b8: EQU 0x000003C3
+__shell_loadState__lc.b9: EQU 0x000003DD
+__shell_processInput__lc: EQU 0x00000CAB
+__shell_processInput__lc.b0: EQU 0x00000CAB
+__shell_processInput__lc.b1: EQU 0x00000CC0
+__shell_processInput__lc.b10: EQU 0x00000CC6
+__shell_processInput__lc.b3: EQU 0x00000CC3
+__shell_processInput__lc.b4: EQU 0x00000CBA
+__shell_processInput__lc.b5: EQU 0x00000CCA
+__shell_processInput__lc.b7: EQU 0x00000CD3
+__shell_processInput__lc.b8: EQU 0x00000CBF
+__shell_processInput__lc.b9: EQU 0x00000CD2
+__shell_reloadFiles__lc: EQU 0x00000551
+__shell_reloadFiles__lc.b0: EQU 0x00000551
+__shell_reloadFiles__lc.b1: EQU 0x0000056F
+__shell_reloadFiles__lc.b2: EQU 0x00000572
+__shell_runCmdLine__lc: EQU 0x000003DE
+__shell_runCmdLine__lc.b0: EQU 0x000003DE
+__shell_runCmdLine__lc.b2: EQU 0x000003E6
+__shell_runCmdLine__lc.b3: EQU 0x000003FD
+__shell_runCmdLine__lc.b4: EQU 0x000003F4
+__shell_runCmdLine__lc.b5: EQU 0x000003F7
+__shell_saveState__lc: EQU 0x00000BDA
+__shell_saveState__lc.b0: EQU 0x00000BDA
+__shell_saveState__lc.b1: EQU 0x00000C08
+__shell_saveState__lc.b2: EQU 0x00000C12
+__shell_saveState__lc.b3: EQU 0x00000BE4
+__shell_selectFile__lc: EQU 0x0000058A
+__shell_selectFile__lc.b0: EQU 0x0000058A
+__shell_selectFile__lc.b1: EQU 0x00000594
+__shell_selectFile__lc.b2: EQU 0x0000059C
+__shell_selectFile__lc.b3: EQU 0x000005C0
+__shell_selectFile__lc.b4: EQU 0x000005C9
+__shell_selectFile__lc.b5: EQU 0x000005EC
+__shell_selectFile__lc.b6: EQU 0x000005AF
+__shell_sort__lc: EQU 0x00000831
+__shell_sort__lc.b0: EQU 0x00000831
+__shell_sort__lc.b1: EQU 0x00000841
+__shell_sort__lc.b10: EQU 0x00000906
+__shell_sort__lc.b11: EQU 0x00000910
+__shell_sort__lc.b12: EQU 0x00000994
+__shell_sort__lc.b13: EQU 0x0000092C
+__shell_sort__lc.b14: EQU 0x00000999
+__shell_sort__lc.b15: EQU 0x00000936
+__shell_sort__lc.b16: EQU 0x00000937
+__shell_sort__lc.b17: EQU 0x000008F6
+__shell_sort__lc.b18: EQU 0x00000952
+__shell_sort__lc.b19: EQU 0x00000900
+__shell_sort__lc.b2: EQU 0x00000894
+__shell_sort__lc.b20: EQU 0x000009A0
+__shell_sort__lc.b21: EQU 0x000009AA
+__shell_sort__lc.b22: EQU 0x000009B2
+__shell_sort__lc.b24: EQU 0x000009C6
+__shell_sort__lc.b25: EQU 0x00000965
+__shell_sort__lc.b26: EQU 0x000009D2
+__shell_sort__lc.b27: EQU 0x0000096F
+__shell_sort__lc.b28: EQU 0x000009E2
+__shell_sort__lc.b29: EQU 0x00000976
+__shell_sort__lc.b3: EQU 0x0000089F
+__shell_sort__lc.b32: EQU 0x000009E8
+__shell_sort__lc.b33: EQU 0x000009F1
+__shell_sort__lc.b34: EQU 0x00000929
+__shell_sort__lc.b35: EQU 0x00000933
+__shell_sort__lc.b36: EQU 0x000008EC
+__shell_sort__lc.b37: EQU 0x0000098C
+__shell_sort__lc.b4: EQU 0x000008A6
+__shell_sort__lc.b5: EQU 0x000008B5
+__shell_sort__lc.b6: EQU 0x000008C6
+__shell_sort__lc.b7: EQU 0x000008CB
+__shell_sort__lc.b8: EQU 0x000008D2
+__shell_sort__lc.b9: EQU 0x000008DD
+__x80_argv: EQU 0x000029D1
+__x80_bss_off: EQU 0x00000566
+__x80_bss_size: EQU 0x00000566
+__x80_bss_top: EQU 0x00007600
+__x80_clear: EQU 0x00000007
+__x80_cleared: EQU 0x00000013
+__x80_div_args: EQU 0x000024AF
+__x80_divide: EQU 0x000024D7
+__x80_divide.b3: EQU 0x00002506
+__x80_divide.by_zero: EQU 0x000027D3
+__x80_divide.g24byte: EQU 0x000025F7
+__x80_divide.g24c: EQU 0x00002655
+__x80_divide.g24e: EQU 0x0000263F
+__x80_divide.g24go: EQU 0x00002613
+__x80_divide.g24p: EQU 0x0000264A
+__x80_divide.g24q: EQU 0x00002628
+__x80_divide.g24s: EQU 0x00002615
+__x80_divide.g24two: EQU 0x000025DB
+__x80_divide.g24w: EQU 0x000025D1
+__x80_divide.g32: EQU 0x00002675
+__x80_divide.g32big: EQU 0x0000269B
+__x80_divide.g32byte: EQU 0x000026BF
+__x80_divide.g32c: EQU 0x00002745
+__x80_divide.g32e: EQU 0x00002727
+__x80_divide.g32go: EQU 0x000026E4
+__x80_divide.g32last: EQU 0x000026AE
+__x80_divide.g32p: EQU 0x00002736
+__x80_divide.g32q: EQU 0x00002704
+__x80_divide.g32s: EQU 0x000026E9
+__x80_divide.general: EQU 0x00002599
+__x80_divide.huge: EQU 0x00002772
+__x80_divide.huge0: EQU 0x000027A2
+__x80_divide.negate_d: EQU 0x000027B7
+__x80_divide.w0: EQU 0x00002587
+__x80_divide.w1: EQU 0x0000256E
+__x80_divide.w2: EQU 0x00002556
+__x80_divide.w_end: EQU 0x00002589
+__x80_divide.word: EQU 0x00002532
+__x80_dpass16: EQU 0x00002877
+__x80_dpass16.a0: EQU 0x000028A0
+__x80_dpass16.a1: EQU 0x0000289A
+__x80_dpass16.a2: EQU 0x00002894
+__x80_dpass16.a3: EQU 0x0000288E
+__x80_dpass16.a4: EQU 0x00002888
+__x80_dpass16.a5: EQU 0x00002882
+__x80_dpass16.a6: EQU 0x0000287C
+__x80_dpass16.ae: EQU 0x000028A6
+__x80_dpass16.s0: EQU 0x000028CC
+__x80_dpass16.s1: EQU 0x000028C6
+__x80_dpass16.s2: EQU 0x000028C0
+__x80_dpass16.s3: EQU 0x000028BA
+__x80_dpass16.s4: EQU 0x000028B4
+__x80_dpass16.s5: EQU 0x000028AE
+__x80_dpass16.s6: EQU 0x000028A8
+__x80_dpass16.se: EQU 0x000028D2
+__x80_dpass8: EQU 0x000028D5
+__x80_dpass8.a0: EQU 0x0000292A
+__x80_dpass8.a1: EQU 0x00002924
+__x80_dpass8.a2: EQU 0x0000291E
+__x80_dpass8.a3: EQU 0x00002918
+__x80_dpass8.a4: EQU 0x00002912
+__x80_dpass8.a5: EQU 0x0000290C
+__x80_dpass8.a6: EQU 0x00002906
+__x80_dpass8.ae: EQU 0x00002930
+__x80_dpass8.s0: EQU 0x000028FD
+__x80_dpass8.s1: EQU 0x000028F7
+__x80_dpass8.s2: EQU 0x000028F1
+__x80_dpass8.s3: EQU 0x000028EB
+__x80_dpass8.s4: EQU 0x000028E5
+__x80_dpass8.s5: EQU 0x000028DF
+__x80_dpass8.s6: EQU 0x000028D9
+__x80_dpass8.se: EQU 0x00002903
+__x80_dsetup8: EQU 0x00002934
+__x80_exit: EQU 0x0000001C
+__x80_float_varargs: EQU 0x00000000
+__x80_frames: EQU 0x0000711C
+__x80_ll_varargs: EQU 0x00000000
+__x80_ludiv: EQU 0x000024A6
+__x80_mcpy_a: EQU 0xFFFFFFFF
+__x80_mcpy_b: EQU 0x00000008
+__x80_mcpy_d: EQU 0x00000000
+__x80_mcpy_db: EQU 0x00000000
+__x80_mcpy_lb: EQU 0x00000000
+__x80_mcpy_lo: EQU 0x00000000
+__x80_mcpy_m: EQU 0x00000000
+__x80_mcpy_t: EQU 0x00000000
+__x80_mcpyn: EQU 0x00002990
+__x80_mcpyn_any: EQU 0x00000001
+__x80_mcpyn_pairs: EQU 0x00002990
+__x80_mcpyn_pairs.one: EQU 0x000029A4
+__x80_mcpyn_pairs.two: EQU 0x000029A0
+__x80_mcpyp_any: EQU 0x00000000
+__x80_msetn: EQU 0x000029B2
+__x80_msetn.one: EQU 0x000029C5
+__x80_msetn.pairs: EQU 0x000029B2
+__x80_msetn.two: EQU 0x000029C3
+__x80_mul16: EQU 0x00002943
+__x80_mul16.full: EQU 0x00002957
+__x80_mul16.small: EQU 0x0000294E
+__x80_mul16_b1: EQU 0x0000298B
+__x80_mul16_b2: EQU 0x00002985
+__x80_mul16_b3: EQU 0x0000297F
+__x80_mul16_b4: EQU 0x00002979
+__x80_mul16_b5: EQU 0x00002973
+__x80_mul16_b6: EQU 0x0000296D
+__x80_mul16_b7: EQU 0x00002967
+__x80_mul16_byte: EQU 0x00002961
+__x80_mzero_a: EQU 0x00000000
+__x80_mzero_b: EQU 0x00000007
+__x80_mzero_d: EQU 0x00000000
+__x80_mzero_db: EQU 0x00000000
+__x80_mzero_lb: EQU 0x00000000
+__x80_mzero_lo: EQU 0x00000000
+__x80_mzero_m: EQU 0x00000000
+__x80_mzero_t: EQU 0x00000000
+__x80_mzerop_any: EQU 0x00000000
+__x80_quotient: EQU 0x000024C7
+__x80_remainder: EQU 0x000024CF
+__x80_rk86_start: EQU 0x00000000
+__x80_rt_a: EQU 0x000070A4
+__x80_rt_b: EQU 0x000070A0
+__x80_rt_lo: EQU 0x0000709A
+__x80_rt_r: EQU 0x0000709C
+__x80_udiv16: EQU 0x000027EF
+__x80_udiv16.below: EQU 0x0000282C
+__x80_udiv16.big: EQU 0x0000285D
+__x80_udiv16.by_zero: EQU 0x00002870
+__x80_udiv16.less: EQU 0x0000286B
+__x80_udiv16.one: EQU 0x00002806
+__x80_udiv16.two: EQU 0x00002812
+__x80_udiv16.up: EQU 0x00002857
+__x80_udiv16.wide: EQU 0x00002831
+__x80_urem16: EQU 0x000027E9
+__x80_xlat_head: EQU 0x00000000
+_absolutePath: EQU 0x000006D4
+_absolutePath.b0: EQU 0x000006D4
+_absolutePath.b1: EQU 0x00000735
+_absolutePath.b2: EQU 0x000006DC
+_absolutePath.b3: EQU 0x000006EB
+_absolutePath.b4: EQU 0x000006EC
+_absolutePath.b5: EQU 0x00000741
+_absolutePath.b6: EQU 0x000006FE
+_absolutePath.b7: EQU 0x0000072D
+_absolutePath.b8: EQU 0x00000732
+_activePanel: EQU 0x000070AD
+_add32_16: EQU 0x00002332
+_attrHidden: EQU 0x000021F6
+_attrShow: EQU 0x000021F7
+_bioskey1: EQU 0x00001AD5
+_bioskey1.b0: EQU 0x00001AD5
+_buf: EQU 0x000070B0
+_catPathAndUnpack: EQU 0x00000B08
+_catPathAndUnpack.b0: EQU 0x00000B08
+_catPathAndUnpack.b1: EQU 0x00000B26
+_catPathAndUnpack.b2: EQU 0x00000B3C
+_catPathAndUnpack.b3: EQU 0x00000B2F
+_catPathAndUnpack.b4: EQU 0x00000B1B
+_clrscr: EQU 0x000023D5
+_clrscr.b0: EQU 0x000023D5
+_cmd_copymove: EQU 0x000010FC
+_cmd_copymove.b0: EQU 0x000010FC
+_cmd_copymove.b1: EQU 0x00001110
+_cmd_copymove.b2: EQU 0x00001101
+_cmd_copymove.b3: EQU 0x00001104
+_cmd_delete: EQU 0x00001776
+_cmd_delete.b0: EQU 0x00001776
+_cmd_delete.b1: EQU 0x00001786
+_cmd_delete.b11: EQU 0x000017BB
+_cmd_delete.b12: EQU 0x000017C1
+_cmd_delete.b13: EQU 0x00001783
+_cmd_delete.b14: EQU 0x000017A6
+_cmd_delete.b2: EQU 0x00001790
+_cmd_delete.b3: EQU 0x00001791
+_cmd_delete.b4: EQU 0x000017BF
+_cmd_delete.b5: EQU 0x0000179E
+_cmd_delete.b6: EQU 0x000017DB
+_cmd_delete.b7: EQU 0x000017AB
+_cmd_delete.b8: EQU 0x000017D4
+_cmd_delete.b9: EQU 0x000017AF
+_cmd_freespace: EQU 0x00001696
+_cmd_freespace.b0: EQU 0x00001696
+_cmd_freespace.b1: EQU 0x000016CC
+_cmd_freespace.b2: EQU 0x000016AD
+_cmd_freespace.b3: EQU 0x000016BC
+_cmd_freespace.b4: EQU 0x000016C3
+_cmd_freespace.b5: EQU 0x000016C9
+_cmd_new: EQU 0x000015D5
+_cmd_new.b0: EQU 0x000015D5
+_cmd_sel: EQU 0x0000190E
+_cmd_sel.b0: EQU 0x0000190E
+_cmd_sel.b1: EQU 0x00001927
+_cmd_sel.b10: EQU 0x00001924
+_cmd_sel.b13: EQU 0x00001997
+_cmd_sel.b15: EQU 0x0000197A
+_cmd_sel.b2: EQU 0x00001939
+_cmd_sel.b3: EQU 0x0000193E
+_cmd_sel.b4: EQU 0x00001970
+_cmd_sel.b5: EQU 0x00001950
+_cmd_sel.b6: EQU 0x0000197E
+_cmd_sel.b7: EQU 0x0000198E
+_cmd_sel.b8: EQU 0x00001985
+_cmd_sel.b9: EQU 0x00001962
+_cmdline: EQU 0x00007481
+_cmp32_32: EQU 0x000019F3
+_cmp32_32.b0: EQU 0x000019F3
+_cmp32_32.b1: EQU 0x00001A59
+_cmp32_32.b2: EQU 0x00001A43
+_cmp32_32.b3: EQU 0x00001A5B
+_cmp32_32.b4: EQU 0x00001A54
+_cmp32_32.b5: EQU 0x00001A57
+_confirm: EQU 0x00000C13
+_confirm.b0: EQU 0x00000C13
+_confirm.b1: EQU 0x00000C29
+_confirm.b2: EQU 0x00000C38
+_confirm.b3: EQU 0x00000C36
+_div32_16: EQU 0x00001A61
+_div32_16.b0: EQU 0x00001A61
+_drawAnyKeyButton: EQU 0x00001BFA
+_drawAnyKeyButton.b0: EQU 0x00001BFA
+_drawCmdLine: EQU 0x00001CA2
+_drawCmdLine.b0: EQU 0x00001CA2
+_drawCmdLineWithPath: EQU 0x00001C3B
+_drawCmdLineWithPath.b0: EQU 0x00001C3B
+_drawCmdLineWithPath.b1: EQU 0x00001C94
+_drawCmdLineWithPath.b2: EQU 0x00001C5D
+_drawCmdLineWithPath.b3: EQU 0x00001C62
+_drawColumn: EQU 0x00001D52
+_drawColumn.b0: EQU 0x00001D52
+_drawColumn.b2: EQU 0x00001D9E
+_drawColumn.b3: EQU 0x00001DD4
+_drawColumn.b4: EQU 0x00001DA8
+_drawColumn.b5: EQU 0x00001DC0
+_drawColumn.b7: EQU 0x00001DD3
+_drawError: EQU 0x00000CDE
+_drawError.b0: EQU 0x00000CDE
+_drawError.b10: EQU 0x00000D81
+_drawError.b11: EQU 0x00000D87
+_drawError.b12: EQU 0x00000D8D
+_drawError.b13: EQU 0x00000D1E
+_drawError.b14: EQU 0x00000D32
+_drawError.b15: EQU 0x00000D3B
+_drawError.b16: EQU 0x00000D53
+_drawError.b2: EQU 0x00000CEC
+_drawError.b3: EQU 0x00000D63
+_drawError.b4: EQU 0x00000D5D
+_drawError.b5: EQU 0x00000D69
+_drawError.b6: EQU 0x00000D6F
+_drawError.b7: EQU 0x00000D75
+_drawError.b8: EQU 0x00000D4D
+_drawError.b9: EQU 0x00000D7B
+_drawEscButton: EQU 0x00001BF1
+_drawEscButton.b0: EQU 0x00001BF1
+_drawFile: EQU 0x00001DE4
+_drawFile.b0: EQU 0x00001DE4
+_drawFileInfo1: EQU 0x00001D40
+_drawFileInfo1.b0: EQU 0x00001D40
+_drawFileInfo2: EQU 0x00001D1A
+_drawFileInfo2.b0: EQU 0x00001D1A
+_drawFileInfoDir: EQU 0x00001D2C
+_drawFileInfoDir.b0: EQU 0x00001D2C
+_drawFilesCountInt: EQU 0x00001AEF
+_drawFilesCountInt.b0: EQU 0x00001AEF
+_drawFilesCountInt.b1: EQU 0x00001B33
+_drawFilesCountInt.b2: EQU 0x00001B50
+_drawFilesCountInt.b3: EQU 0x00001B96
+_drawFilesCountInt.b4: EQU 0x00001B7A
+_drawFilesCountInt.b5: EQU 0x00001B9E
+_drawFilesCountInt.b6: EQU 0x00001B90
+_drawFilesCountInt.b7: EQU 0x00001B93
+_drawFilesCountInt.b8: EQU 0x00001B8D
+_drawInit: EQU 0x000020FD
+_drawInit.b0: EQU 0x000020FD
+_drawPanelTitle: EQU 0x00001E8A
+_drawPanelTitle.b0: EQU 0x00001E8A
+_drawPanelTitle.b1: EQU 0x00001EE1
+_drawPanelTitle.b2: EQU 0x00001EA6
+_drawPanelTitle.b3: EQU 0x00001EE7
+_drawPanelTitle.b4: EQU 0x00001EB7
+_drawPanelTitle.b5: EQU 0x00001EE0
+_drawPanelTitle.b6: EQU 0x00001EF3
+_drawPanelTitle.b7: EQU 0x00001EA3
+_drawPanelTitle.b8: EQU 0x00001EB5
+_drawScreen: EQU 0x00000D93
+_drawScreen.b0: EQU 0x00000D93
+_drawScreenInt: EQU 0x00001E52
+_drawScreenInt.b0: EQU 0x00001E52
+_drawSwapPanels: EQU 0x000020F5
+_drawSwapPanels.b0: EQU 0x000020F5
+_drawWindow: EQU 0x00001C03
+_drawWindow.b0: EQU 0x00001C03
+_drawWindowInput: EQU 0x00001ADD
+_drawWindowInput.b0: EQU 0x00001ADD
+_drawWindowProgress: EQU 0x00001BA4
+_drawWindowProgress.b0: EQU 0x00001BA4
+_drawWindowProgress.b2: EQU 0x00001BA9
+_drawWindowText: EQU 0x00001BC8
+_drawWindowText.b0: EQU 0x00001BC8
+_dropPathInt: EQU 0x00000697
+_dropPathInt.b0: EQU 0x00000697
+_dropPathInt.b1: EQU 0x000006A3
+_dropPathInt.b2: EQU 0x000006AD
+_dropPathInt.b3: EQU 0x000006BC
+_dropPathInt.b4: EQU 0x000006B7
+_dropPathInt.b6: EQU 0x000006B4
+_dupFiles: EQU 0x00000639
+_dupFiles.b0: EQU 0x00000639
+_dupFiles.b1: EQU 0x00000672
+_dupFiles.b2: EQU 0x00000659
+_dupFiles.b3: EQU 0x00000691
+_dupFiles.b4: EQU 0x00000660
+_editorApp: EQU 0x00000FAC
+_fileCursorAddr: EQU 0x000070AE
+_fillRect: EQU 0x00002001
+_fillRect.b0: EQU 0x00002001
+_fs_cmdLine: EQU 0x000022CA
+_fs_create: EQU 0x000022BE
+_fs_create.b0: EQU 0x000022BE
+_fs_delete: EQU 0x000022B4
+_fs_delete.b0: EQU 0x000022B4
+_fs_entry: EQU 0x0000238C
+_fs_exec: EQU 0x000022C7
+_fs_exec.b0: EQU 0x000022C7
+_fs_findfirst: EQU 0x0000238F
+_fs_getfree: EQU 0x00002296
+_fs_getfree.b0: EQU 0x00002296
+_fs_getsize: EQU 0x000022A9
+_fs_getsize.b0: EQU 0x000022A9
+_fs_gettotal: EQU 0x0000228B
+_fs_gettotal.b0: EQU 0x0000228B
+_fs_high: EQU 0x000070AA
+_fs_init: EQU 0x0000237F
+_fs_low: EQU 0x000070A8
+_fs_mkdir: EQU 0x000022B9
+_fs_mkdir.b0: EQU 0x000022B9
+_fs_move: EQU 0x000023C7
+_fs_open: EQU 0x000022C3
+_fs_open.b0: EQU 0x000022C3
+_fs_open0: EQU 0x000023A3
+_fs_read: EQU 0x000023BD
+_fs_seek: EQU 0x000023AF
+_fs_selfName: EQU 0x000022CD
+_fs_swap: EQU 0x000022A1
+_fs_swap.b0: EQU 0x000022A1
+_fs_write: EQU 0x000023A9
+_getFiles: EQU 0x00000743
+_getFiles.b0: EQU 0x00000743
+_getFiles.b1: EQU 0x000007FD
+_getFiles.b10: EQU 0x000007A4
+_getFiles.b11: EQU 0x000007AC
+_getFiles.b13: EQU 0x000007BB
+_getFiles.b14: EQU 0x0000081A
+_getFiles.b15: EQU 0x0000081F
+_getFiles.b16: EQU 0x000007C1
+_getFiles.b17: EQU 0x000007CD
+_getFiles.b18: EQU 0x000007DA
+_getFiles.b19: EQU 0x000007E6
+_getFiles.b2: EQU 0x00000762
+_getFiles.b21: EQU 0x00000761
+_getFiles.b22: EQU 0x00000783
+_getFiles.b23: EQU 0x000007A9
+_getFiles.b24: EQU 0x000007D6
+_getFiles.b3: EQU 0x00000765
+_getFiles.b6: EQU 0x00000793
+_getFiles.b7: EQU 0x00000787
+_getFiles.b9: EQU 0x0000078C
+_getFirstSelected: EQU 0x00000A5D
+_getFirstSelected.b0: EQU 0x00000A5D
+_getFirstSelected.b2: EQU 0x00000A72
+_getFirstSelected.b3: EQU 0x00000A81
+_getFirstSelected.b4: EQU 0x00000A83
+_getFirstSelected.b5: EQU 0x00000A97
+_getFirstSelected.b6: EQU 0x00000A95
+_getFirstSelected.b7: EQU 0x00000A82
+_getName: EQU 0x000006C0
+_getName.b0: EQU 0x000006C0
+_getName.b1: EQU 0x000006C2
+_getName.b2: EQU 0x000006C5
+_getName.b3: EQU 0x000006CA
+_getName.b6: EQU 0x000006CD
+_getNextSelected: EQU 0x00000A9A
+_getNextSelected.b0: EQU 0x00000A9A
+_getNextSelected.b1: EQU 0x00000A9D
+_getNextSelected.b2: EQU 0x00000ACE
+_getNextSelected.b3: EQU 0x00000AA7
+_getNextSelected.b4: EQU 0x00000AD0
+_getNextSelected.b5: EQU 0x00000AB7
+_getNextSelected.b6: EQU 0x00000B05
+_getNextSelected.b7: EQU 0x00000B03
+_getPalmiraMode: EQU 0x000005FD
+_getPalmiraMode.b0: EQU 0x000005FD
+_getPalmiraModeStr: EQU 0x0000060A
+_getPalmiraModeStr.b0: EQU 0x0000060A
+_getPalmiraModeStr.b1: EQU 0x0000061A
+_getPalmiraModeStr.b2: EQU 0x0000061E
+_getPalmiraModeStr.b3: EQU 0x00000622
+_getPalmiraModeStr.b4: EQU 0x00000626
+_getSelNoBack: EQU 0x00000F50
+_getSelNoBack.b0: EQU 0x00000F50
+_getSelNoBack.b1: EQU 0x00000F57
+_getch1: EQU 0x00001AD9
+_getch1.b0: EQU 0x00001AD9
+_gotoxy: EQU 0x000023CC
+_gotoxy.b0: EQU 0x000023CC
+_hLine: EQU 0x000020C6
+_hLine.b0: EQU 0x000020C6
+_hideFileCursor: EQU 0x00002091
+_hideFileCursor.b0: EQU 0x00002091
+_hideFileCursor.b2: EQU 0x00002097
+_hideTextCursor: EQU 0x00001AE9
+_hideTextCursor.b0: EQU 0x00001AE9
+_i2s: EQU 0x00002192
+_i2s.b0: EQU 0x00002192
+_i2s.b1: EQU 0x0000219B
+_i2s.b3: EQU 0x000021BC
+_i2s.b4: EQU 0x000021C1
+_i2s.b6: EQU 0x000021C9
+_i2s.b7: EQU 0x000021CF
+_i2s32: EQU 0x0000211F
+_i2s32.b0: EQU 0x0000211F
+_i2s32.b1: EQU 0x00002134
+_i2s32.b3: EQU 0x00002166
+_i2s32.b4: EQU 0x00002177
+_i2s32.b6: EQU 0x0000216E
+_i2s32.b7: EQU 0x00002182
+_i2s32.b8: EQU 0x0000217F
+_i2s32.b9: EQU 0x0000218D
+_initPalmiraScreen: EQU 0x00002114
+_initPalmiraScreen.b0: EQU 0x00002114
+_inputBox: EQU 0x00000C3B
+_inputBox.b0: EQU 0x00000C3B
+_inputBox.b1: EQU 0x00000C57
+_inputBox.b10: EQU 0x00000C81
+_inputBox.b11: EQU 0x00000C86
+_inputBox.b12: EQU 0x00000C69
+_inputBox.b2: EQU 0x00000C92
+_inputBox.b3: EQU 0x00000C6D
+_inputBox.b4: EQU 0x00000C99
+_inputBox.b5: EQU 0x00000C72
+_inputBox.b6: EQU 0x00000CA0
+_inputBox.b7: EQU 0x00000C77
+_inputBox.b8: EQU 0x00000CA6
+_inputBox.b9: EQU 0x00000C7C
+_main: EQU 0x0000001F
+_main.b0: EQU 0x0000001F
+_main.b1: EQU 0x00000094
+_main.b11: EQU 0x00000134
+_main.b12: EQU 0x00000153
+_main.b13: EQU 0x000000B8
+_main.b14: EQU 0x000000C1
+_main.b15: EQU 0x000001C6
+_main.b16: EQU 0x000001CC
+_main.b17: EQU 0x000001A5
+_main.b18: EQU 0x000001D0
+_main.b19: EQU 0x000001D6
+_main.b20: EQU 0x000001DB
+_main.b21: EQU 0x000001BD
+_main.b22: EQU 0x000001E0
+_main.b23: EQU 0x00000186
+_main.b24: EQU 0x000001E5
+_main.b25: EQU 0x000001EB
+_main.b26: EQU 0x0000020C
+_main.b27: EQU 0x00000212
+_main.b28: EQU 0x0000021A
+_main.b29: EQU 0x000000DB
+_main.b30: EQU 0x0000011C
+_main.b31: EQU 0x0000021E
+_main.b32: EQU 0x000001F4
+_main.b33: EQU 0x0000013B
+_main.b34: EQU 0x00000142
+_main.b35: EQU 0x00000225
+_main.b36: EQU 0x00000238
+_main.b37: EQU 0x00000244
+_main.b38: EQU 0x0000014A
+_main.b39: EQU 0x000000E5
+_main.b40: EQU 0x0000018E
+_main.b41: EQU 0x00000177
+_main.b42: EQU 0x000001AE
+_main.b43: EQU 0x000000DF
+_main.b44: EQU 0x00000206
+_main.b45: EQU 0x00000188
+_main.b46: EQU 0x000001A8
+_main.b47: EQU 0x000001BE
+_main.b49: EQU 0x000001C0
+_main.b50: EQU 0x00000214
+_main.b51: EQU 0x0000023E
+_main.b52: EQU 0x000001E1
+_main.b6: EQU 0x0000010F
+_main.b7: EQU 0x00000115
+_main.b8: EQU 0x00000109
+_main.b9: EQU 0x0000012E
+_maxFiles: EQU 0x00007581
+_memcmp: EQU 0x00002478
+_memcmp.b0: EQU 0x00002478
+_memcmp.b1: EQU 0x00002479
+_memcmp.b2: EQU 0x00002481
+_memcmp.b3: EQU 0x00002494
+_memcmp.b4: EQU 0x00002486
+_memcmp.b5: EQU 0x00002490
+_memcmp.b6: EQU 0x0000247E
+_memcmp.b7: EQU 0x0000248C
+_memcpy: EQU 0x00002406
+_memcpy.b0: EQU 0x00002406
+_memcpy_back: EQU 0x000022F1
+_memset: EQU 0x00002403
+_memset.b0: EQU 0x00002403
+_memswap: EQU 0x000022DB
+_mode: EQU 0x00007583
+_nextSelectedCnt: EQU 0x00007584
+_nextSelectedFile: EQU 0x00007586
+_packName: EQU 0x00000A31
+_packName.b0: EQU 0x00000A31
+_packName.b1: EQU 0x00000A42
+_packName.b3: EQU 0x00000A45
+_packName.b4: EQU 0x00000A4A
+_packName.b5: EQU 0x00000A52
+_packName.b6: EQU 0x00000A57
+_panelA: EQU 0x0000726D
+_panelB: EQU 0x00007377
+_parentDir: EQU 0x00000FC6
+_print2: EQU 0x00002310
+_print2cn: EQU 0x0000236F
+_print2m: EQU 0x00002343
+_print2n: EQU 0x00002359
+_radio86rkVideoBpl: EQU 0x00002282
+_rk_locate: EQU 0x000023E0
+_rk_locate.b0: EQU 0x000023E0
+_rk_monitor: EQU 0x000023DC
+_rk_monitor.b0: EQU 0x000023DC
+_run: EQU 0x00000B83
+_run.b0: EQU 0x00000B83
+_run.b1: EQU 0x00000B92
+_run.b2: EQU 0x00000BA0
+_run.b3: EQU 0x00000BB0
+_run.b4: EQU 0x00000BB7
+_set32: EQU 0x00002323
+_setPalmiraMode: EQU 0x00000BCD
+_setPalmiraMode.b0: EQU 0x00000BCD
+_setaddr: EQU 0x000020EA
+_setaddr.b0: EQU 0x000020EA
+_setch: EQU 0x000020E7
+_setch.b0: EQU 0x000020E7
+_showFileCursor: EQU 0x0000203C
+_showFileCursor.b0: EQU 0x0000203C
+_strchr: EQU 0x00002409
+_strchr.b0: EQU 0x00002409
+_strchr.b1: EQU 0x0000240B
+_strchr.b2: EQU 0x00002421
+_strchr.b3: EQU 0x00002410
+_strchr.b4: EQU 0x00002424
+_strchr.b5: EQU 0x00002414
+_strcmp: EQU 0x0000243B
+_strcmp.b0: EQU 0x0000243B
+_strcmp.b1: EQU 0x0000243E
+_strcmp.b2: EQU 0x00002443
+_strcmp.b3: EQU 0x00002447
+_strcmp.b4: EQU 0x0000244E
+_strcmp.b5: EQU 0x0000245C
+_strcmp.b6: EQU 0x00002454
+_strcmp.b7: EQU 0x00002460
+_strcmp.b8: EQU 0x00002458
+_strcpy: EQU 0x00002428
+_strcpy.b0: EQU 0x00002428
+_strcpy.b1: EQU 0x0000242A
+_strcpy.b2: EQU 0x00002430
+_strcpy.b3: EQU 0x00002438
+_strlen: EQU 0x00002464
+_strlen.b0: EQU 0x00002464
+_strlen.b1: EQU 0x00002466
+_strlen.b2: EQU 0x0000246B
+_strlen.b3: EQU 0x00002471
+_sub32_32: EQU 0x00001A92
+_sub32_32.b0: EQU 0x00001A92
+_swapPanels: EQU 0x0000062A
+_swapPanels.b0: EQU 0x0000062A
+_unpackName: EQU 0x00000B3F
+_unpackName.b0: EQU 0x00000B3F
+_unpackName.b1: EQU 0x00000B46
+_unpackName.b10: EQU 0x00000B56
+_unpackName.b2: EQU 0x00000B4B
+_unpackName.b3: EQU 0x00000B6C
+_unpackName.b4: EQU 0x00000B50
+_unpackName.b5: EQU 0x00000B76
+_unpackName.b7: EQU 0x00000B5E
+_unpackName.b8: EQU 0x00000B67
+_unpackName.b9: EQU 0x00000B68
+_vLine: EQU 0x00001F44
+_vLine.b0: EQU 0x00001F44
+_viewerApp: EQU 0x00000FB9
+fillRect_l0: EQU 0x0000202E
+fillRect_l1: EQU 0x00002022
+fs_entry_n: EQU 0x0000238C
+fs_ff0: EQU 0x00002396
+hLine_l0: EQU 0x000020E0
+memcpy_back_l1: EQU 0x00002302
+memcpy_back_l2: EQU 0x0000230A
+memswap_l1: EQU 0x000022DC
+memswap_l2: EQU 0x000022EF
+memswap_v1: EQU 0x000022E8
+print2_loop: EQU 0x0000231A
+print2cn_loop: EQU 0x00002379
+print2m_loop: EQU 0x0000234C
+print2m_ret: EQU 0x00002352
+print2n_loop: EQU 0x00002362
+print2n_ret: EQU 0x0000236E
+vLine_l0: EQU 0x00001F5A

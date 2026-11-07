@@ -4,15 +4,20 @@
 // Modified for Palmira by Viktor Pykhonin
 
 
-#include <n.h>
+#include "n.h"
 #include <stdlib.h>
-#include <mem.h>
+//#include "mem.h"
 #include "32.h"
 #include <string.h>
 #include "shell.h"
+#include "mem.h"
+//#include "mem.h"
 
-char   editorApp[1] = "BOOT/EDIT.RK";
-char   viewerApp[1] = "BOOT/VIEW.RK";
+extern char  cmdline[256];
+extern uint op_div16_mod;
+
+char   editorApp[] = "BOOT/EDIT.RK";
+char   viewerApp[] = "BOOT/VIEW.RK";
 Panel  panelA;
 Panel  panelB;
 char   cmdline[256]; 
@@ -146,11 +151,12 @@ void drawFilesCount() {
   uint i, filesCnt;
   FileInfo* p;   
   
-  SET32IMM(&total, 0);
+  total = 0;//SET32IMM(&total, 0);
   filesCnt = 0;
   for(p = panelA.files1, i = panelA.cnt; i; ++p, --i) {
     if((p->fattrib & 0x10) == 0) ++filesCnt;
-    add32_32(&total, &p->fsize);
+    //add32_32(&total, &p->fsize);
+    total += p->fsize;
   }
 
   drawFilesCountInt(&total, filesCnt);
@@ -364,8 +370,8 @@ void sort(FileInfo* low, FileInfo* high) {
     j = high;
     x = low + (high-low)/2;
     while(1) {
-      while(0!=cmpFileInfo(x, i)) i++;
-      while(0!=cmpFileInfo(j, x)) j--;
+      while(i<x && 0!=cmpFileInfo(x, i)) i++;
+      while(x<j && 0!=cmpFileInfo(j, x)) j--;
       if(i <= j) {
         memswap(i, j, sizeof(FileInfo));
         if(x==i) x=j; else if(x==j) x=i;
@@ -389,7 +395,7 @@ void sort(FileInfo* low, FileInfo* high) {
 
 //---------------------------------------------------------------------------
 
-void packName(char* buf, char *path) {
+void packName(char* buf,const char *path) {
   register uchar c, f, i;
 
   memset(buf, ' ', 11);    
@@ -412,7 +418,7 @@ void getFiles() {
   char *n;
   uchar i;
   uint j;
-  FileInfo dir;
+  //FileInfo dir;
 
   // Долгая операция
   hideTextCursor();
@@ -470,7 +476,7 @@ void selectFile(char* sfile) {
       }
       // Устанавлиаем курсор
       panelA.cursorX = l/ROWS_CNT;
-      panelA.cursorY = op_div16_mod;
+      panelA.cursorY = l%ROWS_CNT;// op_div16_mod;
       break;
     }
   }
@@ -550,17 +556,17 @@ const char* getName(const char* name) {
 // Выход из папки
 
 void dropPathInt(char* src, char* preparedName) {
-  char *p;
+  const char *p;
 
   // Отделяем от пути последнюю папку
-  p = getname(src);
+  p = getName(src);
 
   // Сохраняем имя папки из которой вышли
   if(preparedName) packName(preparedName, p);
 
   // Удаляем последнюю папку
   if(p != src) --p;
-  *p = 0;
+  *(char*)p = 0;
 }
 
 //---------------------------------------------------------------------------
@@ -692,7 +698,7 @@ void runCmdLine() {
   if(!absolutePath(cmdline)) return;
 
   // Разделение ком строки по первому пробелу
-  cmdLine2 = strchr(cmdLine, ' ');
+  cmdLine2 = strchr(cmdline, ' ');
   if(cmdLine2) {
     *cmdLine2 = 0;
     ++cmdLine2;
@@ -701,7 +707,7 @@ void runCmdLine() {
   }
 
   // Запуск
-  run(cmdLine, cmdLine2);
+  run(cmdline, cmdLine2);
 }
 
 //---------------------------------------------------------------------------
@@ -729,9 +735,11 @@ void loadState() {
   if(i < 4) return;
   i -= 3;
   if(0 != strcmp(fs_selfName + i, ".RK")) return;
-  strcpy(fs_selfName + i, ".IN");
+  static char fs_selfName2[64];
+	strcpy(fs_selfName2, fs_selfName);
+  strcpy(fs_selfName2 + i, ".IN");
 
-  if(fs_open(fs_selfName)) return;
+  if(fs_open(fs_selfName2)) return;
   fs_read(cmdline, 12);
   if(cmdline[11]) swapPanels();
   fs_read(panelA.path1, 256); panelA.path1[255] = 0;
@@ -752,7 +760,7 @@ void saveState() {
 // Запустить программу. В случае ошибки вывести ошибку на экран, а потом
 // очистить ком строку и восстановить экран
 
-void run(const char* prog, const char* cmdLine) {
+void run(const char* prog, const char* cmdline) {
   uchar e;
 
   saveState();
@@ -764,7 +772,7 @@ void run(const char* prog, const char* cmdLine) {
     }
     setPalmiraMode(mode);
   }
-  e = fs_exec(prog, cmdLine);
+  e = fs_exec(prog, cmdline);
   if (mode != 0) {
     setPalmiraMode(0);
     drawInit();  
@@ -781,23 +789,23 @@ void run(const char* prog, const char* cmdLine) {
 void cmd_editview(char* app) {
   FileInfo* f = getSel();
   if(f->fattrib & 0x10) return;
-  unpackName(cmdLine, f->fname);
-  if(!absolutePath(cmdLine)) {
+  unpackName(cmdline, f->fname);
+  if(!absolutePath(cmdline)) {
     drawScreen();
     return;
   }
-  run(app, cmdLine);
+  run(app, cmdline);
 }
 
 //---------------------------------------------------------------------------
 
 void cmd_enter() {
-  char *d, i;
+  //char *d, i;
   FileInfo* f;
-  uint l, o;
+  //uint l, o;
 
   // Запуск ком строки
-  if(cmdLine[0]) {
+  if(cmdline[0]) {
     runCmdLine(); // Функция восстановит экран
     return;
   }
@@ -812,8 +820,8 @@ void cmd_enter() {
   }
 
   // Получаем полное имя файла
-  unpackName(cmdLine, f->fname);
-  if(!absolutePath(cmdLine)) { drawScreen(); return; }
+  unpackName(cmdline, f->fname);
+  if(!absolutePath(cmdline)) { drawScreen(); return; }
 
   // Входим в папку
   if((f->fattrib & 0x10) != 0) { 
@@ -830,7 +838,7 @@ void cmd_enter() {
 //---------------------------------------------------------------------------
 
 void cmd_esc() {
-  if(cmdLine[0]) {
+  if(cmdline[0]) {
      cmdline[0] = 0;
      drawCmdLine();
      return;
@@ -934,7 +942,7 @@ void main() {
     }    
 
     // Клавиши только для пустой ком строки
-    if(!cmdLine[0]) {
+    if(!cmdline[0]) {
       switch(c) {
         case '1':     cmd_freespace();         continue;
         case '2':     cmd_new(0);              continue;

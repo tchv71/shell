@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{46E1C877-E20C-4C13-91A0-247FA0D2E3BE}</ProjectGuid>
+    <ProjectGuid>{5AC9BF33-BC53-4AA3-B441-2663E03C8FA0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -68,12 +68,12 @@
     <NMakeBuildCommandLine>make clean
 make all</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>make clean</NMakeCleanCommandLine>
-    <IncludePath>D:\RK\sd_src\c8080\Include;$(IncludePath)</IncludePath>
+    <IncludePath>..\c8080\Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <NMakeOutput>shell.exe</NMakeOutput>
     <NMakePreprocessorDefinitions>_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <IncludePath>D:\RK\sd_src\c8080\Include;$(IncludePath)</IncludePath>
+    <IncludePath>..\c8080\Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <NMakeOutput>shell.rk</NMakeOutput>
@@ -96,11 +96,9 @@ make all</NMakeReBuildCommandLine>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="make-rka.js" />
     <None Include="Makefile" />
-    <None Include="shell.asm" />
-    <None Include="shell.lst" />
-    <None Include="stdlib8080.inc" />
+    <None Include="mem.asm" />
+    <None Include="shell.s" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\c8080\Include\Radio86rk\charAddr.c" />
@@ -144,7 +142,8 @@ make all</NMakeReBuildCommandLine>
     <ClInclude Include="..\c8080\Include\Radio86rk\bios.h" />
     <ClInclude Include="..\c8080\Include\Radio86rk\screen_constrcutor.h" />
     <ClInclude Include="..\c8080\Include\Radio86rk\video.h" />
-    <ClInclude Include="fs.h" />
+    <ClInclude Include="Fs\fs.h" />
+    <ClInclude Include="Fs\fs_open0.h" />
     <ClInclude Include="interface.h" />
     <ClInclude Include="shell.h" />
   </ItemGroup>

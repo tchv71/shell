@@ -19,16 +19,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
-    <None Include="stdlib8080.inc">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="make-rka.js" />
-    <None Include="shell.asm">
+    <None Include="mem.asm">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="shell.lst">
-      <Filter>Source Files</Filter>
-    </None>
+    <None Include="shell.s" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cmd_copymove.c">
@@ -141,9 +135,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="fs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="interface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -158,6 +149,12 @@
     </ClInclude>
     <ClInclude Include="..\c8080\Include\Radio86rk\video.h">
       <Filter>Source Files\radio86rk</Filter>
+    </ClInclude>
+    <ClInclude Include="Fs\fs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Fs\fs_open0.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

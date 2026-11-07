@@ -1,9 +1,11 @@
 // Shell for Computer "Radio 86RK" / "Apogee BK01"
 // (c) 12-05-2014 vinxru (aleksey.f.morozov@gmail.com)
 
-#include <n.h>
+#include "n.h"
 #include "shell.h"
 #include "32.h"
+#include "string.h"
+#include "../x80cc-0.8.0-r1902-win64/lib/include/string.h"
 
 uchar cmd_copyFile(char* from, char* to) {
   char buf[16];
@@ -36,8 +38,8 @@ uchar cmd_copyFile(char* from, char* to) {
   if(e = fs_create(to)) return e;
 
   // Копирование
-  SET32IMM(&progress, 0);
-  SET32IMM(&progress_x, 0);
+  progress = 0;// SET32IMM(&progress, 0);
+  progress_x = 0;// SET32IMM(&progress_x, 0);
   for(;;) {
     // Вывод прогресса
     i2s32(buf, &progress, 10, ' ');
@@ -161,7 +163,7 @@ void applyMask(char* dest, char* mask) {
 //---------------------------------------------------------------------------
 
 char cmd_copymove1(uchar copymode, uchar shiftPressed) {
-  char *name;
+  const char *name;
   char e;
   FileInfo* f;
   char sourceFile[256];
@@ -174,12 +176,12 @@ char cmd_copymove1(uchar copymode, uchar shiftPressed) {
     // Копируем имя c первой панели (без пути)
     f = getSelNoBack();
     if(!f) return 0; // Файл не выбран, выходим без ошибки
-    unpackName(cmdLine, f->fname);
+    unpackName(cmdline, f->fname);
   } else {
     // Копируем путь со второй панели
     i = strlen(panelB.path1);
     if(i >= 254) return ERR_RECV_STRING; // Так как прибавим 2 символа
-    cmdLine[0] = '/';
+    cmdline[0] = '/';
     strcpy(cmdline+1, panelB.path1);
     if(i != 0) strcpy(cmdline+i+1, "/");
   }
@@ -192,16 +194,16 @@ char cmd_copymove1(uchar copymode, uchar shiftPressed) {
 
   // Используется ли маска?
   mask[0] = 0;  
-  name = getname(cmdline);
+  name = getName(cmdline);
   if(name[0] != 0) {
     // Сохраняем маску
     packName(mask, name);
     // Убираем из пути маску
-    dropPathInt(cmdLine, 0);
+    dropPathInt(cmdline, 0);
   } else {
     // Если в ком строке что то есть, а имя не выделено, значит ком строка оканчивается на /.
     // Этот символ надо удалить
-    if(cmdline[0] != 0 && name[0] == 0) name[-1] = 0;
+    if(cmdline[0] != 0 && name[0] == 0) ((char*)name)[-1] = 0;
   }
 
   // Ищем первый файл
@@ -213,7 +215,7 @@ char cmd_copymove1(uchar copymode, uchar shiftPressed) {
     if(!absolutePath(sourceFile)) { e = ERR_RECV_STRING; break; }
 
     // Добавляем имя
-    packName(forMask, getname(sourceFile));
+    packName(forMask, getName(sourceFile));
     if(mask[0]) applyMask(forMask, mask);
     if(catPathAndUnpack(cmdline, forMask)) return ERR_RECV_STRING;
 
@@ -245,7 +247,7 @@ char cmd_copymove1(uchar copymode, uchar shiftPressed) {
     }
 
     // Убираем из пути имя файла
-    dropPathInt(cmdLine, 0);
+    dropPathInt(cmdline, 0);
 
     // Следующий выбранный файл
     type = getNextSelected(sourceFile);
@@ -262,7 +264,7 @@ char cmd_copymove1(uchar copymode, uchar shiftPressed) {
 
 //---------------------------------------------------------------------------
 
-char cmd_copymove(uchar copymode, uchar shiftPressed) {
+void cmd_copymove(uchar copymode, uchar shiftPressed) {
   drawError(copymode ? "o{ibka kopirowaniq" : "o{ibka pereme}eniq", cmd_copymove1(copymode, shiftPressed));
   drawScreen();
 }
