@@ -136,6 +136,7 @@ _dropPath:
 ; ---- reloadFiles ----
 _reloadFiles:
 .b0:
+	EX DE,HL
 	JP __shell_reloadFiles__lc
 	ENDIF
 
@@ -145,19 +146,8 @@ _reloadFiles:
 ; ---- selectFile ----
 _selectFile:
 .b0:
-	JP __shell_selectFile__lc
-	ENDIF
-
-	DEFINE __X80_DEF_sort
-	IFUSED _sort
-
-; ---- sort ----
-_sort:
-.b0:
-	LD B,D
-	LD C,E
 	EX DE,HL
-	JP __shell_sort__lc
+	JP __shell_selectFile__lc
 	ENDIF
 
 	DEFINE __X80_DEF_cmpFileInfo
@@ -166,8 +156,6 @@ _sort:
 ; ---- cmpFileInfo ----
 _cmpFileInfo:
 .b0:
-	LD B,H
-	LD C,L
 	JP __shell_cmpFileInfo__lc
 	ENDIF
 
@@ -235,12 +223,11 @@ _getSel:
 	JP __shell_getSel__lc
 	ENDIF
 
-	DEFINE __X80_DEF_main
+	DEFINE __X80_DEF_main2
 
-; ---- main ----
-_main:
+; ---- main2 ----
+_main2:
 .b0:
-	CALL _fs_init
 	CALL _getPalmiraMode
 	XOR A
 	CALL _setPalmiraMode
@@ -268,7 +255,7 @@ _main:
 	CALL _getFiles
 	LD A,1
 	CALL _dupFiles
-	LD HL,_cmdline
+	LD DE,_cmdline
 	CALL __shell_selectFile__lc
 	XOR A
 	LD (_cmdline),A
@@ -290,43 +277,6 @@ _main:
 	CALL _drawCmdLineWithPath
 .b1:
 	CALL _getch1
-	CP 9
-	JP Z,.b12
-	JP C,.b39
-	CP 13
-	JP Z,.b6
-	CP 24
-	JP Z,.b9
-	CP 25
-	JP Z,.b11
-	CP 26
-	JP Z,.b44
-	CP 27
-	JP Z,.b7
-.b13:
-	LD HL,_cmdline
-	LD B,(HL)
-	INC B
-	DEC B
-	JP NZ,.b29
-.b14:
-	CP 52
-	JP Z,.b18
-	JP C,.b40
-	CP 56
-	JP Z,.b24
-	JP C,.b41
-	CP 58
-	JP Z,.b26
-	CP 59
-	JP Z,.b27
-.b29:
-	LD C,A
-	CALL __shell_processInput__lc
-.b43:
-	CALL _drawCmdLine
-	JP .b1
-.b39:
 	OR A
 	JP Z,.b15
 	CP 1
@@ -335,104 +285,88 @@ _main:
 	JP Z,.b17
 	CP 3
 	JP Z,.b18
+	CP 13
+	JP Z,.b6
+	CP 27
+	JP Z,.b7
 	CP 8
 	JP Z,.b8
-	LD HL,_cmdline
-	LD B,(HL)
-	INC B
-	DEC B
-	JP NZ,.b29
-	JP .b14
-.b8:
-	CALL __shell_cursor_left__lc
+	CP 24
+	JP Z,.b9
+	CP 26
+	JP Z,.b10
+	CP 25
+	JP Z,.b11
+	CP 9
+	JP Z,.b12
+	JP .b13
+.b9:
+	CALL __shell_cursor_right__lc
 	JP .b1
 .b6:
 	CALL __shell_cmd_enter__lc
 	JP .b1
 .b7:
-	LD A,(_cmdline)
-	OR A
-	JP NZ,.b31
-.b30:
-	LD HL,_panelA+2
-	LD DE,__shell_l0_buf
-	CALL _dropPathInt
-	LD HL,__shell_l0_buf
-	CALL __shell_reloadFiles__lc
+	CALL __shell_cmd_esc__lc
 	JP .b1
-.b9:
-	CALL __shell_cursor_right__lc
+.b8:
+	CALL __shell_cursor_left__lc
+	JP .b1
+.b10:
+	CALL __shell_cursor_down__lc
 	JP .b1
 .b11:
-	LD A,(_panelA+259)
-	OR A
-	JP NZ,.b37
-.b33:
-	LD A,(_panelA+258)
-	OR A
-	JP NZ,.b36
-.b34:
-	LD HL,(_panelA+260)
-	LD A,L
-	OR H
-	JP NZ,.b35
-.b38:
-	CALL _showFileCursor
-	CALL __shell_drawFileInfo__lc
+	CALL __shell_cursor_up__lc
 	JP .b1
 .b12:
-	CALL _hideFileCursor
-	XOR A
-	CALL _drawPanelTitle
-	LD HL,_panelA
-	LD DE,_panelB
-	LD BC,10AH
-	CALL _memswap
-	CALL _drawSwapPanels
-	CALL _showFileCursor
-	LD A,1
-	CALL _drawPanelTitle
-	CALL _drawCmdLineWithPath
+	CALL __shell_cmd_tab__lc
 	JP .b1
-.b41:
-	CP 53
-	JP Z,.b20
-	CP 54
-	JP Z,.b22
-	CP 55
+.b13:
+	LD HL,_cmdline
+	LD B,(HL)
+	INC B
+	DEC B
 	JP NZ,.b29
-.b23:
-	LD A,1
-.b45:
-	CALL _cmd_new
-	JP .b1
-.b40:
-	CP 45
-	JP Z,.b28
-	JP C,.b42
+.b14:
 	CP 49
 	JP Z,.b15
 	CP 50
 	JP Z,.b16
 	CP 51
-	JP NZ,.b29
-.b17:
-	LD HL,_viewerApp
-.b46:
-	CALL __shell_cmd_editview__lc
-	JP .b1
-.b42:
-	CP 31
-	JP Z,.b25
+	JP Z,.b17
+	CP 52
+	JP Z,.b18
 	CP 37
 	JP Z,.b19
+	CP 53
+	JP Z,.b20
 	CP 38
-	JP NZ,.b29
-.b21:
+	JP Z,.b21
+	CP 54
+	JP Z,.b22
+	CP 55
+	JP Z,.b23
+	CP 56
+	JP Z,.b24
+	CP 31
+	JP Z,.b25
+	CP 58
+	JP Z,.b26
+	CP 59
+	JP Z,.b27
+	CP 45
+	JP Z,.b28
+	JP .b29
+.b18:
+	LD HL,_editorApp
+.b32:
+	CALL __shell_cmd_editview__lc
+	JP .b1
+.b22:
 	XOR A
-.b47:
-	LD L,1
-.b49:
+.b30:
+	LD L,B
+.b34:
 	CALL _cmd_copymove
 	JP .b1
 .b15:
@@ -440,100 +374,77 @@ _main:
 	JP .b1
 .b16:
 	XOR A
-	JP .b45
-.b18:
-	LD HL,_editorApp
-	JP .b46
+.b31:
+	CALL _cmd_new
+	JP .b1
+.b17:
+	LD HL,_viewerApp
+	JP .b32
 .b19:
 	LD A,1
-	JP .b47
+.b33:
+	LD L,1
+	JP .b34
 .b20:
 	LD A,1
-	JP .b52
-.b22:
+	JP .b30
+.b21:
 	XOR A
-.b52:
-	LD L,B
-	JP .b49
+	JP .b33
+.b23:
+	LD A,1
+	JP .b31
 .b24:
 	CALL _cmd_delete
 	JP .b1
 .b25:
-	CALL _getSelNoBack
-	EX DE,HL
-	LD A,E
-	OR D
-	JP Z,.b1
-.b32:
-	LD HL,11
-	ADD HL,DE
-	LD A,(HL)
-	XOR 128
-	LD (HL),A
-	LD A,(_panelA+258)
-	LD HL,_panelA+259
-	LD L,(HL)
-	CALL _drawFile
-.b44:
-	CALL __shell_cursor_down__lc
+	CALL __shell_cmd_inverseOne__lc
 	JP .b1
 .b26:
 	CALL __shell_cmd_inverseAll__lc
 	JP .b1
 .b27:
 	LD A,1
-.b50:
+.b35:
 	CALL _cmd_sel
 	JP .b1
 .b28:
 	XOR A
-	JP .b50
-.b31:
-	XOR A
-	LD (_cmdline),A
-	JP .b43
-.b35:
-	DEC HL
-	LD (_panelA+260),HL
-	CALL _hideFileCursor
-	XOR A
-	CALL _drawColumn
-	LD A,1
-	CALL _drawColumn
-	JP .b38
-.b36:
-	DEC A
-	LD (_panelA+258),A
-	LD A,21
-.b51:
-	LD (_panelA+259),A
-	JP .b38
-.b37:
-	DEC A
-	JP .b51
+	JP .b35
+.b29:
+	LD C,A
+	CALL __shell_processInput__lc
+	CALL _drawCmdLine
+	JP .b1
 
 	IFUSED __shell_cmd_inverseAll__lc
 
 ; ---- cmd_inverseAll__lc ----
 __shell_cmd_inverseAll__lc:
 .b0:
+	DEC SP
+	DEC SP
 	LD HL,(_panelA)
 	EX DE,HL
 	LD HL,(_panelA+262)
 	LD B,H
 	LD C,L
-	EX DE,HL
-	LD (__shell___x80_spill_cmd_inverseAll__lc),HL
+	LD HL,0
+	ADD HL,SP
 .b1:
+	LD (HL),E
+	INC HL
+	LD (HL),D
 	LD A,C
 	OR B
 	JP Z,.b6
-.b7:
-	DEC BC
-	INC B
-	INC C
 .b2:
-	LD HL,(__shell___x80_spill_cmd_inverseAll__lc)
+	LD HL,0
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	LD DE,11
 	ADD HL,DE
 	LD D,(HL)
@@ -545,33 +456,29 @@ __shell_cmd_inverseAll__lc:
 	XOR D
 .b5:
 	LD (HL),A
-	LD HL,(__shell___x80_spill_cmd_inverseAll__lc)
+	DEC BC
+	LD HL,0
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	LD DE,20
 	ADD HL,DE
-	LD (__shell___x80_spill_cmd_inverseAll__lc),HL
-	DEC C
-	JP NZ,.b2
-.b8:
-	DEC B
-	JP NZ,.b2
-.b6:
-	CALL _hideFileCursor
-	XOR A
-	CALL _drawColumn
-	LD A,1
-	CALL _drawColumn
-	JP _showFileCursor
+	EX DE,HL
+	LD HL,0
+	ADD HL,SP
+	JP .b1
 .b3:
 	LD A,127
 	AND D
-	LD (HL),A
-	LD HL,(__shell___x80_spill_cmd_inverseAll__lc)
-	LD DE,20
-	ADD HL,DE
-	LD (__shell___x80_spill_cmd_inverseAll__lc),HL
-	DEC C
-	JP NZ,.b2
-	JP .b8
+	JP .b5
+.b6:
+	CALL __shell_drawFiles__lc
+	CALL _showFileCursor
+	INC SP
+	INC SP
+	RET
 	ENDIF
 
 	IFUSED __shell_cmd_inverseOne__lc
@@ -602,19 +509,46 @@ __shell_cmd_inverseOne__lc:
 ; ---- cmd_esc__lc ----
 __shell_cmd_esc__lc:
 .b0:
+	LD (__shell___x80_frame_scratch),HL
+	LD HL,65523
+	ADD HL,SP
+	LD SP,HL
+	LD HL,(__shell___x80_frame_scratch)
 	LD A,(_cmdline)
 	OR A
 	JP NZ,.b1
 .b2:
 	LD HL,_panelA+2
-	LD DE,__shell_l1_buf
+	EX DE,HL
+	LD HL,11
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,0
+	ADD HL,SP
+	EX DE,HL
+	LD HL,11
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	CALL _dropPathInt
-	LD HL,__shell_l1_buf
-	JP __shell_reloadFiles__lc
+	LD HL,0
+	ADD HL,SP
+	EX DE,HL
+	CALL __shell_reloadFiles__lc
+.b3:
+	LD HL,13
+	ADD HL,SP
+	LD SP,HL
+	RET
 .b1:
 	XOR A
 	LD (_cmdline),A
-	JP _drawCmdLine
+	CALL _drawCmdLine
+	JP .b3
 	ENDIF
 
 	IFUSED __shell_cmd_enter__lc
@@ -622,6 +556,11 @@ __shell_cmd_esc__lc:
 ; ---- cmd_enter__lc ----
 __shell_cmd_enter__lc:
 .b0:
+	LD (__shell___x80_frame_scratch),HL
+	LD HL,65523
+	ADD HL,SP
+	LD SP,HL
+	LD HL,(__shell___x80_frame_scratch)
 	LD A,(_cmdline)
 	OR A
 	JP NZ,.b1
@@ -641,19 +580,37 @@ __shell_cmd_enter__lc:
 	POP DE
 	JP NZ,.b6
 .b5:
-	XOR A
-	LD (_cmdline),A
-	CALL _drawScreenInt
-	CALL _drawCmdLineWithPath
-	JP __shell_drawFiles2__lc
+	CALL _drawScreen
+.b12:
+	LD HL,13
+	ADD HL,SP
+	LD SP,HL
+	RET
 .b1:
-	JP __shell_runCmdLine__lc
+	CALL __shell_runCmdLine__lc
+	JP .b12
 .b3:
 	LD HL,_panelA+2
-	LD DE,__shell_l2_buf
+	EX DE,HL
+	LD HL,11
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,0
+	ADD HL,SP
+	EX DE,HL
+	LD HL,11
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	CALL _dropPathInt
-	LD HL,__shell_l2_buf
-	JP __shell_reloadFiles__lc
+	LD HL,0
+	ADD HL,SP
+	EX DE,HL
+	JP .b13
 .b6:
 	LD HL,11
 	ADD HL,DE
@@ -662,30 +619,19 @@ __shell_cmd_enter__lc:
 	JP NZ,.b7
 .b8:
 	LD HL,_cmdline
-	LD DE,__shell_anon3
-	JP _run
+	LD DE,__shell_anon0
+	CALL _run
+	JP .b12
 .b7:
 	LD HL,_panelA+2
 	LD DE,_cmdline
 	CALL _strcpy
 	XOR A
 	LD (_cmdline),A
-	INC A
-	CALL _drawPanelTitle
-	CALL _drawCmdLineWithPath
-	CALL _getFiles
-	LD A,1
-	CALL _drawPanelTitle
-	CALL _drawCmdLineWithPath
-	CALL __shell_drawFilesCount__lc
-	CALL _hideFileCursor
-	XOR A
-	CALL _drawColumn
-	LD A,1
-	CALL _drawColumn
-	CALL _showFileCursor
-	CALL __shell_drawFileInfo__lc
-	JP _drawCmdLine
+	LD DE,0
+.b13:
+	CALL __shell_reloadFiles__lc
+	JP .b12
 	ENDIF
 
 	IFUSED __shell_cmd_editview__lc
@@ -693,29 +639,27 @@ __shell_cmd_enter__lc:
 ; ---- cmd_editview__lc ----
 __shell_cmd_editview__lc:
 .b0:
-	LD (__shell___x80_spill_cmd_editview__lc),HL
+	PUSH HL
 	CALL __shell_getSel__lc
 	EX DE,HL
 	LD HL,11
 	ADD HL,DE
 	LD A,(HL)
 	AND 16
+	POP HL
 	RET NZ
 .b2:
+	PUSH HL
 	LD HL,_cmdline
 	CALL _unpackName
 	LD HL,_cmdline
 	CALL _absolutePath
 	OR A
+	POP HL
 	JP NZ,.b4
 .b3:
-	XOR A
-	LD (_cmdline),A
-	CALL _drawScreenInt
-	CALL _drawCmdLineWithPath
-	JP __shell_drawFiles2__lc
+	JP _drawScreen
 .b4:
-	LD HL,(__shell___x80_spill_cmd_editview__lc)
 	LD DE,_cmdline
 	JP _run
 	ENDIF
@@ -741,7 +685,7 @@ __shell_loadState__lc:
 	DEC BC
 	LD HL,(_fs_selfName)
 	ADD HL,BC
-	LD DE,__shell_anon4
+	LD DE,__shell_anon1
 	CALL _strcmp
 	LD A,L
 	OR H
@@ -751,14 +695,14 @@ __shell_loadState__lc:
 	PUSH HL
 	LD HL,(_fs_selfName)
 	EX DE,HL
-	LD HL,__shell_l5_fs_selfName2
+	LD HL,__shell_l2_fs_selfName2
 	CALL _strcpy
 	POP HL
-	LD BC,__shell_l5_fs_selfName2-3
+	LD BC,__shell_l2_fs_selfName2-3
 	ADD HL,BC
-	LD DE,__shell_anon6
+	LD DE,__shell_anon3
 	CALL _strcpy
-	LD HL,__shell_l5_fs_selfName2
+	LD HL,__shell_l2_fs_selfName2
 	CALL _fs_open
 	OR A
 	RET NZ
@@ -807,7 +751,7 @@ __shell_runCmdLine__lc:
 	OR H
 	JP NZ,.b3
 .b4:
-	LD DE,__shell_anon7
+	LD DE,__shell_anon4
 .b5:
 	LD HL,_cmdline
 	JP _run
@@ -842,8 +786,15 @@ __shell_cmd_tab__lc:
 ; ---- cursor_down__lc ----
 __shell_cursor_down__lc:
 .b0:
+	DEC SP
+	DEC SP
 	LD HL,(_panelA+260)
-	LD (__shell___x80_spill_cursor_down__lc),HL
+	EX DE,HL
+	LD HL,0
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
 	LD HL,_panelA+258
 	LD B,(HL)
 	LD E,B
@@ -856,8 +807,13 @@ __shell_cursor_down__lc:
 	ADD HL,HL
 	ADD HL,DE
 	ADD HL,HL
-	EX DE,HL
-	LD HL,(__shell___x80_spill_cursor_down__lc)
+	PUSH HL
+	LD HL,2
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
 	ADD HL,DE
 	EX DE,HL
 	LD HL,_panelA+259
@@ -872,7 +828,7 @@ __shell_cursor_down__lc:
 	SUB L
 	LD A,D
 	SBC A, H
-	RET NC
+	JP NC,.b1
 .b2:
 	LD A,C
 	CP 21
@@ -882,17 +838,22 @@ __shell_cursor_down__lc:
 	OR B
 	JP Z,.b5
 .b6:
-	LD HL,(__shell___x80_spill_cursor_down__lc)
+	LD HL,0
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,C
 	INC HL
 	LD (_panelA+260),HL
-	CALL _hideFileCursor
-	XOR A
-	CALL _drawColumn
-	LD A,1
-	CALL _drawColumn
+	CALL __shell_drawFiles__lc
 .b7:
 	CALL _showFileCursor
-	JP __shell_drawFileInfo__lc
+	CALL __shell_drawFileInfo__lc
+.b1:
+	INC SP
+	INC SP
+	RET
 .b3:
 	INC A
 	LD (_panelA+259),A
@@ -938,11 +899,7 @@ __shell_cursor_up__lc:
 .b5:
 	DEC HL
 	LD (_panelA+260),HL
-	CALL _hideFileCursor
-	XOR A
-	CALL _drawColumn
-	LD A,1
-	CALL _drawColumn
+	CALL __shell_drawFiles__lc
 	JP .b6
 	ENDIF
 
@@ -951,17 +908,34 @@ __shell_cursor_up__lc:
 ; ---- cursor_right__lc ----
 __shell_cursor_right__lc:
 .b0:
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
 	LD HL,(_panelA+260)
-	LD (__shell___x80_spill_cursor_right__lc+3),HL
+	EX DE,HL
+	LD HL,3
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
 	LD HL,_panelA+259
 	LD C,(HL)
 	LD B,0
-	LD HL,(__shell___x80_spill_cursor_right__lc+3)
+	LD HL,3
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	ADD HL,BC
 	LD B,H
 	LD C,L
 	LD A,(_panelA+258)
-	LD (__shell___x80_spill_cursor_right__lc+2),A
+	LD HL,2
+	ADD HL,SP
+	LD (HL),A
 	LD E,A
 	LD D,0
 	LD H,D
@@ -972,7 +946,13 @@ __shell_cursor_right__lc:
 	ADD HL,HL
 	ADD HL,DE
 	ADD HL,HL
-	LD (__shell___x80_spill_cursor_right__lc),HL
+	EX DE,HL
+	LD HL,0
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	EX DE,HL
 	ADD HL,BC
 	EX DE,HL
 	LD HL,(_panelA+262)
@@ -986,27 +966,40 @@ __shell_cursor_right__lc:
 	SBC A, B
 	JP NC,.b1
 .b7:
-	LD A,(__shell___x80_spill_cursor_right__lc+2)
+	LD HL,2
+	ADD HL,SP
+	LD A,(HL)
 	CP 1
 	JP Z,.b8
 .b9:
+	LD HL,2
+	ADD HL,SP
+	LD A,(HL)
 	INC A
 	LD (_panelA+258),A
 .b10:
 	CALL _showFileCursor
-	JP __shell_drawFileInfo__lc
+	CALL __shell_drawFileInfo__lc
+.b2:
+	LD HL,5
+	ADD HL,SP
+	LD SP,HL
+	RET
 .b1:
 	INC DE
 	LD A,E
 	SUB C
 	LD A,D
 	SBC A, B
-	RET NC
+	JP NC,.b2
 .b3:
-	LD HL,(__shell___x80_spill_cursor_right__lc+3)
-	LD A,L
-	LD HL,(__shell___x80_spill_cursor_right__lc)
-	ADD A, L
+	LD HL,3
+	ADD HL,SP
+	LD A,(HL)
+	LD HL,0
+	ADD HL,SP
+	LD E,(HL)
+	ADD A, E
 	INC A
 	LD B,A
 	LD A,C
@@ -1027,19 +1020,20 @@ __shell_cursor_right__lc:
 .b5:
 	LD HL,(_panelA+260)
 	LD BC,22
-	ADD HL,BC
 .b11:
+	ADD HL,BC
 	LD (_panelA+260),HL
-	CALL _hideFileCursor
-	XOR A
-	CALL _drawColumn
-	LD A,1
-	CALL _drawColumn
+	CALL __shell_drawFiles__lc
 	JP .b10
 .b8:
-	LD HL,(__shell___x80_spill_cursor_right__lc+3)
-	LD DE,22
-	ADD HL,DE
+	LD HL,22
+	PUSH HL
+	LD HL,5
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD B,(HL)
+	POP HL
 	JP .b11
 	ENDIF
 
@@ -1078,11 +1072,7 @@ __shell_cursor_left__lc:
 	ADD HL,BC
 .b9:
 	LD (_panelA+260),HL
-	CALL _hideFileCursor
-	XOR A
-	CALL _drawColumn
-	LD A,1
-	CALL _drawColumn
+	CALL __shell_drawFiles__lc
 	JP .b8
 .b4:
 	LD HL,0
@@ -1099,9 +1089,9 @@ __shell_cursor_left__lc:
 __shell_dropPath__lc:
 .b0:
 	LD HL,_panelA+2
-	LD DE,__shell_l8_buf
+	LD DE,__shell_l5_buf
 	CALL _dropPathInt
-	LD HL,__shell_l8_buf
+	LD DE,__shell_l5_buf
 	JP __shell_reloadFiles__lc
 	ENDIF
 
@@ -1110,7 +1100,13 @@ __shell_dropPath__lc:
 ; ---- reloadFiles__lc ----
 __shell_reloadFiles__lc:
 .b0:
-	LD (__shell___x80_spill_reloadFiles__lc),HL
+	DEC SP
+	DEC SP
+	LD HL,0
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
 	LD A,1
 	CALL _drawPanelTitle
 	CALL _drawCmdLineWithPath
@@ -1118,22 +1114,30 @@ __shell_reloadFiles__lc:
 	LD A,1
 	CALL _drawPanelTitle
 	CALL _drawCmdLineWithPath
-	LD HL,(__shell___x80_spill_reloadFiles__lc)
-	LD A,L
-	OR H
+	LD HL,0
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD B,(HL)
+	LD A,C
+	OR B
 	JP Z,.b2
 .b1:
+	LD HL,0
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
 	CALL __shell_selectFile__lc
 .b2:
 	CALL __shell_drawFilesCount__lc
-	CALL _hideFileCursor
-	XOR A
-	CALL _drawColumn
-	LD A,1
-	CALL _drawColumn
+	CALL __shell_drawFiles__lc
 	CALL _showFileCursor
 	CALL __shell_drawFileInfo__lc
-	JP _drawCmdLine
+	CALL _drawCmdLine
+	INC SP
+	INC SP
+	RET
 	ENDIF
 
 	IFUSED __shell_selectFile__lc
@@ -1141,7 +1145,13 @@ __shell_reloadFiles__lc:
 ; ---- selectFile__lc ----
 __shell_selectFile__lc:
 .b0:
-	LD (__shell___x80_spill_selectFile__lc),HL
+	DEC SP
+	DEC SP
+	LD HL,0
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
 	LD HL,(_panelA)
 	EX DE,HL
 	LD BC,0
@@ -1151,12 +1161,19 @@ __shell_selectFile__lc:
 	SUB L
 	LD A,B
 	SBC A, H
-	RET NC
+	JP NC,.b7
 .b2:
 	PUSH BC
+	LD H,D
+	LD L,E
 	PUSH DE
-	LD HL,(__shell___x80_spill_selectFile__lc)
-	EX DE,HL
+	PUSH HL
+	LD HL,6
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
 	LD BC,11
 	CALL _memcmp
 	LD A,L
@@ -1169,12 +1186,10 @@ __shell_selectFile__lc:
 	LD HL,20
 	ADD HL,DE
 	EX DE,HL
-	LD HL,(_panelA+262)
-	LD A,C
-	SUB L
-	LD A,B
-	SBC A, H
-	JP C,.b2
+	JP .b1
+.b7:
+	INC SP
+	INC SP
 	RET
 .b3:
 	LD A,C
@@ -1219,6 +1234,352 @@ __shell_selectFile__lc:
 	LD (_panelA+258),A
 	LD HL,_panelA+259
 	LD (HL),E
+	JP .b7
+	ENDIF
+
+	DEFINE __X80_DEF_sort
+	IFUSED _sort
+
+; ---- sort ----
+_sort:
+.b0:
+	LD B,H
+	LD C,L
+	LD HL,65024
+	ADD HL,SP
+	LD SP,HL
+	XOR A
+	LD HL,0
+	ADD HL,SP
+	PUSH HL
+	LD H,B
+	LD L,C
+	LD (__shell___x80_spill_sort+7),HL
+	POP HL
+	EX DE,HL
+.b1:
+	LD (__shell___x80_spill_sort+5),HL
+	EX DE,HL
+	LD (__shell___x80_spill_sort+4),A
+	LD (__shell___x80_spill_sort+2),HL
+	LD H,D
+	LD L,E
+	LD A,L
+	LD HL,(__shell___x80_spill_sort+7)
+	SUB L
+	LD L,A
+	LD A,D
+	EX DE,HL
+	LD HL,(__shell___x80_spill_sort+7)
+	SBC A, H
+	RLCA
+	RRCA
+	RRA
+	LD H,A
+	LD A,E
+	RRA
+	LD L,A
+	LD A,H
+	RLCA
+	RRCA
+	RRA
+	LD H,A
+	LD A,L
+	RRA
+	LD L,A
+	LD DE,0CCCDH
+	CALL __x80_mul16
+	LD A,H
+	RLCA
+	AND 1
+	LD C,A
+	LD B,0
+	ADD HL,BC
+	LD A,H
+	RLCA
+	RRCA
+	RRA
+	LD D,A
+	LD A,L
+	RRA
+	LD E,A
+	LD H,D
+	LD L,E
+	ADD HL,HL
+	ADD HL,HL
+	ADD HL,DE
+	ADD HL,HL
+	ADD HL,HL
+	EX DE,HL
+	LD HL,(__shell___x80_spill_sort+7)
+	ADD HL,DE
+	EX DE,HL
+	LD HL,(__shell___x80_spill_sort+7)
+	LD A,(__shell___x80_spill_sort+5)
+	LD C,A
+	LD A,(__shell___x80_spill_sort+6)
+	LD B,A
+.b2:
+	LD A,C
+	LD (__shell___x80_spill_sort+9),A
+	LD A,B
+	LD (__shell___x80_spill_sort+10),A
+.b3:
+	LD (__shell___x80_spill_sort),HL
+	LD A,L
+	SUB E
+	LD A,H
+	SBC A, D
+	JP NC,.b6
+.b4:
+	PUSH DE
+	LD HL,(__shell___x80_spill_sort)
+	EX DE,HL
+	CALL __shell_cmpFileInfo__lc
+	OR A
+	POP DE
+	JP Z,.b6
+.b5:
+	LD HL,(__shell___x80_spill_sort)
+	LD BC,20
+	ADD HL,BC
+	JP .b3
+.b6:
+	LD HL,(__shell___x80_spill_sort+9)
+	LD B,H
+	LD C,L
+.b7:
+	LD A,E
+	SUB C
+	LD A,D
+	SBC A, B
+	JP NC,.b10
+.b8:
+	PUSH DE
+	PUSH BC
+	LD H,B
+	LD L,C
+	CALL __shell_cmpFileInfo__lc
+	OR A
+	POP BC
+	POP DE
+	JP Z,.b10
+.b9:
+	LD A,C
+	SUB 20
+	LD C,A
+	LD A,B
+	SBC A, 0
+	LD B,A
+	JP .b7
+.b10:
+	LD A,C
+	LD HL,(__shell___x80_spill_sort)
+	SUB L
+	LD A,B
+	SBC A, H
+	JP NC,.b11
+.b17:
+	LD HL,(__shell___x80_spill_sort)
+	LD A,L
+	SUB C
+	LD A,H
+	SBC A, B
+	JP NC,.b18
+	JP .b2
+.b11:
+	PUSH DE
+	LD HL,(__shell___x80_spill_sort)
+	LD D,B
+	LD E,C
+	PUSH BC
+	LD BC,20
+	CALL _memswap
+	POP BC
+	POP DE
+	LD A,E
+	LD HL,(__shell___x80_spill_sort)
+	XOR L
+	JP NZ,.b13
+	LD A,D
+	XOR H
+.b34:
+	JP Z,.b12
+.b13:
+	LD A,E
+	XOR C
+	JP NZ,.b15
+	LD A,D
+	XOR B
+.b35:
+	JP Z,.b14
+.b15:
+	EX DE,HL
+.b16:
+	PUSH HL
+	LD HL,(__shell___x80_spill_sort)
+	LD DE,20
+	ADD HL,DE
+	LD A,C
+	SUB 20
+	LD C,A
+	LD A,B
+	SBC A, 0
+	LD B,A
+	LD (__shell___x80_spill_sort),HL
+	POP DE
+	JP .b17
+.b12:
+	LD H,B
+	LD L,C
+	JP .b16
+.b14:
+	LD HL,(__shell___x80_spill_sort)
+	EX DE,HL
+	JP .b15
+.b18:
+	LD A,L
+	LD HL,(__shell___x80_spill_sort+5)
+	SUB L
+	LD HL,(__shell___x80_spill_sort)
+	LD A,H
+	LD HL,(__shell___x80_spill_sort+5)
+	SBC A, H
+	JP C,.b20
+.b25:
+	LD HL,(__shell___x80_spill_sort+7)
+	LD A,L
+	SUB C
+	LD A,H
+	SBC A, B
+	JP C,.b26
+.b27:
+	LD A,(__shell___x80_spill_sort+4)
+	OR A
+	JP Z,.b28
+.b29:
+	LD A,(__shell___x80_spill_sort+4)
+	DEC A
+	LD HL,(__shell___x80_spill_sort+2)
+	DEC HL
+	DEC HL
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	DEC HL
+	DEC HL
+	DEC HL
+	LD C,(HL)
+	INC HL
+	LD B,(HL)
+	DEC HL
+	PUSH HL
+	LD H,B
+	LD L,C
+.b36:
+	LD (__shell___x80_spill_sort+7),HL
+	POP HL
+	EX DE,HL
+	JP .b1
+.b20:
+	LD HL,(__shell___x80_spill_sort+7)
+	LD A,L
+	SUB C
+	LD A,H
+	SBC A, B
+	JP NC,.b32
+.b21:
+	LD A,(__shell___x80_spill_sort+4)
+	CP 128
+	JP Z,.b33
+.b22:
+	LD HL,(__shell___x80_spill_sort+2)
+	EX DE,HL
+	LD HL,(__shell___x80_spill_sort+7)
+	EX DE,HL
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	INC HL
+	LD (HL),C
+	INC HL
+	LD (HL),B
+	INC HL
+	LD A,(__shell___x80_spill_sort+4)
+	INC A
+.b24:
+	EX DE,HL
+	LD HL,(__shell___x80_spill_sort+5)
+	EX DE,HL
+	PUSH HL
+	LD HL,(__shell___x80_spill_sort)
+	JP .b36
+.b26:
+	EX DE,HL
+	LD A,(__shell___x80_spill_sort+4)
+	LD HL,(__shell___x80_spill_sort+2)
+	EX DE,HL
+	LD (__shell___x80_spill_sort+7),HL
+	LD H,B
+	LD L,C
+	JP .b1
+.b28:
+	LD HL,512
+	ADD HL,SP
+	LD SP,HL
+	RET
+.b32:
+	LD HL,(__shell___x80_spill_sort+2)
+	LD A,(__shell___x80_spill_sort+4)
+	JP .b24
+.b33:
+	LD HL,(__shell___x80_spill_sort+2)
+	JP .b24
+	ENDIF
+
+	IFUSED __shell_cmpFileInfo__lc
+
+; ---- cmpFileInfo__lc ----
+__shell_cmpFileInfo__lc:
+.b0:
+	LD B,H
+	LD C,L
+	LD HL,11
+	ADD HL,BC
+	LD A,(HL)
+	AND 16
+	LD (__shell___x80_spill_cmpFileInfo__lc),A
+	LD HL,11
+	ADD HL,DE
+	LD A,(HL)
+	AND 16
+	LD H,A
+	LD A,(__shell___x80_spill_cmpFileInfo__lc)
+	CP H
+	JP C,.b5
+.b2:
+	LD A,H
+	LD HL,__shell___x80_spill_cmpFileInfo__lc
+	LD H,(HL)
+	CP H
+	JP C,.b6
+.b4:
+	LD H,B
+	LD L,C
+	LD BC,11
+	CALL _memcmp
+	LD A,1
+	XOR L
+	JP NZ,.b6
+	XOR A
+	OR H
+.b7:
+	JP Z,.b5
+.b6:
+	XOR A
+	RET
+.b5:
+	LD A,1
 	RET
 	ENDIF
 
@@ -1229,18 +1590,6 @@ __shell_showFileCursorAndDrawFileInfo__lc:
 .b0:
 	CALL _showFileCursor
 	JP __shell_drawFileInfo__lc
-	ENDIF
-
-	IFUSED __shell_drawFiles__lc
-
-; ---- drawFiles__lc ----
-__shell_drawFiles__lc:
-.b0:
-	CALL _hideFileCursor
-	XOR A
-	CALL _drawColumn
-	LD A,1
-	JP _drawColumn
 	ENDIF
 
 	DEFINE __X80_DEF_getPalmiraMode
@@ -1270,16 +1619,16 @@ _getPalmiraModeStr:
 	RRCA
 	JP C,.b3
 .b1:
-	LD HL,__shell_anon9
+	LD HL,__shell_anon6
 	RET
 .b2:
-	LD HL,__shell_anon10
+	LD HL,__shell_anon7
 	RET
 .b3:
-	LD HL,__shell_anon11
+	LD HL,__shell_anon8
 	RET
 .b4:
-	LD HL,__shell_anon12
+	LD HL,__shell_anon9
 	RET
 
 	DEFINE __X80_DEF_swapPanels
@@ -1298,7 +1647,10 @@ _swapPanels:
 ; ---- dupFiles ----
 _dupFiles:
 .b0:
-	LD (__shell___x80_spill_dupFiles),A
+	DEC SP
+	LD HL,0
+	ADD HL,SP
+	LD (HL),A
 	LD HL,_panelA
 	LD DE,_panelB
 	LD BC,10AH
@@ -1311,7 +1663,9 @@ _dupFiles:
 	OR H
 	JP Z,.b1
 .b2:
-	LD A,(__shell___x80_spill_dupFiles)
+	LD HL,0
+	ADD HL,SP
+	LD A,(HL)
 	OR A
 	JP NZ,.b3
 .b4:
@@ -1320,7 +1674,9 @@ _dupFiles:
 	LD DE,_panelB
 	LD BC,10AH
 	CALL _memswap
-	JP _drawSwapPanels
+	CALL _drawSwapPanels
+	INC SP
+	RET
 .b1:
 	LD HL,(_maxFiles)
 	LD B,H
@@ -1395,23 +1751,22 @@ _getName:
 	RET Z
 .b2:
 	CP 47
-	JP NZ,.b6
+	JP NZ,.b4
 .b3:
 	LD H,B
 	LD L,C
 	INC HL
-.b6:
+.b4:
 	INC BC
-	LD A,(BC)
-	OR A
-	JP NZ,.b2
-	RET
+	JP .b1
 
 	DEFINE __X80_DEF_absolutePath
 
 ; ---- absolutePath ----
 _absolutePath:
 .b0:
+	DEC SP
+	DEC SP
 	LD D,H
 	LD E,L
 	LD A,(HL)
@@ -1447,8 +1802,14 @@ _absolutePath:
 	PUSH BC
 	EX DE,HL
 	CALL _strlen
+	LD B,H
+	LD C,L
+	INC BC
+	LD HL,4
+	ADD HL,SP
+	LD (HL),C
 	INC HL
-	LD (__shell___x80_spill_absolutePath),HL
+	LD (HL),B
 	POP BC
 	POP DE
 	LD H,D
@@ -1456,10 +1817,13 @@ _absolutePath:
 	PUSH DE
 	ADD HL,BC
 	PUSH BC
-	LD A,(__shell___x80_spill_absolutePath)
-	LD C,A
-	LD A,(__shell___x80_spill_absolutePath+1)
-	LD B,A
+	PUSH HL
+	LD HL,6
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD B,(HL)
+	POP HL
 	CALL _memcpy_back
 	POP BC
 	POP DE
@@ -1473,14 +1837,17 @@ _absolutePath:
 	POP BC
 	LD A,C
 	OR B
-	JP Z,.b8
+	JP Z,.b9
 .b7:
 	DEC BC
 	EX DE,HL
 	ADD HL,BC
 	LD (HL),47
-.b8:
+.b9:
 	LD A,1
+.b10:
+	INC SP
+	INC SP
 	RET
 .b1:
 	LD B,D
@@ -1490,17 +1857,18 @@ _absolutePath:
 	LD D,B
 	LD E,C
 	CALL _strcpy
-	LD A,1
-	RET
+	JP .b9
 .b5:
 	XOR A
-	RET
+	JP .b10
 
 	DEFINE __X80_DEF_getFiles
 
 ; ---- getFiles ----
 _getFiles:
 .b0:
+	DEC SP
+	DEC SP
 	CALL _hideTextCursor
 	LD HL,0
 	LD (_panelA+262),HL
@@ -1513,11 +1881,8 @@ _getFiles:
 	LD A,(_panelA+2)
 	OR A
 	JP NZ,.b1
-.b21:
-	EX DE,HL
-.b2:
-	LD (__shell___x80_spill_getFiles),HL
 .b3:
+	PUSH DE
 	LD HL,(_maxFiles)
 	LD B,H
 	LD C,L
@@ -1529,19 +1894,17 @@ _getFiles:
 	SBC A, H
 	LD B,A
 	LD HL,_panelA+2
-	EX DE,HL
-	LD HL,(__shell___x80_spill_getFiles)
-	EX DE,HL
 	CALL _fs_findfirst
 	CP 10
+	POP DE
 	JP Z,.b6
-.b22:
+.b20:
 	OR A
 	JP Z,.b6
 .b7:
 	LD A,(_panelA+2)
 	OR A
-	RET Z
+	JP Z,.b18
 .b9:
 	XOR A
 	LD (_panelA+2),A
@@ -1551,76 +1914,43 @@ _getFiles:
 	EX DE,HL
 	LD HL,(_panelA+262)
 	ADD HL,DE
-	LD B,H
-	LD C,L
+	LD D,H
+	LD E,L
 	LD (_panelA+262),HL
 	LD HL,(_panelA)
-	EX DE,HL
 .b10:
-	LD A,C
-	OR B
+	LD B,H
+	LD C,L
+	LD A,E
+	OR D
 	JP Z,.b18
-.b23:
-	DEC BC
-	INC B
-	INC C
 .b11:
 	LD HL,11
-	ADD HL,DE
+	ADD HL,BC
 	LD A,(HL)
 	AND 127
 	LD (HL),A
 	LD A,12
-	LD (__shell___x80_spill_getFiles+2),A
-	LD H,D
-	LD L,E
+	PUSH BC
+	LD HL,2
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	POP HL
+	LD D,A
+.b12:
+	XOR A
+	OR D
+	JP Z,.b17
 .b13:
 	LD A,(HL)
 	CP 97
 	JP NC,.b14
 .b16:
-	LD A,(__shell___x80_spill_getFiles+2)
-	DEC A
+	DEC D
 	INC HL
-	LD (__shell___x80_spill_getFiles+2),A
-	OR A
-	JP NZ,.b13
-.b17:
-	LD HL,20
-	ADD HL,DE
-	EX DE,HL
-	DEC C
-	JP NZ,.b11
-.b24:
-	DEC B
-	JP NZ,.b11
-.b18:
-	LD HL,(_panelA+262)
-	LD B,H
-	LD C,L
-	LD A,C
-	SUB 2
-	LD A,B
-	SBC A, 0
-	RET C
-.b19:
-	LD HL,(_panelA)
-	EX DE,HL
-	DEC BC
-	LD H,B
-	LD L,C
-	ADD HL,HL
-	ADD HL,HL
-	ADD HL,BC
-	ADD HL,HL
-	ADD HL,HL
-	EX DE,HL
-	ADD HL,DE
-	LD B,H
-	LD C,L
-	LD HL,(__shell___x80_spill_getFiles)
-	EX DE,HL
-	JP __shell_sort__lc
+	JP .b12
 .b1:
 	LD H,D
 	LD L,E
@@ -1635,389 +1965,36 @@ _getFiles:
 	LD HL,(_panelA+262)
 	INC HL
 	LD (_panelA+262),HL
-	EX DE,HL
-	JP .b2
+	JP .b3
+.b17:
+	LD HL,0
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	DEC DE
+	LD HL,20
+	ADD HL,BC
+	JP .b10
 .b14:
 	CP 123
 	JP NC,.b16
 .b15:
 	SUB 32
 	LD (HL),A
-	LD A,(__shell___x80_spill_getFiles+2)
-	DEC A
-	INC HL
-	LD (__shell___x80_spill_getFiles+2),A
-	OR A
-	JP NZ,.b13
-	JP .b17
-
-	IFUSED __shell_sort__lc
-
-; ---- sort__lc ----
-__shell_sort__lc:
-.b0:
-	LD HL,65024
-	ADD HL,SP
-	LD SP,HL
-	XOR A
-	LD HL,0
-	ADD HL,SP
-	EX DE,HL
-	LD (__shell___x80_spill_sort__lc+7),HL
-	LD H,B
-	LD L,C
-.b1:
-	LD (__shell___x80_spill_sort__lc+5),HL
-	EX DE,HL
-	LD (__shell___x80_spill_sort__lc+4),A
-	LD (__shell___x80_spill_sort__lc+2),HL
-	LD H,D
-	LD L,E
-	LD A,L
-	LD HL,(__shell___x80_spill_sort__lc+7)
-	SUB L
-	LD L,A
-	LD A,D
-	EX DE,HL
-	LD HL,(__shell___x80_spill_sort__lc+7)
-	SBC A, H
-	RLCA
-	RRCA
-	RRA
-	LD H,A
-	LD A,E
-	RRA
-	LD L,A
-	LD A,H
-	RLCA
-	RRCA
-	RRA
-	LD H,A
-	LD A,L
-	RRA
-	LD L,A
-	LD DE,0CCCDH
-	CALL __x80_mul16
-	LD A,H
-	RLCA
-	AND 1
-	LD C,A
-	LD B,0
-	ADD HL,BC
-	LD A,H
-	RLCA
-	RRCA
-	RRA
-	LD D,A
-	LD A,L
-	RRA
-	LD E,A
-	LD H,D
-	LD L,E
-	ADD HL,HL
-	ADD HL,HL
-	ADD HL,DE
-	ADD HL,HL
-	ADD HL,HL
-	EX DE,HL
-	LD HL,(__shell___x80_spill_sort__lc+7)
-	EX DE,HL
-	ADD HL,DE
-	EX DE,HL
-	LD A,(__shell___x80_spill_sort__lc+5)
-	LD C,A
-	LD A,(__shell___x80_spill_sort__lc+6)
-	LD B,A
-.b2:
-	LD A,C
-	LD (__shell___x80_spill_sort__lc+9),A
-	LD A,B
-	LD (__shell___x80_spill_sort__lc+10),A
-	LD (__shell___x80_spill_sort__lc),HL
-.b3:
-	LD A,L
-	SUB E
-	LD A,H
-	SBC A, D
-	JP NC,.b6
-.b4:
-	PUSH DE
-	LD B,D
-	LD C,E
-	LD HL,(__shell___x80_spill_sort__lc)
-	EX DE,HL
-	CALL __shell_cmpFileInfo__lc
-	OR A
-	POP DE
-	JP Z,.b6
-.b5:
-	LD HL,(__shell___x80_spill_sort__lc)
-	LD BC,20
-	ADD HL,BC
-	LD (__shell___x80_spill_sort__lc),HL
-	LD A,L
-	SUB E
-	LD A,H
-	SBC A, D
-	JP C,.b4
-.b6:
-	LD HL,(__shell___x80_spill_sort__lc+9)
-	LD B,H
-	LD C,L
-.b7:
-	LD A,E
-	SUB C
-	LD A,D
-	SBC A, B
-	JP NC,.b10
-.b8:
-	PUSH DE
-	PUSH BC
-	CALL __shell_cmpFileInfo__lc
-	OR A
-	POP BC
-	POP DE
-	JP Z,.b36
-.b9:
-	LD A,C
-	SUB 20
-	LD C,A
-	LD A,B
-	SBC A, 0
-	LD B,A
-	LD A,E
-	SUB C
-	LD A,D
-	SBC A, B
-	JP C,.b8
-.b36:
-	LD A,C
-	LD HL,(__shell___x80_spill_sort__lc)
-	SUB L
-	LD A,B
-	SBC A, H
-	JP NC,.b11
-.b17:
-	LD HL,(__shell___x80_spill_sort__lc)
-	LD A,L
-	SUB C
-	LD A,H
-	SBC A, B
-	JP NC,.b18
-.b19:
-	LD HL,(__shell___x80_spill_sort__lc)
-	JP .b2
-.b10:
-	LD A,C
-	LD HL,(__shell___x80_spill_sort__lc)
-	SUB L
-	LD A,B
-	SBC A, H
-	JP C,.b17
-.b11:
-	PUSH DE
-	LD HL,(__shell___x80_spill_sort__lc)
-	LD D,B
-	LD E,C
-	PUSH BC
-	LD BC,20
-	CALL _memswap
-	POP BC
-	POP DE
-	LD A,E
-	LD HL,(__shell___x80_spill_sort__lc)
-	XOR L
-	JP NZ,.b13
-	LD A,D
-	XOR H
-.b34:
-	JP Z,.b12
-.b13:
-	LD A,E
-	XOR C
-	JP NZ,.b15
-	LD A,D
-	XOR B
-.b35:
-	JP Z,.b14
-.b15:
-	EX DE,HL
-.b16:
-	PUSH HL
-	LD HL,(__shell___x80_spill_sort__lc)
-	LD DE,20
-	ADD HL,DE
-	LD A,C
-	SUB 20
-	LD C,A
-	LD A,B
-	SBC A, 0
-	LD B,A
-	LD (__shell___x80_spill_sort__lc),HL
-	POP DE
-	LD A,L
-	SUB C
-	LD A,H
-	SBC A, B
-	JP C,.b19
-.b18:
-	LD HL,(__shell___x80_spill_sort__lc)
-	LD A,L
-	LD HL,(__shell___x80_spill_sort__lc+5)
-	SUB L
-	LD HL,(__shell___x80_spill_sort__lc)
-	LD A,H
-	LD HL,(__shell___x80_spill_sort__lc+5)
-	SBC A, H
-	JP C,.b20
-.b25:
-	LD HL,(__shell___x80_spill_sort__lc+7)
-	LD A,L
-	SUB C
-	LD A,H
-	SBC A, B
-	JP C,.b26
-.b27:
-	LD A,(__shell___x80_spill_sort__lc+4)
-	OR A
-	JP Z,.b28
-.b29:
-	LD A,(__shell___x80_spill_sort__lc+4)
-	DEC A
-	LD HL,(__shell___x80_spill_sort__lc+2)
-	DEC HL
-	DEC HL
-	LD E,(HL)
-	INC HL
-	LD D,(HL)
-	DEC HL
-	DEC HL
-	DEC HL
-	LD C,(HL)
-	INC HL
-	LD B,(HL)
-	DEC HL
-	PUSH HL
-	LD H,B
-	LD L,C
-.b37:
-	LD (__shell___x80_spill_sort__lc+7),HL
-	POP HL
-	EX DE,HL
-	JP .b1
-.b12:
-	LD H,B
-	LD L,C
 	JP .b16
-.b14:
-	LD HL,(__shell___x80_spill_sort__lc)
-	EX DE,HL
-	JP .b15
-.b20:
-	LD HL,(__shell___x80_spill_sort__lc+7)
-	LD A,L
-	SUB C
-	LD A,H
-	SBC A, B
-	JP NC,.b32
-.b21:
-	LD A,(__shell___x80_spill_sort__lc+4)
-	CP 128
-	JP Z,.b33
-.b22:
-	LD HL,(__shell___x80_spill_sort__lc+2)
-	EX DE,HL
-	LD HL,(__shell___x80_spill_sort__lc+7)
-	EX DE,HL
-	LD (HL),E
-	INC HL
-	LD (HL),D
-	INC HL
-	LD (HL),C
-	INC HL
-	LD (HL),B
-	INC HL
-	LD A,(__shell___x80_spill_sort__lc+4)
-	INC A
-.b24:
-	EX DE,HL
-	LD HL,(__shell___x80_spill_sort__lc+5)
-	EX DE,HL
-	PUSH HL
-	LD HL,(__shell___x80_spill_sort__lc)
-	JP .b37
-.b26:
-	EX DE,HL
-	LD A,(__shell___x80_spill_sort__lc+4)
-	LD HL,(__shell___x80_spill_sort__lc+2)
-	EX DE,HL
-	LD (__shell___x80_spill_sort__lc+7),HL
-	LD H,B
-	LD L,C
-	JP .b1
-.b28:
-	LD HL,512
-	ADD HL,SP
-	LD SP,HL
+.b18:
+	INC SP
+	INC SP
 	RET
-.b32:
-	LD HL,(__shell___x80_spill_sort__lc+2)
-	LD A,(__shell___x80_spill_sort__lc+4)
-	JP .b24
-.b33:
-	LD HL,(__shell___x80_spill_sort__lc+2)
-	JP .b24
-	ENDIF
-
-	IFUSED __shell_cmpFileInfo__lc
-
-; ---- cmpFileInfo__lc ----
-__shell_cmpFileInfo__lc:
-.b0:
-	LD HL,11
-	ADD HL,BC
-	LD A,(HL)
-	AND 16
-	LD (__shell___x80_spill_cmpFileInfo__lc),A
-	LD HL,11
-	ADD HL,DE
-	LD A,(HL)
-	AND 16
-	LD H,A
-	LD A,(__shell___x80_spill_cmpFileInfo__lc)
-	CP H
-	JP C,.b5
-.b2:
-	LD A,H
-	LD HL,__shell___x80_spill_cmpFileInfo__lc
-	LD H,(HL)
-	CP H
-	JP C,.b6
-.b4:
-	LD H,B
-	LD L,C
-	LD BC,11
-	CALL _memcmp
-	LD A,1
-	XOR L
-	JP NZ,.b6
-	XOR A
-	OR H
-.b7:
-	JP Z,.b5
-.b6:
-	XOR A
-	RET
-.b5:
-	LD A,1
-	RET
-	ENDIF
 
 	DEFINE __X80_DEF_packName
 
 ; ---- packName ----
 _packName:
 .b0:
+	DEC SP
+	DEC SP
 	PUSH DE
 	PUSH HL
 	LD DE,32
@@ -2025,30 +2002,66 @@ _packName:
 	CALL _memset
 	LD B,46
 	LD C,8
-	POP HL
+	POP DE
+	LD HL,2
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
 	POP DE
 .b1:
 	LD A,(DE)
 	OR A
-	RET Z
+	JP Z,.b2
 .b3:
 	INC DE
 	CP B
 	JP NZ,.b5
 .b4:
 	LD B,0
+	LD HL,0
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	ADD HL,BC
 	LD C,3
+	PUSH DE
+	EX DE,HL
+	LD HL,2
+	ADD HL,SP
+.b7:
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	POP DE
 	JP .b1
+.b2:
+	INC SP
+	INC SP
+	RET
 .b5:
 	INC C
 	DEC C
 	JP Z,.b1
 .b6:
+	PUSH AF
+	LD HL,2
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	POP AF
 	LD (HL),A
 	INC HL
 	DEC C
-	JP .b1
+	PUSH DE
+	EX DE,HL
+	LD HL,2
+	ADD HL,SP
+	JP .b7
 
 	DEFINE __X80_DEF_getFirstSelected
 
@@ -2127,12 +2140,7 @@ _getNextSelected:
 	LD L,C
 	DEC HL
 	LD (_nextSelectedCnt),HL
-	LD HL,(_nextSelectedCnt)
-	LD B,H
-	LD C,L
-	LD A,C
-	OR B
-	JP NZ,.b3
+	JP .b1
 .b2:
 	XOR A
 	RET
@@ -2174,11 +2182,16 @@ _getNextSelected:
 ; ---- catPathAndUnpack ----
 _catPathAndUnpack:
 .b0:
+	DEC SP
+	DEC SP
 	LD B,H
 	LD C,L
 	PUSH BC
-	EX DE,HL
-	LD (__shell___x80_spill_catPathAndUnpack),HL
+	LD HL,2
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
 	LD H,B
 	LD L,C
 	CALL _strlen
@@ -2187,13 +2200,22 @@ _catPathAndUnpack:
 	OR D
 	POP BC
 	JP NZ,.b1
+.b5:
+	LD H,B
+	LD L,C
 .b4:
-	LD D,B
-	LD E,C
-	LD HL,(__shell___x80_spill_catPathAndUnpack)
-	EX DE,HL
+	PUSH HL
+	LD HL,2
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
 	CALL _unpackName
 	XOR A
+.b6:
+	INC SP
+	INC SP
 	RET
 .b1:
 	LD A,E
@@ -2209,12 +2231,10 @@ _catPathAndUnpack:
 	EX DE,HL
 	INC HL
 	ADD HL,BC
-	LD B,H
-	LD C,L
 	JP .b4
 .b2:
 	LD A,1
-	RET
+	JP .b6
 
 	DEFINE __X80_DEF_unpackName
 
@@ -2229,21 +2249,27 @@ _unpackName:
 	LD E,C
 	LD B,A
 .b1:
+	LD A,B
 	CP 11
 	JP Z,.b7
 .b2:
 	CP 8
-	JP Z,.b3
+	JP NZ,.b4
+.b3:
+	LD A,46
+	LD (DE),A
+	INC DE
 .b4:
 	LD A,(HL)
 	CP 32
-	JP NZ,.b5
-.b10:
+	JP Z,.b6
+.b5:
+	LD (DE),A
+	INC DE
+.b6:
 	INC B
 	INC HL
-	LD A,B
-	CP 11
-	JP NZ,.b2
+	JP .b1
 .b7:
 	LD H,D
 	LD L,E
@@ -2257,29 +2283,22 @@ _unpackName:
 	EX DE,HL
 	LD (HL),0
 	RET
-.b3:
-	LD A,46
-	LD (DE),A
-	INC DE
-	LD A,(HL)
-	CP 32
-	JP Z,.b10
-.b5:
-	LD (DE),A
-	INC DE
-	INC B
-	INC HL
-	LD A,B
-	CP 11
-	JP NZ,.b2
-	JP .b7
 
 	DEFINE __X80_DEF_run
 
 ; ---- run ----
 _run:
 _run.b0:
-	LD (__shell___x80_spill_run),HL
+	DEC SP
+	DEC SP
+	DEC SP
+	LD B,H
+	LD C,L
+	LD HL,0
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
 	PUSH DE
 	CALL __shell_saveState__lc
 	LD A,(_mode)
@@ -2295,9 +2314,16 @@ _run.b1:
 	CALL _setPalmiraMode
 	POP DE
 _run.b2:
-	LD HL,(__shell___x80_spill_run)
+	LD HL,0
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	CALL _fs_exec
-	LD (__shell___x80_spill_run+2),A
+	LD HL,2
+	ADD HL,SP
+	LD (HL),A
 	LD A,(_mode)
 	OR A
 	JP Z,_run.b4
@@ -2306,14 +2332,23 @@ _run.b3:
 	CALL _setPalmiraMode
 	CALL _drawInit
 _run.b4:
-	LD HL,(__shell___x80_spill_run)
-	LD A,(__shell___x80_spill_run+2)
+	LD HL,0
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	PUSH HL
+	LD HL,4
+	ADD HL,SP
+	LD A,(HL)
+	POP HL
 	CALL _drawError
-	XOR A
-	LD (_cmdline),A
-	CALL _drawScreenInt
-	CALL _drawCmdLineWithPath
-	JP __shell_drawFiles2__lc
+	CALL _drawScreen
+	INC SP
+	INC SP
+	INC SP
+	RET
 
 	DEFINE __X80_DEF_setPalmiraMode
 	IFUSED _setPalmiraMode
@@ -2321,8 +2356,8 @@ _run.b4:
 ; ---- setPalmiraMode ----
 _setPalmiraMode:
 _setPalmiraMode.b0:
-	LD (__shell_l13_md),A
-	LD A,(__shell_l13_md)
+	LD (__shell_l10_md),A
+	LD A,(__shell_l10_md)
 	LD C,A
 	LD A,1
 	CALL 0F003h
@@ -2373,7 +2408,7 @@ _confirm:
 	CALL _drawWindowText
 	LD A,6
 	LD L,4
-	LD DE,__shell_anon14
+	LD DE,__shell_anon11
 	CALL _drawWindowText
 .b1:
 	CALL _getch1
@@ -2393,17 +2428,20 @@ _confirm:
 ; ---- inputBox ----
 _inputBox:
 .b0:
+	DEC SP
 	CALL _drawWindow
 	LD A,3
 	LD L,1
-	LD DE,__shell_anon15
+	LD DE,__shell_anon12
 	CALL _drawWindowText
 	LD A,6
 	LD L,4
-	LD DE,__shell_anon16
+	LD DE,__shell_anon13
 	CALL _drawWindowText
 	LD A,1
-	LD (__shell___x80_spill_inputBox),A
+	LD HL,0
+	ADD HL,SP
+	LD (HL),A
 .b1:
 	LD A,3
 	LD L,2
@@ -2412,13 +2450,20 @@ _inputBox:
 	CALL _getch1
 	LD C,A
 	CP 24
-	JP Z,.b2
-.b12:
-	LD HL,__shell___x80_spill_inputBox
-	LD B,(HL)
+	JP NZ,.b3
+.b2:
+	XOR A
+	LD HL,0
+	ADD HL,SP
+	LD (HL),A
 .b3:
+	LD A,C
 	CP 8
 	JP Z,.b4
+.b13:
+	LD HL,0
+	ADD HL,SP
+	LD B,(HL)
 .b5:
 	CP 13
 	JP Z,.b6
@@ -2428,34 +2473,34 @@ _inputBox:
 .b9:
 	XOR A
 	OR B
-	JP Z,.b11
+	JP Z,.b14
 .b10:
 	XOR A
 	LD (_cmdline),A
-	LD B,A
+	LD HL,0
+	ADD HL,SP
+	LD (HL),A
 .b11:
-	PUSH BC
 	CALL __shell_processInput__lc
-	POP BC
-	LD HL,__shell___x80_spill_inputBox
-	LD (HL),B
 	JP .b1
-.b2:
-	LD B,0
-	CP 8
-	JP NZ,.b5
 .b4:
 	LD B,0
-	CP 13
-	JP NZ,.b7
+	JP .b5
 .b6:
 	CALL _hideTextCursor
 	LD A,1
+.b15:
+	INC SP
 	RET
 .b8:
 	CALL _hideTextCursor
 	XOR A
-	RET
+	JP .b15
+.b14:
+	LD HL,0
+	ADD HL,SP
+	LD (HL),B
+	JP .b11
 
 	IFUSED __shell_processInput__lc
 
@@ -2506,92 +2551,127 @@ __shell_processInput__lc:
 ; ---- drawError ----
 _drawError:
 .b0:
-	LD (__shell___x80_spill_drawError+3),HL
-	LD (__shell___x80_spill_drawError),A
-	LD L,A
-	LD H,0
-	LD (__shell___x80_spill_drawError+1),HL
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	EX DE,HL
+	LD HL,7
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,4
+	ADD HL,SP
+	LD (HL),A
+	LD C,A
+	LD B,0
+	LD HL,5
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
 	OR A
-	RET Z
+	JP Z,.b1
 .b2:
-	LD HL,__shell_anon17
+	LD HL,__shell_anon14
 	CALL _drawWindow
 	CALL _drawAnyKeyButton
 	XOR A
 	LD L,A
-	EX DE,HL
-	LD HL,(__shell___x80_spill_drawError+3)
-	EX DE,HL
+	PUSH HL
+	LD HL,9
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
 	CALL _drawWindowText
-	LD A,(__shell___x80_spill_drawError)
-	CP 6
-	JP Z,.b9
-	JP C,.b15
+	LD HL,4
+	ADD HL,SP
+	LD A,(HL)
+	CP 1
+	JP Z,.b3
+	CP 2
+	JP Z,.b4
 	CP 7
 	JP Z,.b5
+	CP 3
+	JP Z,.b6
+	CP 4
+	JP Z,.b7
+	CP 5
+	JP Z,.b8
+	CP 6
+	JP Z,.b9
 	CP 8
 	JP Z,.b10
-	CP 11
-	JP Z,.b12
 	CP 128
 	JP Z,.b11
-.b13:
-	LD HL,__shell_l18_buf
-	PUSH HL
-	LD HL,(__shell___x80_spill_drawError+1)
-	EX DE,HL
-	LD BC,3
-	LD A,48
-	POP HL
-	CALL _i2s
-	LD DE,__shell_l18_buf
+	CP 11
+	JP Z,.b12
+	JP .b13
+.b10:
+	LD DE,__shell_anon15
 .b14:
 	XOR A
 	LD L,2
 	CALL _drawWindowText
-	JP _getch1
-.b15:
-	CP 3
-	JP Z,.b6
-	JP C,.b16
-	CP 4
-	JP Z,.b7
-	CP 5
-	JP NZ,.b13
-.b8:
-	LD DE,__shell_anon19
-	JP .b14
-.b16:
-	CP 1
-	JP Z,.b3
-	CP 2
-	JP NZ,.b13
-.b4:
-	LD DE,__shell_anon20
-	JP .b14
+	CALL _getch1
+.b1:
+	LD HL,9
+	ADD HL,SP
+	LD SP,HL
+	RET
 .b3:
-	LD DE,__shell_anon21
+	LD DE,__shell_anon16
+	JP .b14
+.b4:
+	LD DE,__shell_anon17
 	JP .b14
 .b5:
-	LD DE,__shell_anon22
+	LD DE,__shell_anon18
 	JP .b14
 .b6:
-	LD DE,__shell_anon23
+	LD DE,__shell_anon19
 	JP .b14
 .b7:
-	LD DE,__shell_anon24
+	LD DE,__shell_anon20
+	JP .b14
+.b8:
+	LD DE,__shell_anon21
 	JP .b14
 .b9:
-	LD DE,__shell_anon25
-	JP .b14
-.b10:
-	LD DE,__shell_anon26
+	LD DE,__shell_anon22
 	JP .b14
 .b11:
-	LD DE,__shell_anon27
+	LD DE,__shell_anon23
 	JP .b14
 .b12:
-	LD DE,__shell_anon28
+	LD DE,__shell_anon24
+	JP .b14
+.b13:
+	LD HL,0
+	ADD HL,SP
+	PUSH HL
+	LD HL,7
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
+	LD BC,3
+	LD A,48
+	CALL _i2s
+	LD HL,0
+	ADD HL,SP
+	LD D,H
+	LD E,L
 	JP .b14
 
 	DEFINE __X80_DEF_drawScreen
@@ -2610,22 +2690,14 @@ _drawScreen:
 ; ---- drawFiles2__lc ----
 __shell_drawFiles2__lc:
 .b0:
-	CALL _hideFileCursor
-	XOR A
-	CALL _drawColumn
-	LD A,1
-	CALL _drawColumn
+	CALL __shell_drawFiles__lc
 	CALL __shell_drawFilesCount__lc
 	LD HL,_panelA
 	LD DE,_panelB
 	LD BC,10AH
 	CALL _memswap
 	CALL _drawSwapPanels
-	CALL _hideFileCursor
-	XOR A
-	CALL _drawColumn
-	LD A,1
-	CALL _drawColumn
+	CALL __shell_drawFiles__lc
 	CALL __shell_drawFilesCount__lc
 	CALL __shell_drawFileInfo__lc
 	LD HL,_panelA
@@ -2642,6 +2714,11 @@ __shell_drawFiles2__lc:
 ; ---- drawFileInfo__lc ----
 __shell_drawFileInfo__lc:
 .b0:
+	LD (__shell___x80_frame_scratch),HL
+	LD HL,65516
+	ADD HL,SP
+	LD SP,HL
+	LD HL,(__shell___x80_frame_scratch)
 	CALL __shell_getSel__lc
 	EX DE,HL
 	LD HL,11
@@ -2654,17 +2731,27 @@ __shell_drawFileInfo__lc:
 	ADD HL,DE
 	PUSH DE
 	EX DE,HL
-	LD HL,__shell_l29_buf
+	LD HL,2
+	ADD HL,SP
 	LD BC,10
 	LD A,32
 	CALL _i2s32
-	LD HL,__shell_l29_buf
+	LD HL,2
+	ADD HL,SP
 	CALL _drawFileInfo1
 	POP DE
 .b3:
 	LD HL,18
 	ADD HL,DE
-	LD (__shell___x80_spill_drawFileInfo__lc),HL
+	LD B,H
+	LD C,L
+	LD HL,18
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
+	LD H,B
+	LD L,C
 	LD C,(HL)
 	INC HL
 	LD B,(HL)
@@ -2673,18 +2760,30 @@ __shell_drawFileInfo__lc:
 	JP Z,.b4
 .b6:
 	PUSH DE
-	LD HL,(__shell___x80_spill_drawFileInfo__lc)
+	LD HL,20
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,C
 	LD A,(HL)
 	AND 31
 	LD E,A
 	LD D,0
-	LD HL,__shell_l29_buf
+	LD HL,2
+	ADD HL,SP
 	LD BC,2
 	LD A,32
 	CALL _i2s
-	LD A,45
-	LD (__shell_l29_buf+2),A
-	LD HL,(__shell___x80_spill_drawFileInfo__lc)
+	LD HL,4
+	ADD HL,SP
+	LD (HL),45
+	LD HL,20
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,C
 	LD C,(HL)
 	INC HL
 	LD B,(HL)
@@ -2703,13 +2802,20 @@ __shell_drawFileInfo__lc:
 	AND 15
 	LD E,A
 	LD D,0
-	LD HL,__shell_l29_buf+3
+	LD HL,5
+	ADD HL,SP
 	LD BC,2
 	LD A,48
 	CALL _i2s
-	LD A,45
-	LD (__shell_l29_buf+5),A
-	LD HL,(__shell___x80_spill_drawFileInfo__lc)
+	LD HL,7
+	ADD HL,SP
+	LD (HL),45
+	LD HL,20
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,C
 	INC HL
 	LD A,(HL)
 	OR A
@@ -2719,12 +2825,14 @@ __shell_drawFileInfo__lc:
 	LD HL,7BCH
 	ADD HL,BC
 	EX DE,HL
-	LD HL,__shell_l29_buf+6
+	LD HL,8
+	ADD HL,SP
 	LD C,4
 	LD A,48
 	CALL _i2s
-	LD A,32
-	LD (__shell_l29_buf+10),A
+	LD HL,12
+	ADD HL,SP
+	LD (HL),32
 	LD HL,16
 	POP DE
 	ADD HL,DE
@@ -2737,12 +2845,14 @@ __shell_drawFileInfo__lc:
 	AND 31
 	LD E,A
 	LD D,0
-	LD HL,__shell_l29_buf+11
+	LD HL,13
+	ADD HL,SP
 	LD BC,2
 	LD A,48
 	CALL _i2s
-	LD A,58
-	LD (__shell_l29_buf+13),A
+	LD HL,15
+	ADD HL,SP
+	LD (HL),58
 	POP HL
 	LD C,(HL)
 	INC HL
@@ -2762,13 +2872,19 @@ __shell_drawFileInfo__lc:
 	AND 63
 	LD E,A
 	LD D,0
-	LD HL,__shell_l29_buf+14
+	LD HL,14
+	ADD HL,SP
 	LD BC,2
 	LD A,48
 	CALL _i2s
 .b7:
-	LD HL,__shell_l29_buf
-	JP _drawFileInfo2
+	LD HL,0
+	ADD HL,SP
+	CALL _drawFileInfo2
+	LD HL,20
+	ADD HL,SP
+	LD SP,HL
+	RET
 .b1:
 	PUSH DE
 	CALL _drawFileInfoDir
@@ -2784,8 +2900,9 @@ __shell_drawFileInfo__lc:
 	OR B
 	JP NZ,.b6
 .b5:
-	XOR A
-	LD (__shell_l29_buf),A
+	LD HL,0
+	ADD HL,SP
+	LD (HL),0
 	JP .b7
 	ENDIF
 
@@ -2794,78 +2911,201 @@ __shell_drawFileInfo__lc:
 ; ---- drawFilesCount__lc ----
 __shell_drawFilesCount__lc:
 .b0:
+	LD (__shell___x80_frame_scratch),HL
+	LD HL,65522
+	ADD HL,SP
+	LD SP,HL
+	LD HL,(__shell___x80_frame_scratch)
 	LD HL,0
-	LD (__shell_l30_total),HL
-	LD (__shell_l30_total+2),HL
+	ADD HL,SP
+	LD (HL),0
+	INC HL
+	LD (HL),0
+	LD HL,2
+	ADD HL,SP
+	LD (HL),0
+	INC HL
+	LD (HL),0
 	LD HL,(_panelA)
-	LD B,H
-	LD C,L
+	EX DE,HL
+	LD HL,4
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
 	LD HL,(_panelA+262)
-	LD DE,0
-	LD (__shell___x80_spill_drawFilesCount__lc+2),HL
-	LD H,B
-	LD L,C
-	LD (__shell___x80_spill_drawFilesCount__lc),HL
+	LD BC,0
+	EX DE,HL
+	LD HL,8
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,6
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
 .b1:
-	LD HL,(__shell___x80_spill_drawFilesCount__lc+2)
-	LD A,L
-	OR H
+	LD HL,8
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD B,(HL)
+	LD A,C
+	OR B
 	JP Z,.b5
 .b2:
-	LD HL,(__shell___x80_spill_drawFilesCount__lc)
+	LD HL,4
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	LD BC,11
 	ADD HL,BC
 	LD A,(HL)
 	AND 16
 	JP NZ,.b4
 .b3:
-	INC DE
-.b4:
-	EX DE,HL
-	PUSH HL
-	LD HL,(__shell___x80_spill_drawFilesCount__lc)
-	INC C
-	ADD HL,BC
+	LD HL,6
+	ADD HL,SP
 	LD C,(HL)
 	INC HL
 	LD B,(HL)
+	INC BC
+	LD HL,6
+	ADD HL,SP
+	LD (HL),C
 	INC HL
+	LD (HL),B
+.b4:
+	LD HL,4
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	LD BC,12
+	ADD HL,BC
 	LD E,(HL)
 	INC HL
 	LD D,(HL)
-	LD HL,__shell_l30_total
-	LD A,(HL)
-	ADD A, C
-	LD (HL),A
 	INC HL
-	LD A,(HL)
-	ADC A, B
-	LD (HL),A
+	LD C,(HL)
 	INC HL
-	LD A,(HL)
-	ADC A, E
-	LD (HL),A
+	LD B,(HL)
+	LD HL,10
+	ADD HL,SP
+	LD (HL),C
 	INC HL
+	LD (HL),B
+	LD HL,0
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD B,(HL)
+	LD HL,12
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
+	LD HL,2
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD B,(HL)
+	LD HL,12
+	ADD HL,SP
 	LD A,(HL)
-	ADC A, D
-	LD (HL),A
-	LD HL,(__shell___x80_spill_drawFilesCount__lc)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	ADD HL,DE
+	EX DE,HL
+	LD A,C
+	PUSH AF
+	LD HL,12
+	ADD HL,SP
+	LD L,(HL)
+	POP AF
+	ADC A, L
+	LD C,A
+	LD A,B
+	PUSH AF
+	LD HL,12
+	ADD HL,SP
+	INC HL
+	LD H,(HL)
+	POP AF
+	ADC A, H
+	LD B,A
+	LD HL,0
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,2
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
+	LD HL,4
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	LD BC,20
 	ADD HL,BC
-	EX DE,HL
-	LD HL,(__shell___x80_spill_drawFilesCount__lc+2)
-	DEC HL
-	LD (__shell___x80_spill_drawFilesCount__lc+2),HL
-	EX DE,HL
-	LD (__shell___x80_spill_drawFilesCount__lc),HL
+	PUSH HL
+	LD HL,10
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD B,(HL)
 	POP HL
-	EX DE,HL
-	LD A,L
-	OR H
-	JP NZ,.b2
+	DEC BC
+	PUSH HL
+	LD HL,10
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
+	POP DE
+	LD HL,4
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	JP .b1
 .b5:
-	LD HL,__shell_l30_total
-	JP _drawFilesCountInt
+	LD HL,0
+	ADD HL,SP
+	PUSH HL
+	LD HL,8
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
+	CALL _drawFilesCountInt
+	LD HL,14
+	ADD HL,SP
+	LD SP,HL
+	RET
+	ENDIF
+
+	IFUSED __shell_drawFiles__lc
+
+; ---- drawFiles__lc ----
+__shell_drawFiles__lc:
+.b0:
+	CALL _hideFileCursor
+	XOR A
+	CALL _drawColumn
+	LD A,1
+	JP _drawColumn
 	ENDIF
 
 	DEFINE __X80_DEF_getSelNoBack
@@ -2972,96 +3212,66 @@ _parentDir:
 	DEFB 0
 	DEFB 0
 	DEFB 0
-__shell_anon17:
-	DEFB 32,111,123,105,98,107,97,32,0
-__shell_anon21:
-	DEFB 110,101,116,32,102,97,106,108,111,119,111,106,32,115,105,115,116,101,109,121,0
-__shell_anon20:
-	DEFB 111,123,105,98,107,97,32,110,97,107,111,112,105,116,101,108,113,0
-__shell_anon22:
-	DEFB 112,97,112,107,97,32,110,101,32,112,117,115,116,97,0
-__shell_anon23:
-	DEFB 102,97,106,108,32,110,101,32,111,116,107,114,121,116,0
-__shell_anon24:
-	DEFB 112,117,116,120,32,110,101,32,110,97,106,100,101,110,0
-__shell_anon19:
-	DEFB 109,97,107,115,105,109,117,109,32,102,97,106,108,111,119,32,119,32,112,97,112,107,101,0
-__shell_anon25:
-	DEFB 100,105,115,107,32,122,97,112,111,108,110,101,110,0
-__shell_anon26:
-	DEFB 102,97,105,108,32,115,117,125,101,115,116,119,117,101,116,0
-__shell_anon27:
-	DEFB 112,114,101,114,119,97,110,111,32,112,111,108,120,122,111,119,97,116,101,108,101,109,0
-__shell_anon28:
-	DEFB 112,117,116,120,32,98,111,108,120,123,101,32,50,53,53,32,115,105,109,119,111,108,111,119,0
-__shell_anon15:
-	DEFB 105,109,113,58,0
-__shell_anon16:
-	DEFB 91,32,119,107,32,45,32,111,107,32,93,32,32,91,32,97,114,50,32,45,32,111,116,109,101,110,97,32,93,0
 __shell_anon14:
-	DEFB 91,32,119,107,32,45,32,111,107,32,93,32,32,91,32,97,114,50,32,45,32,111,116,109,101,110,97,32,93,0
-__shell_anon9:
-	DEFB 52,56,75,58,0
-__shell_anon10:
-	DEFB 51,50,75,58,0
-__shell_anon11:
-	DEFB 49,54,75,58,0
+	DEFB 32,111,123,105,98,107,97,32,0
+__shell_anon16:
+	DEFB 110,101,116,32,102,97,106,108,111,119,111,106,32,115,105,115,116,101,109,121,0
+__shell_anon17:
+	DEFB 111,123,105,98,107,97,32,110,97,107,111,112,105,116,101,108,113,0
+__shell_anon18:
+	DEFB 112,97,112,107,97,32,110,101,32,112,117,115,116,97,0
+__shell_anon19:
+	DEFB 102,97,106,108,32,110,101,32,111,116,107,114,121,116,0
+__shell_anon20:
+	DEFB 112,117,116,120,32,110,101,32,110,97,106,100,101,110,0
+__shell_anon21:
+	DEFB 109,97,107,115,105,109,117,109,32,102,97,106,108,111,119,32,119,32,112,97,112,107,101,0
+__shell_anon22:
+	DEFB 100,105,115,107,32,122,97,112,111,108,110,101,110,0
+__shell_anon15:
+	DEFB 102,97,105,108,32,115,117,125,101,115,116,119,117,101,116,0
+__shell_anon23:
+	DEFB 112,114,101,114,119,97,110,111,32,112,111,108,120,122,111,119,97,116,101,108,101,109,0
+__shell_anon24:
+	DEFB 112,117,116,120,32,98,111,108,120,123,101,32,50,53,53,32,115,105,109,119,111,108,111,119,0
 __shell_anon12:
-	DEFB 63,63,63,58,0
-__shell_anon7:
-	DEFB 0
-__shell_anon4:
-	DEFB 46,82,75,0
+	DEFB 105,109,113,58,0
+__shell_anon13:
+	DEFB 91,32,119,107,32,45,32,111,107,32,93,32,32,91,32,97,114,50,32,45,32,111,116,109,101,110,97,32,93,0
+__shell_anon11:
+	DEFB 91,32,119,107,32,45,32,111,107,32,93,32,32,91,32,97,114,50,32,45,32,111,116,109,101,110,97,32,93,0
 __shell_anon6:
-	DEFB 46,73,78,0
+	DEFB 52,56,75,58,0
+__shell_anon7:
+	DEFB 51,50,75,58,0
+__shell_anon8:
+	DEFB 49,54,75,58,0
+__shell_anon9:
+	DEFB 63,63,63,58,0
+__shell_anon4:
+	DEFB 0
+__shell_anon1:
+	DEFB 46,82,75,0
 __shell_anon3:
+	DEFB 46,73,78,0
+__shell_anon0:
 	DEFB 0
 
 ; ---- zeros, below __x80_bss_top ----
 __x80_bss_off = __x80_bss_off + 2
-__shell___x80_spill_cmd_editview__lc EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 2
-__shell___x80_spill_cmd_inverseAll__lc EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 2
-__shell___x80_spill_cursor_down__lc EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 5
-__shell___x80_spill_cursor_right__lc EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 2
-__shell___x80_spill_reloadFiles__lc EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 2
-__shell___x80_spill_selectFile__lc EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 1
-__shell___x80_spill_dupFiles EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 2
-__shell___x80_spill_absolutePath EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 3
-__shell___x80_spill_getFiles EQU __x80_bss_top - __x80_bss_off
+__shell___x80_frame_scratch EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 11
-__shell___x80_spill_sort__lc EQU __x80_bss_top - __x80_bss_off
+__shell___x80_spill_sort EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 1
 __shell___x80_spill_cmpFileInfo__lc EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 1
-__shell___x80_spill_packName EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 3
 __shell___x80_spill_getNextSelected EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 2
-__shell___x80_spill_catPathAndUnpack EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 1
 __shell___x80_spill_unpackName EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 3
-__shell___x80_spill_run EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 1
-__shell___x80_spill_inputBox EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 5
-__shell___x80_spill_drawError EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 2
-__shell___x80_spill_drawFileInfo__lc EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 4
-__shell___x80_spill_drawFilesCount__lc EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 64
-__shell_l5_fs_selfName2 EQU __x80_bss_top - __x80_bss_off
+__shell_l2_fs_selfName2 EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 1
-__shell_l13_md EQU __x80_bss_top - __x80_bss_off
+__shell_l10_md EQU __x80_bss_top - __x80_bss_off
 	DEFINE __X80_DEF_nextSelectedFile
 __x80_bss_off = __x80_bss_off + 2
 _nextSelectedFile EQU __x80_bss_top - __x80_bss_off
@@ -3083,15 +3293,13 @@ _panelB EQU __x80_bss_top - __x80_bss_off
 	DEFINE __X80_DEF_panelA
 __x80_bss_off = __x80_bss_off + 266
 _panelA EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 337
+__x80_bss_off = __x80_bss_off + 15
 __x80_frames EQU __x80_bss_top - __x80_bss_off
-__shell_l0_buf EQU __x80_frames+0
-__shell_l1_buf EQU __x80_frames+0
-__shell_l2_buf EQU __x80_frames+11
-__shell_l8_buf EQU __x80_frames+0
-__shell_l30_total EQU __x80_frames+22
-__shell_l29_buf EQU __x80_frames+22
-__shell_l18_buf EQU __x80_frames+22
+__shell_l5_buf EQU __x80_frames+0
+
+	IFNDEF X80_OPT_SIZE
+	DEFINE X80_OPT_SIZE
+	ENDIF
 
 ; ==== translation unit cmd_copymove ====
 
@@ -3101,10 +3309,7 @@ __shell_l18_buf EQU __x80_frames+22
 ; ---- cmd_copymove1 ----
 _cmd_copymove1:
 .b0:
-	LD B,L
-	CALL __cmd_copymove_cmd_copymove1__lc
-	LD A,B
-	RET
+	JP __cmd_copymove_cmd_copymove1__lc
 	ENDIF
 
 	DEFINE __X80_DEF_applyMask
@@ -3140,37 +3345,349 @@ _applyMask1:
 ; ---- cmd_copyFile ----
 _cmd_copyFile:
 .b0:
-	LD B,D
-	LD C,E
-	EX DE,HL
-	LD H,B
-	LD L,C
 	JP __cmd_copymove_cmd_copyFile__lc
 	ENDIF
 
-	IFUSED __cmd_copymove_applyMask__lc
+	DEFINE __X80_DEF_cmd_copymove
+	IFUSED _cmd_copymove
 
-; ---- applyMask__lc ----
-__cmd_copymove_applyMask__lc:
+; ---- cmd_copymove ----
+_cmd_copymove:
 .b0:
+	LD B,L
+	OR A
+	JP NZ,.b1
+.b2:
+	LD HL,__cmd_copymove_anon0
+.b3:
 	PUSH HL
-	PUSH DE
-	LD A,8
-	CALL __cmd_copymove_applyMask1__lc
-	POP DE
+	LD L,B
+	CALL __cmd_copymove_cmd_copymove1__lc
 	POP HL
-	LD BC,8
-	ADD HL,BC
-	LD B,H
-	LD C,L
+	CALL _drawError
+	JP _drawScreen
+.b1:
+	LD HL,__cmd_copymove_anon1
+	JP .b3
+	ENDIF
+
+	IFUSED __cmd_copymove_cmd_copymove1__lc
+
+; ---- cmd_copymove1__lc ----
+__cmd_copymove_cmd_copymove1__lc:
+.b0:
+	LD (__cmd_copymove___x80_frame_scratch),HL
+	LD HL,65250
+	ADD HL,SP
+	LD SP,HL
+	LD HL,(__cmd_copymove___x80_frame_scratch)
+	LD B,A
+	XOR A
+	OR L
+	JP NZ,.b1
+.b4:
+	PUSH BC
+	LD HL,_panelB+2
+	CALL _strlen
 	EX DE,HL
-	LD DE,8
+	POP BC
+	LD A,E
+	SUB 254
+	LD A,D
+	SBC A, 0
+	JP NC,.b29
+.b6:
+	PUSH BC
+	PUSH DE
+	LD A,47
+	LD (_cmdline),A
+	LD HL,_cmdline+1
+	LD DE,_panelB+2
+	CALL _strcpy
+	POP DE
+	POP BC
+	XOR A
+	OR E
+	JP NZ,.b7
+.b8:
+	XOR A
+	OR B
+	LD A,0
+	JP Z,.b46
+.b45:
+	INC A
+.b46:
+	LD HL,278
+	ADD HL,SP
+	LD (HL),A
+	OR A
+	JP NZ,.b9
+.b10:
+	LD HL,__cmd_copymove_anon2
+.b11:
+	CALL _inputBox
+	OR A
+	JP NZ,.b14
+.b12:
+	LD A,(_cmdline)
+	OR A
+	JP NZ,.b22
+.b14:
+	LD HL,_cmdline
+	CALL _absolutePath
+	OR A
+	JP NZ,.b16
+.b29:
+	LD A,11
+.b48:
+	LD HL,286
+	ADD HL,SP
+	LD SP,HL
+	RET
+.b1:
+	PUSH BC
+	CALL _getSelNoBack
+	EX DE,HL
+	POP BC
+	LD A,E
+	OR D
+	JP NZ,.b3
+.b22:
+	XOR A
+	JP .b48
+.b3:
+	PUSH BC
+	LD HL,_cmdline
+	CALL _unpackName
+	POP BC
+	JP .b8
+.b7:
+	PUSH BC
+	LD HL,_cmdline
 	ADD HL,DE
+	INC HL
+	LD DE,__cmd_copymove_anon3
+	CALL _strcpy
+	POP BC
+	JP .b8
+.b9:
+	LD HL,__cmd_copymove_anon4
+	JP .b11
+.b16:
+	LD HL,256
+	ADD HL,SP
+	LD (HL),0
+	LD HL,_cmdline
+	CALL _getName
+	LD D,H
+	LD E,L
+	LD B,(HL)
+	XOR A
+	OR B
+	JP NZ,.b17
+.b18:
+	LD A,(_cmdline)
+	OR A
+	JP NZ,.b19
+.b21:
+	LD HL,0
+	ADD HL,SP
+	CALL _getFirstSelected
+	OR A
+	JP Z,.b22
+.b23:
+	LD HL,279
+	ADD HL,SP
+.b24:
+	LD (HL),A
+	LD HL,0
+	ADD HL,SP
+	CALL _absolutePath
+	OR A
+	JP Z,.b25
+.b26:
+	LD HL,0
+	ADD HL,SP
+	CALL _getName
 	EX DE,HL
-	LD H,B
-	LD L,C
-	LD A,3
-	JP __cmd_copymove_applyMask1__lc
+	LD HL,267
+	ADD HL,SP
+	CALL _packName
+	LD HL,256
+	ADD HL,SP
+	LD A,(HL)
+	OR A
+	JP Z,.b28
+.b27:
+	LD HL,267
+	ADD HL,SP
+	EX DE,HL
+	LD HL,280
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,256
+	ADD HL,SP
+	EX DE,HL
+	LD HL,280
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	CALL __cmd_copymove_applyMask__lc
+.b28:
+	LD HL,_cmdline
+	EX DE,HL
+	LD HL,282
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,267
+	ADD HL,SP
+	EX DE,HL
+	LD HL,282
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	CALL _catPathAndUnpack
+	OR A
+	JP NZ,.b29
+.b30:
+	LD HL,0
+	ADD HL,SP
+	LD DE,_cmdline
+	CALL _strcmp
+	LD A,L
+	OR H
+	JP NZ,.b31
+.b41:
+	LD HL,_cmdline
+	LD DE,0
+	CALL _dropPathInt
+	LD HL,0
+	ADD HL,SP
+	CALL _getNextSelected
+	OR A
+	JP Z,.b42
+.b43:
+	LD HL,279
+	ADD HL,SP
+	JP .b24
+.b25:
+	LD B,11
+.b44:
+	PUSH BC
+	CALL _getFiles
+	LD A,1
+	CALL _dupFiles
+	POP BC
+	LD A,B
+	JP .b48
+.b17:
+	LD HL,256
+	ADD HL,SP
+	CALL _packName
+	LD HL,_cmdline
+	LD DE,0
+	CALL _dropPathInt
+	JP .b21
+.b19:
+	XOR A
+	OR B
+	JP NZ,.b21
+.b20:
+	EX DE,HL
+	DEC HL
+	LD (HL),0
+	JP .b21
+.b31:
+	LD HL,278
+	ADD HL,SP
+	LD A,(HL)
+	OR A
+	JP NZ,.b32
+.b36:
+	LD HL,__cmd_copymove_anon5
+	CALL _drawWindow
+	XOR A
+	LD L,1
+	LD DE,__cmd_copymove_anon6
+	CALL _drawWindowText
+	LD A,4
+	LD L,1
+	EX DE,HL
+	LD HL,284
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,0
+	ADD HL,SP
+	EX DE,HL
+	PUSH AF
+	LD HL,286
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	POP AF
+	CALL _drawWindowText
+	XOR A
+	LD L,2
+	LD DE,__cmd_copymove_anon7
+	CALL _drawWindowText
+	LD A,4
+	LD L,2
+	LD DE,_cmdline
+	CALL _drawWindowText
+	CALL _drawAnyKeyButton
+	CALL _bioskey1
+	CP 27
+	JP Z,.b37
+.b38:
+	LD HL,0
+	ADD HL,SP
+	LD DE,_cmdline
+	CALL _fs_move
+.b39:
+	OR A
+	JP Z,.b41
+.b40:
+	LD B,A
+	JP .b44
+.b32:
+	LD HL,279
+	ADD HL,SP
+	LD A,(HL)
+	CP 2
+	JP Z,.b33
+.b34:
+	LD HL,0
+	ADD HL,SP
+	LD DE,_cmdline
+	CALL __cmd_copymove_cmd_copyFile__lc
+	JP .b50
+.b33:
+	LD HL,0
+	ADD HL,SP
+	LD DE,_cmdline
+	CALL __cmd_copymove_cmd_copyFolder__lc
+.b50:
+	OR A
+	JP NZ,.b40
+	JP .b41
+.b37:
+	LD B,128
+	JP .b44
+.b42:
+	LD B,A
+	JP .b44
 	ENDIF
 
 	IFUSED __cmd_copymove_cmd_copyFolder__lc
@@ -3178,17 +3695,39 @@ __cmd_copymove_applyMask__lc:
 ; ---- cmd_copyFolder__lc ----
 __cmd_copymove_cmd_copyFolder__lc:
 .b0:
-	LD (__cmd_copymove___x80_spill_cmd_copyFolder__lc+2),HL
-	EX DE,HL
-	LD (__cmd_copymove___x80_spill_cmd_copyFolder__lc),HL
+	LD (__cmd_copymove___x80_frame_scratch),HL
+	LD HL,65515
+	ADD HL,SP
+	LD SP,HL
+	LD HL,(__cmd_copymove___x80_frame_scratch)
+	LD B,H
+	LD C,L
+	LD HL,19
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
+	LD HL,17
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,17
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	CALL _fs_mkdir
 	OR A
-	RET NZ
+	JP NZ,.b33
 .b2:
 	LD DE,0
 	XOR A
+	LD HL,16
+	ADD HL,SP
+	LD (HL),A
 .b3:
-	LD (__cmd_copymove___x80_spill_cmd_copyFolder__lc+4),A
 	LD HL,(_maxFiles)
 	LD A,E
 	XOR L
@@ -3204,7 +3743,12 @@ __cmd_copymove_cmd_copyFolder__lc:
 	INC BC
 	LD HL,(_panelB)
 	EX DE,HL
-	LD HL,(__cmd_copymove___x80_spill_cmd_copyFolder__lc+2)
+	LD HL,21
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	CALL _fs_findfirst
 	OR A
 	POP DE
@@ -3232,7 +3776,12 @@ __cmd_copymove_cmd_copyFolder__lc:
 	LD B,H
 	LD C,L
 	PUSH BC
-	LD HL,(__cmd_copymove___x80_spill_cmd_copyFolder__lc+2)
+	LD HL,23
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	LD D,B
 	LD E,C
 	CALL _catPathAndUnpack
@@ -3243,7 +3792,12 @@ __cmd_copymove_cmd_copyFolder__lc:
 .b14:
 	PUSH DE
 	PUSH BC
-	LD HL,(__cmd_copymove___x80_spill_cmd_copyFolder__lc)
+	LD HL,21
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	LD D,B
 	LD E,C
 	CALL _catPathAndUnpack
@@ -3259,504 +3813,147 @@ __cmd_copymove_cmd_copyFolder__lc:
 	JP NZ,.b17
 .b22:
 	PUSH DE
-	LD HL,(__cmd_copymove___x80_spill_cmd_copyFolder__lc+2)
-	EX DE,HL
-	LD HL,(__cmd_copymove___x80_spill_cmd_copyFolder__lc)
+	LD HL,21
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,C
+	PUSH HL
+	LD HL,21
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
 	CALL __cmd_copymove_cmd_copyFile__lc
-	LD (__cmd_copymove___x80_spill_cmd_copyFolder__lc+5),A
-	LD HL,(__cmd_copymove___x80_spill_cmd_copyFolder__lc+2)
+	LD B,A
+	LD HL,21
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	EX DE,HL
 	LD DE,0
+	PUSH BC
 	CALL _dropPathInt
-	LD HL,(__cmd_copymove___x80_spill_cmd_copyFolder__lc)
+	POP BC
+	LD HL,19
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	EX DE,HL
 	LD DE,0
+	PUSH BC
 	CALL _dropPathInt
-	LD A,(__cmd_copymove___x80_spill_cmd_copyFolder__lc+5)
-	OR A
+	POP BC
+	XOR A
+	OR B
 	POP DE
 	JP NZ,.b23
-.b24:
-	LD A,(__cmd_copymove___x80_spill_cmd_copyFolder__lc+4)
 .b25:
 	INC DE
 	JP .b3
 .b4:
 	LD A,10
-.b27:
+.b33:
+	LD HL,21
+	ADD HL,SP
+	LD SP,HL
 	RET
 .b6:
 	CP 10
-	RET NZ
-	LD HL,(_fs_low)
-	LD A,E
-	SUB L
-	LD A,D
-	SBC A, H
-	JP C,.b12
+	JP Z,.b8
+	JP .b33
 .b9:
-	LD A,(__cmd_copymove___x80_spill_cmd_copyFolder__lc+4)
+	LD HL,16
+	ADD HL,SP
+	LD A,(HL)
 	OR A
 	JP Z,.b10
 .b11:
-	LD HL,(__cmd_copymove___x80_spill_cmd_copyFolder__lc+2)
+	LD HL,19
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	LD DE,0
 	CALL _dropPathInt
-	LD HL,(__cmd_copymove___x80_spill_cmd_copyFolder__lc)
+	LD HL,17
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	LD DE,0
 	CALL _dropPathInt
-	LD A,(__cmd_copymove___x80_spill_cmd_copyFolder__lc+4)
+	LD HL,16
+	ADD HL,SP
+	LD A,(HL)
 	DEC A
 	LD L,A
 	LD H,0
 	ADD HL,HL
-	LD BC,__cmd_copymove_l0_stack
+	LD B,H
+	LD C,L
+	LD HL,0
+	ADD HL,SP
 	ADD HL,BC
 	LD E,(HL)
 	INC HL
 	LD D,(HL)
+	LD HL,16
+	ADD HL,SP
+.b29:
+	LD (HL),A
 	JP .b25
 .b10:
 	XOR A
-	RET
+	JP .b33
 .b17:
-	LD A,(__cmd_copymove___x80_spill_cmd_copyFolder__lc+4)
+	LD HL,16
+	ADD HL,SP
+	LD A,(HL)
 	CP 7
 	JP Z,.b18
 .b19:
-	LD L,A
+	LD HL,16
+	ADD HL,SP
+	LD L,(HL)
 	LD H,0
 	ADD HL,HL
-	LD BC,__cmd_copymove_l0_stack
+	LD B,H
+	LD C,L
+	LD HL,0
+	ADD HL,SP
 	ADD HL,BC
 	LD (HL),E
 	INC HL
 	LD (HL),D
-	LD HL,(__cmd_copymove___x80_spill_cmd_copyFolder__lc)
-	CALL _fs_mkdir
-	OR A
-	RET NZ
-.b21:
-	LD A,(__cmd_copymove___x80_spill_cmd_copyFolder__lc+4)
-	INC A
-	LD DE,0FFFFH
-	JP .b25
-.b18:
-	LD A,11
-	RET
-.b23:
-	LD A,(__cmd_copymove___x80_spill_cmd_copyFolder__lc+5)
-	RET
-	ENDIF
-
-	DEFINE __X80_DEF_cmd_copymove
-	IFUSED _cmd_copymove
-
-; ---- cmd_copymove ----
-_cmd_copymove:
-.b0:
-	LD B,L
-	OR A
-	JP NZ,.b1
-.b2:
-	LD HL,__cmd_copymove_anon1
-.b3:
-	PUSH HL
-	CALL __cmd_copymove_cmd_copymove1__lc
-	LD A,B
-	POP HL
-	CALL _drawError
-	JP _drawScreen
-.b1:
-	LD HL,__cmd_copymove_anon2
-	JP .b3
-	ENDIF
-
-	IFUSED __cmd_copymove_cmd_copymove1__lc
-
-; ---- cmd_copymove1__lc ----
-__cmd_copymove_cmd_copymove1__lc:
-.b0:
-	LD (__cmd_copymove___x80_spill_cmd_copymove1__lc),A
-	XOR A
-	OR B
-	JP NZ,.b1
-.b4:
-	LD HL,_panelB+2
-	CALL _strlen
-	LD A,L
-	SUB 254
-	LD A,H
-	SBC A, 0
-	JP NC,.b15
-.b6:
-	PUSH HL
-	LD A,47
-	LD (_cmdline),A
-	LD HL,_cmdline+1
-	LD DE,_panelB+2
-	CALL _strcpy
-	POP HL
-	XOR A
-	OR L
-	JP NZ,.b7
-.b8:
-	LD A,(__cmd_copymove___x80_spill_cmd_copymove1__lc)
-	OR A
-	LD A,0
-	JP Z,.b72
-.b71:
-	INC A
-.b72:
-	LD (__cmd_copymove___x80_spill_cmd_copymove1__lc+1),A
-	OR A
-	JP NZ,.b9
-.b10:
-	LD HL,__cmd_copymove_anon3
-.b11:
-	CALL _inputBox
-	OR A
-	JP NZ,.b14
-.b12:
-	LD A,(_cmdline)
-	OR A
-	JP NZ,.b2
-.b14:
-	LD HL,_cmdline
-	CALL _absolutePath
-	OR A
-	JP NZ,.b16
-.b15:
-	LD B,11
-	RET
-.b1:
-	CALL _getSelNoBack
-	EX DE,HL
-	LD A,E
-	OR D
-	JP NZ,.b3
-.b2:
-	LD B,0
-	RET
-.b3:
-	LD HL,_cmdline
-	CALL _unpackName
-	JP .b8
-.b7:
-	LD BC,_cmdline
-	ADD HL,BC
-	INC HL
-	LD DE,__cmd_copymove_anon4
-	CALL _strcpy
-	JP .b8
-.b9:
-	LD HL,__cmd_copymove_anon5
-	JP .b11
-.b16:
-	XOR A
-	LD (__cmd_copymove_l6_mask),A
-	LD HL,_cmdline
-	CALL _getName
-	LD D,H
-	LD E,L
-	LD B,(HL)
-	XOR A
-	OR B
-	JP NZ,.b17
-.b18:
-	LD A,(_cmdline)
-	OR A
-	JP NZ,.b19
-.b21:
-	LD HL,__cmd_copymove_l7_sourceFile
-	CALL _getFirstSelected
-	OR A
-	JP Z,.b2
-.b24:
-	LD (__cmd_copymove___x80_spill_cmd_copymove1__lc+2),A
-	LD HL,__cmd_copymove_l7_sourceFile
-	CALL _absolutePath
-	OR A
-	JP Z,.b25
-.b26:
-	LD HL,__cmd_copymove_l7_sourceFile
-	CALL _getName
-	EX DE,HL
-	LD HL,__cmd_copymove_l8_forMask
-	CALL _packName
-	LD A,(__cmd_copymove_l6_mask)
-	OR A
-	JP Z,.b28
-.b27:
-	LD HL,__cmd_copymove_l8_forMask
-	LD DE,__cmd_copymove_l6_mask
-	LD A,8
-	CALL __cmd_copymove_applyMask1__lc
-	LD HL,__cmd_copymove_l8_forMask+8
-	LD DE,__cmd_copymove_l6_mask+8
-	LD A,3
-	CALL __cmd_copymove_applyMask1__lc
-.b28:
-	LD HL,_cmdline
-	LD DE,__cmd_copymove_l8_forMask
-	CALL _catPathAndUnpack
-	OR A
-	JP NZ,.b15
-.b30:
-	LD HL,__cmd_copymove_l7_sourceFile
-	LD DE,_cmdline
-	CALL _strcmp
-	LD A,L
-	OR H
-	JP NZ,.b31
-.b41:
-	LD HL,_cmdline
-	LD DE,0
-	CALL _dropPathInt
-	LD HL,__cmd_copymove_l7_sourceFile
-	CALL _getNextSelected
-	OR A
-	JP NZ,.b24
-.b42:
-	LD B,A
-.b44:
-	PUSH BC
-	CALL _getFiles
-	LD A,1
-	CALL _dupFiles
-	POP BC
-	RET
-.b25:
-	LD B,11
-	JP .b44
-.b17:
-	LD HL,__cmd_copymove_l6_mask
-	CALL _packName
-	LD HL,_cmdline
-	LD DE,0
-	CALL _dropPathInt
-	JP .b21
-.b19:
-	XOR A
-	OR B
-	JP NZ,.b21
-.b20:
-	EX DE,HL
-	DEC HL
-	LD (HL),0
-	JP .b21
-.b31:
-	LD A,(__cmd_copymove___x80_spill_cmd_copymove1__lc+1)
-	OR A
-	JP NZ,.b32
-.b36:
-	LD HL,__cmd_copymove_anon9
-	CALL _drawWindow
-	XOR A
-	LD L,1
-	LD DE,__cmd_copymove_anon10
-	CALL _drawWindowText
-	LD A,4
-	LD L,1
-	LD DE,__cmd_copymove_l7_sourceFile
-	CALL _drawWindowText
-	XOR A
-	LD L,2
-	LD DE,__cmd_copymove_anon11
-	CALL _drawWindowText
-	LD A,4
-	LD L,2
-	LD DE,_cmdline
-	CALL _drawWindowText
-	CALL _drawAnyKeyButton
-	CALL _bioskey1
-	CP 27
-	JP Z,.b37
-.b38:
-	LD HL,__cmd_copymove_l7_sourceFile
-	LD DE,_cmdline
-	CALL _fs_move
-.b39:
-	OR A
-	JP Z,.b41
-.b40:
-	LD B,A
-	JP .b44
-.b32:
-	LD A,(__cmd_copymove___x80_spill_cmd_copymove1__lc+2)
-	CP 2
-	JP Z,.b33
-.b34:
-	LD DE,__cmd_copymove_l7_sourceFile
-	LD HL,_cmdline
-	CALL __cmd_copymove_cmd_copyFile__lc
-.b45:
-	OR A
-	JP NZ,.b40
-	JP .b41
-.b33:
-	LD HL,_cmdline
-	CALL _fs_mkdir
-	OR A
-	JP NZ,.b40
-.b46:
-	LD BC,0
-	XOR A
-.b47:
-	LD (__cmd_copymove___x80_spill_cmd_copymove1__lc+3),A
-	LD HL,(_maxFiles)
-	LD A,C
-	XOR L
-	JP NZ,.b48
-	LD A,B
-	XOR H
-.b73:
-	JP Z,.b69
-.b48:
-	LD D,B
-	LD E,C
-	PUSH BC
-	INC DE
-	LD B,D
-	LD C,E
-	LD HL,(_panelB)
-	EX DE,HL
-	LD HL,__cmd_copymove_l7_sourceFile
-	CALL _fs_findfirst
-	OR A
-	POP BC
-	JP NZ,.b49
-.b50:
-	LD HL,(_fs_low)
-	LD A,C
-	SUB L
-	LD A,B
-	SBC A, H
-	JP NC,.b64
-.b51:
-	LD HL,(_panelB)
-	EX DE,HL
-	LD H,B
-	LD L,C
-	ADD HL,HL
-	ADD HL,HL
-	ADD HL,BC
-	PUSH BC
-	ADD HL,HL
-	ADD HL,HL
-	EX DE,HL
-	ADD HL,DE
-	EX DE,HL
-	PUSH DE
-	LD HL,__cmd_copymove_l7_sourceFile
-	CALL _catPathAndUnpack
-	OR A
-	POP DE
-	POP BC
-	JP NZ,.b63
-.b52:
-	PUSH BC
-	PUSH DE
-	LD HL,_cmdline
-	CALL _catPathAndUnpack
-	OR A
-	POP DE
-	POP BC
-	JP NZ,.b63
-.b53:
-	EX DE,HL
-	LD DE,11
-	ADD HL,DE
-	LD A,(HL)
-	AND 16
-	JP NZ,.b57
-.b54:
-	PUSH BC
-	LD DE,__cmd_copymove_l7_sourceFile
-	LD HL,_cmdline
-	CALL __cmd_copymove_cmd_copyFile__lc
-	LD (__cmd_copymove___x80_spill_cmd_copymove1__lc+4),A
-	LD HL,__cmd_copymove_l7_sourceFile
-	LD DE,0
-	CALL _dropPathInt
-	LD HL,_cmdline
-	LD DE,0
-	CALL _dropPathInt
-	LD A,(__cmd_copymove___x80_spill_cmd_copymove1__lc+4)
-	OR A
-	POP BC
-	JP NZ,.b56
-.b55:
-	LD A,(__cmd_copymove___x80_spill_cmd_copymove1__lc+3)
-.b66:
-	INC BC
-	JP .b47
-.b37:
-	LD B,128
-	JP .b44
-.b49:
-	CP 10
-	JP NZ,.b40
-	LD HL,(_fs_low)
-	LD A,C
-	SUB L
-	LD A,B
-	SBC A, H
-	JP C,.b51
-.b64:
-	LD A,(__cmd_copymove___x80_spill_cmd_copymove1__lc+3)
-	OR A
-	JP Z,.b67
-.b65:
-	LD HL,__cmd_copymove_l7_sourceFile
-	LD DE,0
-	CALL _dropPathInt
-	LD HL,_cmdline
-	LD DE,0
-	CALL _dropPathInt
-	LD A,(__cmd_copymove___x80_spill_cmd_copymove1__lc+3)
-	DEC A
-	LD L,A
-	LD H,0
-	ADD HL,HL
-	LD BC,__cmd_copymove_l12_stack
-	ADD HL,BC
+	LD HL,17
+	ADD HL,SP
 	LD C,(HL)
 	INC HL
-	LD B,(HL)
-	JP .b66
-.b56:
-	LD A,(__cmd_copymove___x80_spill_cmd_copymove1__lc+4)
-	JP .b45
-.b57:
-	LD A,(__cmd_copymove___x80_spill_cmd_copymove1__lc+3)
-	CP 7
-	JP Z,.b63
-.b58:
-	LD L,A
-	LD H,D
-	ADD HL,HL
-	LD DE,__cmd_copymove_l12_stack
-	ADD HL,DE
-	LD (HL),C
-	INC HL
-	LD (HL),B
-	LD HL,_cmdline
+	LD H,(HL)
+	LD L,C
 	CALL _fs_mkdir
 	OR A
-	JP NZ,.b40
-.b59:
-	LD A,(__cmd_copymove___x80_spill_cmd_copymove1__lc+3)
+	JP NZ,.b33
+.b21:
+	LD HL,16
+	ADD HL,SP
+	LD A,(HL)
 	INC A
-	LD BC,0FFFFH
-	JP .b66
-.b63:
+	LD DE,0FFFFH
+	JP .b29
+.b18:
 	LD A,11
-	JP .b40
-.b67:
-	XOR A
-	JP .b45
-.b69:
-	LD A,10
-	JP .b40
+	JP .b33
+.b23:
+	LD A,B
+	JP .b33
 	ENDIF
 
 	IFUSED __cmd_copymove_cmd_copyFile__lc
@@ -3764,101 +3961,213 @@ __cmd_copymove_cmd_copymove1__lc:
 ; ---- cmd_copyFile__lc ----
 __cmd_copymove_cmd_copyFile__lc:
 .b0:
-	PUSH DE
-	LD (__cmd_copymove___x80_spill_cmd_copyFile__lc+1),HL
-	EX DE,HL
+	LD (__cmd_copymove___x80_frame_scratch),HL
+	LD HL,65491
+	ADD HL,SP
+	LD SP,HL
+	LD HL,(__cmd_copymove___x80_frame_scratch)
+	LD B,H
+	LD C,L
+	LD HL,28
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
+	LD HL,30
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,28
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	CALL _fs_open
 	OR A
-	POP DE
-	RET NZ
+	JP NZ,.b27
 .b2:
-	PUSH DE
 	CALL _fs_getsize
 	OR A
-	POP DE
-	RET NZ
+	JP NZ,.b27
 .b4:
-	PUSH DE
-	LD HL,__cmd_copymove_l13_progress_step
-	LD DE,_fs_low
-	CALL _set32
-	LD HL,__cmd_copymove_l13_progress_step
-	LD DE,40
-	CALL _div32_16
-	LD HL,__cmd_copymove_anon14
+	LD HL,(_fs_low+2)
+	EX DE,HL
+	LD HL,(_fs_low)
+	LD BC,0
+	PUSH BC
+	LD C,40
+	CALL __x80_ludiv
+	POP BC
+	LD B,H
+	LD C,L
+	LD HL,24
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
+	LD HL,26
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,__cmd_copymove_anon8
 	CALL _drawWindow
 	XOR A
 	LD L,A
-	LD DE,__cmd_copymove_anon15
+	LD DE,__cmd_copymove_anon9
 	CALL _drawWindowText
-	POP DE
 	LD A,4
 	LD L,0
+	PUSH HL
+	LD HL,30
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
 	CALL _drawWindowText
 	XOR A
 	LD L,1
-	LD DE,__cmd_copymove_anon16
+	LD DE,__cmd_copymove_anon10
 	CALL _drawWindowText
 	LD A,4
 	LD L,1
-	EX DE,HL
-	LD HL,(__cmd_copymove___x80_spill_cmd_copyFile__lc+1)
-	EX DE,HL
+	PUSH HL
+	LD HL,32
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
 	CALL _drawWindowText
 	XOR A
 	LD L,2
-	LD DE,__cmd_copymove_anon17
+	LD DE,__cmd_copymove_anon11
 	CALL _drawWindowText
 	XOR A
 	LD L,3
 	LD E,40
 	LD BC,2323H
 	CALL _drawWindowProgress
-	LD HL,__cmd_copymove_l18_buf
+	LD HL,0
+	ADD HL,SP
 	LD DE,_fs_low
 	LD BC,10
 	LD A,32
 	CALL _i2s32
 	LD A,23
 	LD L,2
-	LD DE,__cmd_copymove_l18_buf
+	EX DE,HL
+	LD HL,32
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,0
+	ADD HL,SP
+	EX DE,HL
+	PUSH AF
+	LD HL,34
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	POP AF
 	CALL _drawWindowText
 	CALL _drawEscButton
 	CALL _fs_swap
 	OR A
-	RET NZ
+	JP NZ,.b27
 .b6:
-	LD HL,(__cmd_copymove___x80_spill_cmd_copyFile__lc+1)
+	LD HL,30
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,C
 	CALL _fs_create
 	OR A
-	RET NZ
+	JP NZ,.b27
 .b8:
-	LD HL,0
-	LD (__cmd_copymove_l19_progress),HL
-	LD (__cmd_copymove_l19_progress+2),HL
-	LD (__cmd_copymove_l20_progress_x),HL
-	LD (__cmd_copymove_l20_progress_x+2),HL
+	LD HL,16
+	ADD HL,SP
+	LD (HL),0
+	INC HL
+	LD (HL),0
+	LD HL,18
+	ADD HL,SP
+	LD (HL),0
+	INC HL
+	LD (HL),0
+	LD HL,20
+	ADD HL,SP
+	LD (HL),0
+	INC HL
+	LD (HL),0
+	LD HL,22
+	ADD HL,SP
+	LD (HL),0
+	INC HL
+	LD (HL),0
 	XOR A
-	LD (__cmd_copymove___x80_spill_cmd_copyFile__lc),A
+	LD HL,34
+	ADD HL,SP
+	LD (HL),A
 .b9:
-	LD HL,__cmd_copymove_l18_buf
-	LD DE,__cmd_copymove_l19_progress
+	LD HL,0
+	ADD HL,SP
+	EX DE,HL
+	LD HL,37
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,16
+	ADD HL,SP
+	EX DE,HL
 	LD BC,10
 	LD A,32
+	PUSH AF
+	LD HL,39
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	POP AF
 	CALL _i2s32
 	LD A,12
 	LD L,2
-	LD DE,__cmd_copymove_l18_buf
+	EX DE,HL
+	LD HL,35
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,0
+	ADD HL,SP
+	EX DE,HL
+	PUSH AF
+	LD HL,37
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	POP AF
 	CALL _drawWindowText
 	CALL _fs_swap
 	OR A
-	RET NZ
+	JP NZ,.b27
 .b11:
 	LD HL,(_panelB)
 	LD DE,400H
 	CALL _fs_read
 	OR A
-	RET NZ
+	JP NZ,.b27
 .b13:
 	LD HL,(_fs_low)
 	LD A,L
@@ -3867,59 +4176,206 @@ __cmd_copymove_cmd_copyFile__lc:
 .b15:
 	CALL _fs_swap
 	OR A
-	RET NZ
+	JP NZ,.b27
 .b17:
 	LD HL,(_fs_low)
 	EX DE,HL
 	LD HL,(_panelB)
 	CALL _fs_write
 	OR A
-	RET NZ
+	JP NZ,.b27
 .b19:
 	LD HL,(_fs_low)
+	LD B,H
+	LD C,L
+	LD HL,39
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
+	LD HL,16
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	LD HL,18
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD B,(HL)
 	EX DE,HL
-	LD HL,__cmd_copymove_l19_progress
-	CALL _add32_16
-	LD HL,(_fs_low)
+	PUSH HL
+	LD HL,41
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
+	ADD HL,DE
 	EX DE,HL
-	LD HL,__cmd_copymove_l20_progress_x
-	CALL _add32_16
+	ADC A, C
+	LD C,A
+	LD A,0
+	ADC A, B
+	LD B,A
+	LD HL,16
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,18
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
+	LD HL,20
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	LD HL,22
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD B,(HL)
+	EX DE,HL
+	PUSH HL
+	LD HL,41
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
+	ADD HL,DE
+	EX DE,HL
+	LD A,0
+	ADC A, C
+	LD C,A
+	LD A,0
+	ADC A, B
+	LD B,A
+	LD HL,20
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,22
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
+	LD HL,34
+	ADD HL,SP
+	LD B,(HL)
 .b20:
-	LD A,(__cmd_copymove___x80_spill_cmd_copyFile__lc)
+	LD A,B
 	CP 40
 	JP NC,.b23
 .b21:
-	LD HL,__cmd_copymove_l20_progress_x
-	LD DE,__cmd_copymove_l13_progress_step
+	PUSH BC
+	LD HL,22
+	ADD HL,SP
+	EX DE,HL
+	LD HL,43
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,26
+	ADD HL,SP
+	EX DE,HL
+	LD HL,43
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	CALL _cmp32_32
 	CP 1
+	POP BC
 	JP Z,.b23
 .b22:
-	LD HL,__cmd_copymove_l20_progress_x
-	LD DE,__cmd_copymove_l13_progress_step
-	CALL _sub32_32
-	LD A,(__cmd_copymove___x80_spill_cmd_copyFile__lc)
-	LD L,3
-	LD DE,__cmd_copymove_anon21
-	CALL _drawWindowText
-	LD HL,__cmd_copymove___x80_spill_cmd_copyFile__lc
-	INC (HL)
+	PUSH BC
+	LD HL,22
+	ADD HL,SP
+	EX DE,HL
+	LD HL,45
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,26
+	ADD HL,SP
+	EX DE,HL
+	LD HL,45
+	ADD HL,SP
 	LD A,(HL)
-	CP 40
-	JP C,.b21
-.b23:
-	CALL _bioskey1
-	CP 27
-	JP NZ,.b9
-.b24:
-	LD HL,(__cmd_copymove___x80_spill_cmd_copyFile__lc+1)
-	CALL _fs_delete
-	LD A,128
-	RET
+	INC HL
+	LD H,(HL)
+	LD L,A
+	CALL _sub32_32
+	POP BC
+	LD A,B
+	PUSH BC
+	LD L,3
+	LD DE,__cmd_copymove_anon12
+	CALL _drawWindowText
+	POP BC
+	INC B
+	JP .b20
 .b14:
 	XOR A
-.b25:
+.b27:
+	LD HL,45
+	ADD HL,SP
+	LD SP,HL
 	RET
+.b23:
+	PUSH BC
+	CALL _bioskey1
+	CP 27
+	POP BC
+	JP Z,.b24
+.b25:
+	LD HL,34
+	ADD HL,SP
+	LD (HL),B
+	JP .b9
+.b24:
+	LD HL,30
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,C
+	CALL _fs_delete
+	LD A,128
+	JP .b27
+	ENDIF
+
+	IFUSED __cmd_copymove_applyMask__lc
+
+; ---- applyMask__lc ----
+__cmd_copymove_applyMask__lc:
+.b0:
+	PUSH HL
+	PUSH DE
+	LD A,8
+	CALL __cmd_copymove_applyMask1__lc
+	POP DE
+	POP HL
+	LD BC,8
+	ADD HL,BC
+	LD B,H
+	LD C,L
+	EX DE,HL
+	LD DE,8
+	ADD HL,DE
+	EX DE,HL
+	LD H,B
+	LD L,C
+	LD A,3
+	JP __cmd_copymove_applyMask1__lc
 	ENDIF
 
 	IFUSED __cmd_copymove_applyMask1__lc
@@ -3939,62 +4395,49 @@ __cmd_copymove_applyMask1__lc:
 	LD (HL),A
 .b5:
 	DEC B
-	RET Z
-.b7:
 	INC DE
 	INC HL
-	LD A,(DE)
-	CP 42
-	JP NZ,.b3
-.b2:
+	JP NZ,.b1
+.b7:
 	RET
 	ENDIF
 
 ; ---- data ----
-__cmd_copymove_anon2:
-	DEFB 111,123,105,98,107,97,32,107,111,112,105,114,111,119,97,110,105,113,0
 __cmd_copymove_anon1:
+	DEFB 111,123,105,98,107,97,32,107,111,112,105,114,111,119,97,110,105,113,0
+__cmd_copymove_anon0:
 	DEFB 111,123,105,98,107,97,32,112,101,114,101,109,101,125,101,110,105,113,0
-__cmd_copymove_anon14:
+__cmd_copymove_anon8:
 	DEFB 32,107,111,112,105,114,111,119,97,110,105,101,32,0
-__cmd_copymove_anon15:
+__cmd_copymove_anon9:
 	DEFB 105,122,58,0
-__cmd_copymove_anon16:
+__cmd_copymove_anon10:
 	DEFB 119,58,0
-__cmd_copymove_anon17:
+__cmd_copymove_anon11:
 	DEFB 115,107,111,112,105,114,111,119,97,110,111,32,32,32,32,32,32,32,32,32,32,32,47,32,32,32,32,32,32,32,32,32
 	DEFB 32,32,98,97,106,116,0
-__cmd_copymove_anon21:
+__cmd_copymove_anon12:
 	DEFB 23,0
-__cmd_copymove_anon4:
-	DEFB 47,0
-__cmd_copymove_anon5:
-	DEFB 32,107,111,112,105,114,111,119,97,116,120,32,0
 __cmd_copymove_anon3:
+	DEFB 47,0
+__cmd_copymove_anon4:
+	DEFB 32,107,111,112,105,114,111,119,97,116,120,32,0
+__cmd_copymove_anon2:
 	DEFB 32,112,101,114,101,105,109,101,110,111,119,97,116,120,47,112,101,114,101,109,101,115,116,105,116,120,32,0
-__cmd_copymove_anon9:
+__cmd_copymove_anon5:
 	DEFB 32,112,101,114,101,105,109,101,110,111,119,97,110,105,101,47,112,101,114,101,109,101,125,101,110,105,101,32,0
-__cmd_copymove_anon10:
+__cmd_copymove_anon6:
 	DEFB 105,122,58,0
-__cmd_copymove_anon11:
+__cmd_copymove_anon7:
 	DEFB 119,58,0
 
 ; ---- zeros, below __x80_bss_top ----
-__x80_bss_off = __x80_bss_off + 6
-__cmd_copymove___x80_spill_cmd_copyFolder__lc EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 5
-__cmd_copymove___x80_spill_cmd_copymove1__lc EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 3
-__cmd_copymove___x80_spill_cmd_copyFile__lc EQU __x80_bss_top - __x80_bss_off
-__cmd_copymove_l12_stack EQU __x80_frames+267
-__cmd_copymove_l8_forMask EQU __x80_frames+294
-__cmd_copymove_l6_mask EQU __x80_frames+283
-__cmd_copymove_l7_sourceFile EQU __x80_frames+11
-__cmd_copymove_l0_stack EQU __x80_frames+0
-__cmd_copymove_l13_progress_step EQU __x80_frames+329
-__cmd_copymove_l20_progress_x EQU __x80_frames+325
-__cmd_copymove_l19_progress EQU __x80_frames+321
-__cmd_copymove_l18_buf EQU __x80_frames+305
+__x80_bss_off = __x80_bss_off + 2
+__cmd_copymove___x80_frame_scratch EQU __x80_bss_top - __x80_bss_off
+
+	IFNDEF X80_OPT_SIZE
+	DEFINE X80_OPT_SIZE
+	ENDIF
 
 ; ==== translation unit cmd_new ====
 
@@ -4004,7 +4447,9 @@ __cmd_copymove_l18_buf EQU __x80_frames+305
 ; ---- cmd_new1 ----
 _cmd_new1:
 .b0:
-	JP __cmd_new_cmd_new1__lc
+	CALL __cmd_new_cmd_new1__lc
+	LD A,B
+	RET
 	ENDIF
 
 	DEFINE __X80_DEF_cmd_new
@@ -4014,6 +4459,7 @@ _cmd_new1:
 _cmd_new:
 .b0:
 	CALL __cmd_new_cmd_new1__lc
+	LD A,B
 	LD HL,__cmd_new_anon0
 	CALL _drawError
 	JP _drawScreen
@@ -4034,33 +4480,37 @@ __cmd_new_cmd_new1__lc:
 .b15:
 	INC A
 .b16:
-	LD (__cmd_new___x80_spill_cmd_new1__lc),A
+	LD B,A
 	OR A
 	JP NZ,.b1
 .b2:
 	LD HL,__cmd_new_anon1
 .b3:
+	PUSH BC
 	CALL _inputBox
 	OR A
+	POP BC
 	JP NZ,.b6
 .b4:
 	LD A,(_cmdline)
 	OR A
 	JP NZ,.b17
 .b6:
+	PUSH BC
 	LD HL,_cmdline
 	CALL _absolutePath
 	OR A
+	POP BC
 	JP NZ,.b8
 .b7:
-	LD A,11
+	LD B,11
 	RET
 .b1:
 	LD HL,__cmd_new_anon2
 	JP .b3
 .b8:
-	LD A,(__cmd_new___x80_spill_cmd_new1__lc)
-	OR A
+	XOR A
+	OR B
 	JP NZ,.b12
 .b9:
 	LD HL,_cmdline
@@ -4081,14 +4531,14 @@ __cmd_new_cmd_new1__lc:
 	LD DE,_cmdline
 	CALL _run
 .b17:
-	XOR A
+	LD B,0
 	RET
 .b12:
 	LD HL,_cmdline
 	CALL _fs_mkdir
 	LD B,A
 	OR A
-	JP NZ,.b14
+	RET NZ
 .b13:
 	PUSH BC
 	CALL _getFiles
@@ -4096,7 +4546,6 @@ __cmd_new_cmd_new1__lc:
 	CALL _dupFiles
 	POP BC
 .b14:
-	LD A,B
 	RET
 	ENDIF
 
@@ -4108,9 +4557,9 @@ __cmd_new_anon2:
 __cmd_new_anon1:
 	DEFB 32,115,111,122,100,97,116,120,32,102,97,106,108,32,0
 
-; ---- zeros, below __x80_bss_top ----
-__x80_bss_off = __x80_bss_off + 1
-__cmd_new___x80_spill_cmd_new1__lc EQU __x80_bss_top - __x80_bss_off
+	IFNDEF X80_OPT_SIZE
+	DEFINE X80_OPT_SIZE
+	ENDIF
 
 ; ==== translation unit cmd_freespace ====
 
@@ -4166,44 +4615,121 @@ _cmd_freespace:
 ; ---- cmd_freespace_1__lc ----
 __cmd_freespace_cmd_freespace_1__lc:
 .b0:
-	LD (__cmd_freespace___x80_spill_cmd_freespace_1__lc),A
+	LD (__cmd_freespace___x80_frame_scratch),HL
+	LD HL,65511
+	ADD HL,SP
+	LD SP,HL
+	LD HL,(__cmd_freespace___x80_frame_scratch)
+	LD B,A
+	PUSH BC
 	PUSH DE
-	LD HL,__cmd_freespace_l5_buf
+	LD HL,4
+	ADD HL,SP
 	LD DE,_fs_low
 	LD BC,10
 	LD A,32
 	CALL _i2s32
-	LD HL,__cmd_freespace_l5_buf+10
-	LD DE,__cmd_freespace_l5_buf+7
+	LD HL,14
+	ADD HL,SP
+	EX DE,HL
+	LD HL,27
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,11
+	ADD HL,SP
+	EX DE,HL
 	LD BC,3
+	LD HL,27
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	CALL _memcpy_back
-	LD A,32
-	LD (__cmd_freespace_l5_buf+9),A
-	LD HL,__cmd_freespace_l5_buf+6
-	LD DE,__cmd_freespace_l5_buf+4
+	LD HL,13
+	ADD HL,SP
+	LD (HL),32
+	LD HL,10
+	ADD HL,SP
+	EX DE,HL
+	LD HL,25
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,8
+	ADD HL,SP
+	EX DE,HL
 	LD BC,3
+	LD HL,25
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	CALL _memcpy_back
-	LD A,32
-	LD (__cmd_freespace_l5_buf+5),A
-	LD HL,__cmd_freespace_l5_buf+2
-	LD DE,__cmd_freespace_l5_buf+1
+	LD HL,9
+	ADD HL,SP
+	LD (HL),32
+	LD HL,6
+	ADD HL,SP
+	EX DE,HL
+	LD HL,23
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,5
+	ADD HL,SP
+	EX DE,HL
 	LD BC,3
+	LD HL,23
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	CALL _memcpy_back
-	LD A,32
-	LD (__cmd_freespace_l5_buf+1),A
-	LD HL,__cmd_freespace_l5_buf+13
-	LD DE,__cmd_freespace_anon6
+	LD HL,5
+	ADD HL,SP
+	LD (HL),32
+	LD HL,17
+	ADD HL,SP
+	LD DE,__cmd_freespace_anon5
 	CALL _strcpy
 	POP DE
+	POP BC
+	PUSH BC
 	LD A,6
-	LD HL,__cmd_freespace___x80_spill_cmd_freespace_1__lc
-	LD L,(HL)
+	LD L,B
 	CALL _drawWindowText
 	LD A,16
-	LD HL,__cmd_freespace___x80_spill_cmd_freespace_1__lc
-	LD L,(HL)
-	LD DE,__cmd_freespace_l5_buf
-	JP _drawWindowText
+	POP BC
+	LD L,B
+	EX DE,HL
+	LD HL,17
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,0
+	ADD HL,SP
+	EX DE,HL
+	PUSH AF
+	LD HL,19
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	POP AF
+	CALL _drawWindowText
+	LD HL,25
+	ADD HL,SP
+	LD SP,HL
+	RET
 	ENDIF
 
 ; ---- data ----
@@ -4217,13 +4743,16 @@ __cmd_freespace_anon2:
 	DEFB 115,119,111,98,111,100,110,111,58,32,0
 __cmd_freespace_anon3:
 	DEFB 119,115,101,103,111,58,0
-__cmd_freespace_anon6:
+__cmd_freespace_anon5:
 	DEFB 32,109,98,0
 
 ; ---- zeros, below __x80_bss_top ----
-__x80_bss_off = __x80_bss_off + 1
-__cmd_freespace___x80_spill_cmd_freespace_1__lc EQU __x80_bss_top - __x80_bss_off
-__cmd_freespace_l5_buf EQU __x80_frames+11
+__x80_bss_off = __x80_bss_off + 2
+__cmd_freespace___x80_frame_scratch EQU __x80_bss_top - __x80_bss_off
+
+	IFNDEF X80_OPT_SIZE
+	DEFINE X80_OPT_SIZE
+	ENDIF
 
 ; ==== translation unit cmd_delete ====
 
@@ -4233,7 +4762,9 @@ __cmd_freespace_l5_buf EQU __x80_frames+11
 ; ---- cmd_deleteFolder ----
 _cmd_deleteFolder:
 .b0:
-	JP __cmd_delete_cmd_deleteFolder__lc
+	CALL __cmd_delete_cmd_deleteFolder__lc
+	LD A,B
+	RET
 	ENDIF
 
 	DEFINE __X80_DEF_cmd_deleteFile
@@ -4251,13 +4782,16 @@ _cmd_deleteFile:
 ; ---- cmd_delete ----
 _cmd_delete:
 .b0:
+	DEC SP
 	LD HL,__cmd_delete_anon0
 	LD DE,__cmd_delete_anon1
 	CALL _confirm
 	OR A
 	JP NZ,.b1
 .b13:
-	JP _drawScreen
+	CALL _drawScreen
+	INC SP
+	RET
 .b1:
 	LD HL,_cmdline
 	CALL _getFirstSelected
@@ -4265,22 +4799,28 @@ _cmd_delete:
 	JP Z,.b13
 .b2:
 	XOR A
+	LD HL,0
+	ADD HL,SP
+	LD (HL),A
 .b3:
-	LD (__cmd_delete___x80_spill_cmd_delete),A
 	LD HL,_cmdline
 	CALL _absolutePath
 	OR A
 	JP Z,.b4
 .b5:
 	CALL __cmd_delete_cmd_deleteFile__lc
+	LD B,A
 	CP 7
-	JP Z,.b6
-.b14:
-	LD C,A
-	LD HL,__cmd_delete___x80_spill_cmd_delete
-	LD B,(HL)
+	JP NZ,.b7
+.b6:
+	CALL __cmd_delete_cmd_deleteFolder__lc
+	LD A,1
+	LD HL,0
+	ADD HL,SP
+	LD (HL),A
 .b7:
-	OR A
+	XOR A
+	OR B
 	JP NZ,.b8
 .b9:
 	LD HL,_cmdline
@@ -4288,31 +4828,21 @@ _cmd_delete:
 	CALL _getNextSelected
 	OR A
 	POP BC
-	JP Z,.b8
-.b11:
-	LD A,B
-	JP .b3
-.b4:
-	LD C,11
-.b12:
-	LD HL,__cmd_delete_anon2
-	LD A,C
-	CALL _drawError
-	CALL _getFiles
-	LD A,(__cmd_delete___x80_spill_cmd_delete)
-	CALL _dupFiles
-	JP .b13
+	JP NZ,.b3
 .b8:
 	LD A,B
-	LD (__cmd_delete___x80_spill_cmd_delete),A
+.b12:
+	LD HL,__cmd_delete_anon2
+	CALL _drawError
+	CALL _getFiles
+	LD HL,0
+	ADD HL,SP
+	LD A,(HL)
+	CALL _dupFiles
+	JP .b13
+.b4:
+	LD A,11
 	JP .b12
-.b6:
-	CALL __cmd_delete_cmd_deleteFolder__lc
-	LD B,1
-	LD C,A
-	OR A
-	JP Z,.b9
-	JP .b8
 	ENDIF
 
 	IFUSED __cmd_delete_cmd_deleteFolder__lc
@@ -4320,9 +4850,14 @@ _cmd_delete:
 ; ---- cmd_deleteFolder__lc ----
 __cmd_delete_cmd_deleteFolder__lc:
 .b0:
+	DEC SP
+	DEC SP
+	DEC SP
 	XOR A
+	LD HL,0
+	ADD HL,SP
+	LD (HL),A
 .b1:
-	LD (__cmd_delete___x80_spill_cmd_deleteFolder__lc),A
 	LD HL,(_panelB)
 	EX DE,HL
 	LD HL,(_maxFiles)
@@ -4334,34 +4869,39 @@ __cmd_delete_cmd_deleteFolder__lc:
 	JP NZ,.b2
 .b4:
 	LD HL,(_fs_low)
-	LD D,H
-	LD E,L
+	LD B,H
+	LD C,L
 	LD (_panelB+262),HL
 	LD HL,(_panelB)
-	LD B,0
-	LD (__cmd_delete___x80_spill_cmd_deleteFolder__lc+1),HL
+	EX DE,HL
+	XOR A
+	LD H,B
+	LD L,C
+	LD B,A
 .b5:
-	LD A,E
-	OR D
-	JP Z,.b22
+	LD A,L
+	OR H
+	JP Z,.b13
 .b6:
+	PUSH HL
 	PUSH DE
 	LD HL,_cmdline
-	EX DE,HL
-	LD HL,(__cmd_delete___x80_spill_cmd_deleteFolder__lc+1)
-	EX DE,HL
 	CALL _catPathAndUnpack
 	OR A
 	POP DE
+	POP HL
 	JP NZ,.b7
 .b8:
+	PUSH HL
 	PUSH DE
 	CALL __cmd_delete_cmd_deleteFile__lc
 	LD B,A
 	CP 7
 	POP DE
+	POP HL
 	JP Z,.b13
 .b10:
+	PUSH HL
 	PUSH DE
 	LD HL,_cmdline
 	LD DE,0
@@ -4371,20 +4911,42 @@ __cmd_delete_cmd_deleteFolder__lc:
 	XOR A
 	OR B
 	POP DE
-	JP NZ,.b11
+	POP HL
+	JP NZ,.b25
 .b12:
-	DEC DE
+	DEC HL
+	PUSH DE
 	EX DE,HL
-	PUSH HL
-	LD HL,(__cmd_delete___x80_spill_cmd_deleteFolder__lc+1)
+	LD HL,3
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	POP HL
 	LD DE,20
 	ADD HL,DE
-	POP DE
-	LD (__cmd_delete___x80_spill_cmd_deleteFolder__lc+1),HL
-	LD A,E
-	OR D
-	JP NZ,.b6
-.b22:
+	EX DE,HL
+	LD HL,1
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	JP .b5
+.b2:
+	CP 10
+	JP Z,.b4
+.b18:
+	LD B,A
+.b25:
+	INC SP
+	INC SP
+	INC SP
+	RET
+.b7:
+	LD B,11
+	JP .b25
+.b13:
 	LD A,B
 	CP 7
 	JP Z,.b14
@@ -4398,50 +4960,33 @@ __cmd_delete_cmd_deleteFolder__lc:
 	LD A,D
 	XOR H
 .b23:
-	JP NZ,.b17
-.b16:
-	LD A,(__cmd_delete___x80_spill_cmd_deleteFolder__lc)
-	JP .b1
-.b2:
-	CP 10
-	JP Z,.b4
-.b3:
-	RET
-.b7:
-	LD A,11
-	RET
-.b13:
-	CP 7
-	JP NZ,.b15
-.b14:
-	LD A,(__cmd_delete___x80_spill_cmd_deleteFolder__lc)
-	INC A
-	JP .b1
-.b11:
-	LD A,B
-	RET
+	JP Z,.b1
 .b17:
 	CALL __cmd_delete_cmd_deleteFile__lc
 	OR A
-	RET NZ
+	JP NZ,.b18
 .b19:
-	LD A,(__cmd_delete___x80_spill_cmd_deleteFolder__lc)
+	LD HL,0
+	ADD HL,SP
+	LD A,(HL)
 	OR A
 	JP Z,.b20
 .b21:
-	LD A,(__cmd_delete___x80_spill_cmd_deleteFolder__lc)
-	DEC A
-	LD B,A
-	PUSH BC
+	LD HL,0
+	ADD HL,SP
+	DEC (HL)
 	LD HL,_cmdline
 	LD DE,0
 	CALL _dropPathInt
-	POP BC
-	LD A,B
+	JP .b1
+.b14:
+	LD HL,0
+	ADD HL,SP
+	INC (HL)
 	JP .b1
 .b20:
-	XOR A
-	RET
+	LD B,A
+	JP .b25
 	ENDIF
 
 	IFUSED __cmd_delete_cmd_deleteFile__lc
@@ -4477,11 +5022,9 @@ __cmd_delete_anon2:
 __cmd_delete_anon3:
 	DEFB 32,117,100,97,108,101,110,105,101,32,0
 
-; ---- zeros, below __x80_bss_top ----
-__x80_bss_off = __x80_bss_off + 1
-__cmd_delete___x80_spill_cmd_delete EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 3
-__cmd_delete___x80_spill_cmd_deleteFolder__lc EQU __x80_bss_top - __x80_bss_off
+	IFNDEF X80_OPT_SIZE
+	DEFINE X80_OPT_SIZE
+	ENDIF
 
 ; ==== translation unit cmd_sel ====
 
@@ -4501,6 +5044,131 @@ _compareMask:
 _compareMask1:
 .b0:
 	JP __cmd_sel_compareMask1__lc
+	ENDIF
+
+	DEFINE __X80_DEF_cmd_sel
+	IFUSED _cmd_sel
+
+; ---- cmd_sel ----
+_cmd_sel:
+.b0:
+	LD (__cmd_sel___x80_frame_scratch),HL
+	LD HL,65520
+	ADD HL,SP
+	LD SP,HL
+	LD HL,(__cmd_sel___x80_frame_scratch)
+	LD HL,11
+	ADD HL,SP
+	LD (HL),A
+	LD HL,_cmdline
+	LD DE,__cmd_sel_anon0
+	CALL _strcpy
+	LD HL,__cmd_sel_anon1
+	CALL _inputBox
+	OR A
+	JP NZ,.b1
+.b10:
+	CALL _drawScreen
+	LD HL,16
+	ADD HL,SP
+	LD SP,HL
+	RET
+.b1:
+	LD HL,0
+	ADD HL,SP
+	LD DE,_cmdline
+	CALL _packName
+	LD HL,(_panelA+262)
+	LD B,H
+	LD C,L
+	LD HL,(_panelA)
+	EX DE,HL
+	LD HL,12
+	ADD HL,SP
+.b2:
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD A,C
+	OR B
+	JP Z,.b10
+.b3:
+	LD HL,12
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	LD DE,11
+	ADD HL,DE
+	LD D,(HL)
+	LD A,16
+	AND D
+	JP NZ,.b4
+.b5:
+	PUSH BC
+	PUSH HL
+	LD HL,16
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD D,(HL)
+	LD E,C
+	LD HL,18
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	LD HL,4
+	ADD HL,SP
+	EX DE,HL
+	LD HL,18
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	CALL __cmd_sel_compareMask__lc
+	OR A
+	POP HL
+	POP BC
+	JP NZ,.b6
+.b9:
+	DEC BC
+	LD HL,12
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	LD DE,20
+	ADD HL,DE
+	EX DE,HL
+	LD HL,12
+	ADD HL,SP
+	JP .b2
+.b4:
+	LD A,127
+	AND D
+.b12:
+	LD (HL),A
+	JP .b9
+.b6:
+	PUSH HL
+	LD HL,13
+	ADD HL,SP
+	LD A,(HL)
+	POP HL
+	OR A
+	JP NZ,.b7
+.b8:
+	LD A,(HL)
+	AND 127
+	JP .b12
+.b7:
+	LD A,(HL)
+	OR 128
+	JP .b12
 	ENDIF
 
 	IFUSED __cmd_sel_compareMask__lc
@@ -4534,104 +5202,6 @@ __cmd_sel_compareMask__lc:
 	JP __cmd_sel_compareMask1__lc
 	ENDIF
 
-	DEFINE __X80_DEF_cmd_sel
-	IFUSED _cmd_sel
-
-; ---- cmd_sel ----
-_cmd_sel:
-.b0:
-	LD (__cmd_sel___x80_spill_cmd_sel),A
-	LD HL,_cmdline
-	LD DE,__cmd_sel_anon0
-	CALL _strcpy
-	LD HL,__cmd_sel_anon1
-	CALL _inputBox
-	OR A
-	JP NZ,.b1
-.b10:
-	JP _drawScreen
-.b1:
-	LD HL,__cmd_sel_l2_buf
-	LD DE,_cmdline
-	CALL _packName
-	LD HL,(_panelA+262)
-	LD B,H
-	LD C,L
-	LD HL,(_panelA)
-	EX DE,HL
-.b2:
-	LD A,C
-	OR B
-	JP Z,.b10
-.b3:
-	LD HL,11
-	ADD HL,DE
-	LD (__cmd_sel___x80_spill_cmd_sel+2),HL
-	LD H,(HL)
-	LD A,H
-	LD (__cmd_sel___x80_spill_cmd_sel+1),A
-	LD A,16
-	AND H
-	JP NZ,.b4
-.b5:
-	PUSH BC
-	LD H,D
-	LD L,E
-	PUSH DE
-	LD DE,__cmd_sel_l2_buf
-	LD A,8
-	CALL __cmd_sel_compareMask1__lc
-	OR A
-	POP DE
-	POP BC
-	JP NZ,.b13
-.b9:
-	DEC BC
-	LD HL,20
-	ADD HL,DE
-	EX DE,HL
-	LD A,C
-	OR B
-	JP NZ,.b3
-	JP .b10
-.b4:
-	LD A,127
-	LD HL,__cmd_sel___x80_spill_cmd_sel+1
-	LD H,(HL)
-	AND H
-	LD HL,(__cmd_sel___x80_spill_cmd_sel+2)
-.b15:
-	LD (HL),A
-	JP .b9
-.b6:
-	LD A,(__cmd_sel___x80_spill_cmd_sel)
-	OR A
-	JP NZ,.b7
-.b8:
-	LD HL,(__cmd_sel___x80_spill_cmd_sel+2)
-	LD A,(HL)
-	AND 127
-	JP .b15
-.b7:
-	LD HL,(__cmd_sel___x80_spill_cmd_sel+2)
-	LD A,(HL)
-	OR 128
-	JP .b15
-.b13:
-	PUSH BC
-	LD HL,8
-	ADD HL,DE
-	PUSH DE
-	LD DE,__cmd_sel_l2_buf+8
-	LD A,3
-	CALL __cmd_sel_compareMask1__lc
-	POP DE
-	POP BC
-	OR A
-	JP NZ,.b6
-	JP .b9
-	ENDIF
-
 	IFUSED __cmd_sel_compareMask1__lc
 
 ; ---- compareMask1__lc ----
@@ -4641,35 +5211,25 @@ __cmd_sel_compareMask1__lc:
 .b1:
 	LD A,(DE)
 	CP 42
-	JP Z,.b2
+	JP Z,.b7
 .b3:
 	CP 63
 	JP NZ,.b4
 .b6:
 	DEC B
-	JP Z,.b2
+	JP Z,.b7
 .b8:
 	INC DE
 	INC HL
-	LD A,(DE)
-	CP 42
-	JP NZ,.b3
-.b2:
-	LD A,1
-	RET
+	JP .b1
 .b4:
 	CP (HL)
-	JP NZ,.b5
-	DEC B
-	JP Z,.b2
-	INC DE
-	INC HL
-	LD A,(DE)
-	CP 42
-	JP NZ,.b3
-	JP .b2
+	JP Z,.b6
 .b5:
 	XOR A
+	RET
+.b7:
+	LD A,1
 	RET
 	ENDIF
 
@@ -4680,9 +5240,12 @@ __cmd_sel_anon1:
 	DEFB 32,112,111,109,101,116,105,116,120,32,102,97,106,108,121,32,0
 
 ; ---- zeros, below __x80_bss_top ----
-__x80_bss_off = __x80_bss_off + 4
-__cmd_sel___x80_spill_cmd_sel EQU __x80_bss_top - __x80_bss_off
-__cmd_sel_l2_buf EQU __x80_frames+11
+__x80_bss_off = __x80_bss_off + 2
+__cmd_sel___x80_frame_scratch EQU __x80_bss_top - __x80_bss_off
+
+	IFNDEF X80_OPT_SIZE
+	DEFINE X80_OPT_SIZE
+	ENDIF
 
 ; ==== translation unit interface ====
 
@@ -4710,6 +5273,8 @@ _drawPanel:
 ; ---- drawRect ----
 _drawRect:
 .b0:
+	LD B,H
+	LD C,L
 	JP __interface_drawRect__lc
 	ENDIF
 
@@ -4720,6 +5285,15 @@ _drawRect:
 _showTextCursor:
 .b0:
 	JP __interface_showTextCursor__lc
+	ENDIF
+
+	DEFINE __X80_DEF_gotoxy
+	IFUSED _gotoxy
+
+; ---- gotoxy ----
+_gotoxy:
+.b0:
+	JP __interface_gotoxy__lc
 	ENDIF
 
 	DEFINE __X80_DEF_charAddr
@@ -4773,6 +5347,8 @@ _print:
 ; ---- drawInput ----
 _drawInput:
 .b0:
+	LD B,A
+	LD A,L
 	JP __interface_drawInput__lc
 	ENDIF
 
@@ -4781,7 +5357,7 @@ _drawInput:
 ; ---- showTextCursor__lc ----
 __interface_showTextCursor__lc:
 .b0:
-	JP _gotoxy
+	JP __interface_gotoxy__lc
 	ENDIF
 
 	DEFINE __X80_DEF_cmp32_32
@@ -5051,8 +5627,10 @@ __interface_printcn__lc:
 ; ---- printm__lc ----
 __interface_printm__lc:
 .b0:
-	LD (__interface___x80_spill_printm__lc),A
+	PUSH AF
 	LD A,E
+	LD (__interface___x80_spill_printm__lc),A
+	POP AF
 	LD E,L
 	LD D,0
 	LD H,D
@@ -5063,11 +5641,9 @@ __interface_printm__lc:
 	ADD HL,HL
 	ADD HL,HL
 	ADD HL,HL
-	EX DE,HL
-	LD HL,__interface___x80_spill_printm__lc
-	LD L,(HL)
-	LD H,0
+	LD E,A
 	ADD HL,DE
+	LD A,(__interface___x80_spill_printm__lc)
 	LD D,B
 	LD E,C
 	JP _print2m
@@ -5078,8 +5654,10 @@ __interface_printm__lc:
 ; ---- printn__lc ----
 __interface_printn__lc:
 .b0:
-	LD (__interface___x80_spill_printn__lc),A
+	PUSH AF
 	LD A,E
+	LD (__interface___x80_spill_printn__lc),A
+	POP AF
 	LD E,L
 	LD D,0
 	LD H,D
@@ -5090,11 +5668,9 @@ __interface_printn__lc:
 	ADD HL,HL
 	ADD HL,HL
 	ADD HL,HL
-	EX DE,HL
-	LD HL,__interface___x80_spill_printn__lc
-	LD L,(HL)
-	LD H,0
+	LD E,A
 	ADD HL,DE
+	LD A,(__interface___x80_spill_printn__lc)
 	LD D,B
 	LD E,C
 	JP _print2n
@@ -5150,9 +5726,6 @@ _drawWindowInput:
 	LD B,A
 	LD A,11
 	ADD A, L
-	LD C,A
-	LD A,B
-	LD L,C
 	JP __interface_drawInput__lc
 	ENDIF
 
@@ -5164,7 +5737,7 @@ _hideTextCursor:
 .b0:
 	LD A,255
 	LD L,A
-	JP _gotoxy
+	JP __interface_gotoxy__lc
 	ENDIF
 
 	DEFINE __X80_DEF_drawFilesCountInt
@@ -5173,68 +5746,91 @@ _hideTextCursor:
 ; ---- drawFilesCountInt ----
 _drawFilesCountInt:
 .b0:
+	DEC SP
+	DEC SP
 	LD B,H
 	LD C,L
-	EX DE,HL
-	LD (__interface___x80_spill_drawFilesCountInt),HL
+	LD HL,0
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
+	PUSH DE
 	LD A,(_activePanel)
 	ADD A, 2
-	LD L,A
-	LD H,0
-	LD DE,820H
-	ADD HL,DE
-	LD (__interface___x80_spill_drawFilesCountInt+2),HL
+	LD C,A
+	LD B,0
+	LD HL,820H
+	ADD HL,BC
+	PUSH HL
 	LD HL,_buf
-	LD D,B
-	LD E,C
-	LD BC,10
+	PUSH HL
+	LD HL,6
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
+	LD C,10
 	LD A,32
 	CALL _i2s32
-	LD HL,(__interface___x80_spill_drawFilesCountInt+2)
+	POP DE
+	LD H,D
+	LD L,E
+	PUSH DE
 	LD DE,_buf
 	CALL _print2
-	LD HL,(__interface___x80_spill_drawFilesCountInt+2)
-	LD BC,11
-	ADD HL,BC
+	POP DE
+	LD HL,11
+	ADD HL,DE
+	PUSH DE
 	LD DE,__interface_anon0
 	CALL _print2
-	LD HL,(__interface___x80_spill_drawFilesCountInt)
-	LD A,L
+	POP DE
+	POP BC
+	LD A,C
 	SUB 232
-	LD A,H
+	LD A,B
 	SBC A, 3
 	JP NC,.b2
 .b1:
+	PUSH DE
 	LD HL,_buf
-	EX DE,HL
-	LD HL,(__interface___x80_spill_drawFilesCountInt)
-	EX DE,HL
+	LD D,B
+	LD E,C
+	PUSH BC
 	LD BC,3
 	LD A,32
 	CALL _i2s
-	LD HL,(__interface___x80_spill_drawFilesCountInt+2)
-	LD BC,18
-	ADD HL,BC
+	POP BC
+	POP DE
+	PUSH BC
+	LD HL,18
+	ADD HL,DE
+	PUSH DE
 	LD DE,_buf
 	CALL _print2
+	POP DE
+	POP BC
 .b2:
-	LD HL,(__interface___x80_spill_drawFilesCountInt+2)
-	LD BC,18
-	ADD HL,BC
-	EX DE,HL
-	LD HL,(__interface___x80_spill_drawFilesCountInt)
-	EX DE,HL
-	LD C,3
+	LD HL,18
+	ADD HL,DE
+	PUSH DE
+	LD D,B
+	LD E,C
+	PUSH BC
+	LD BC,3
 	LD A,32
 	CALL _i2s
 	LD DE,100
-	LD HL,(__interface___x80_spill_drawFilesCountInt)
+	POP HL
 	CALL __x80_urem16
 	LD A,L
-	LD HL,(__interface___x80_spill_drawFilesCountInt+2)
-	LD BC,22
-	ADD HL,BC
+	LD HL,22
+	POP DE
+	ADD HL,DE
 	LD C,A
+	LD B,0
 	CP 10
 	JP NC,.b3
 .b4:
@@ -5255,7 +5851,10 @@ _drawFilesCountInt:
 .b6:
 	LD DE,__interface_anon1
 .b7:
-	JP _print2
+	CALL _print2
+	INC SP
+	INC SP
+	RET
 .b3:
 	CP 20
 	JP C,.b6
@@ -5271,15 +5870,20 @@ _drawFilesCountInt:
 ; ---- drawWindowProgress ----
 _drawWindowProgress:
 .b0:
+	DEC SP
 	LD B,A
 	LD D,C
 	XOR A
 	OR E
-	RET Z
+	JP Z,.b1
 .b2:
 	LD A,13
 	ADD A, B
-	LD (__interface___x80_spill_drawWindowProgress),A
+	PUSH HL
+	LD HL,2
+	ADD HL,SP
+	LD (HL),A
+	POP HL
 	LD A,11
 	ADD A, L
 	LD C,A
@@ -5293,12 +5897,19 @@ _drawWindowProgress:
 	ADD HL,HL
 	ADD HL,HL
 	ADD HL,HL
-	LD A,(__interface___x80_spill_drawWindowProgress)
+	PUSH HL
+	LD HL,2
+	ADD HL,SP
+	LD A,(HL)
+	POP HL
 	LD C,A
 	ADD HL,BC
 	LD A,E
 	LD E,D
-	JP _print2cn
+	CALL _print2cn
+.b1:
+	INC SP
+	RET
 	ENDIF
 
 	DEFINE __X80_DEF_drawWindowText
@@ -5307,34 +5918,46 @@ _drawWindowProgress:
 ; ---- drawWindowText ----
 _drawWindowText:
 .b0:
-	LD (__interface___x80_spill_drawWindowText),A
+	DEC SP
+	DEC SP
+	LD B,A
+	PUSH HL
+	LD HL,2
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	POP HL
 	LD A,11
 	ADD A, L
-	LD C,A
-	LD B,0
-	LD H,B
-	LD L,C
+	LD E,A
+	LD D,0
+	LD H,D
+	LD L,E
 	ADD HL,HL
 	ADD HL,HL
-	ADD HL,BC
+	ADD HL,DE
 	ADD HL,HL
 	ADD HL,HL
 	ADD HL,HL
 	ADD HL,HL
-	LD B,H
-	LD C,L
 	LD A,13
-	LD HL,__interface___x80_spill_drawWindowText
-	LD H,(HL)
-	ADD A, H
-	LD L,A
-	LD H,0
-	ADD HL,BC
-	LD A,(__interface___x80_spill_drawWindowText)
-	LD B,A
+	ADD A, B
+	LD E,A
+	ADD HL,DE
 	LD A,40
 	SUB B
-	JP _print2n
+	PUSH HL
+	LD HL,2
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
+	CALL _print2n
+	INC SP
+	INC SP
+	RET
 	ENDIF
 
 	DEFINE __X80_DEF_drawEscButton
@@ -5368,15 +5991,15 @@ _drawWindow:
 	PUSH HL
 	LD A,255
 	LD L,A
-	CALL _gotoxy
+	CALL __interface_gotoxy__lc
 	LD HL,288H
 	LD A,49
 	LD E,11
 	LD BC,2020H
 	CALL _fillRect
-	LD HL,2D9H
+	LD BC,2D9H
 	LD A,46
-	LD E,7
+	LD DE,707H
 	CALL __interface_drawRect__lc
 	POP DE
 	PUSH DE
@@ -5444,13 +6067,7 @@ _drawCmdLineWithPath:
 	POP BC
 	ADD HL,BC
 	LD (_panelA+264),HL
-	LD A,62
-	SUB L
-	LD C,A
-	LD A,L
-	LD L,28
-	LD E,C
-	JP __interface_drawInput__lc
+	JP _drawCmdLine
 .b1:
 	LD A,L
 	SUB 25
@@ -5472,10 +6089,9 @@ _drawCmdLine:
 	LD B,(HL)
 	LD A,62
 	SUB B
-	LD C,A
-	LD A,B
-	LD L,28
-	LD E,C
+	LD D,A
+	LD A,28
+	LD E,D
 	JP __interface_drawInput__lc
 	ENDIF
 
@@ -5484,76 +6100,141 @@ _drawCmdLine:
 ; ---- drawInput__lc ----
 __interface_drawInput__lc:
 .b0:
-	LD (__interface___x80_spill_drawInput__lc+1),A
-	LD A,L
-	LD (__interface___x80_spill_drawInput__lc),A
-	LD B,E
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	LD HL,1
+	ADD HL,SP
+	LD (HL),B
+	LD HL,0
+	ADD HL,SP
+	LD (HL),A
 	LD HL,_cmdline
-	PUSH BC
+	PUSH DE
 	CALL _strlen
-	EX DE,HL
-	POP BC
-	DEC B
-	LD L,B
+	LD B,H
+	LD C,L
+	POP DE
+	DEC E
+	LD L,E
 	LD H,0
-	LD A,E
+	LD A,C
 	SUB L
-	LD A,D
+	LD A,B
 	SBC A, H
 	JP C,.b1
 .b2:
-	LD A,E
+	LD A,C
 	SUB L
 	LD L,A
-	LD A,D
+	LD A,B
 	SBC A, H
 	LD H,A
-.b3:
-	LD (__interface___x80_spill_drawInput__lc+2),HL
-	LD HL,_cmdline
-	ADD HL,DE
 	PUSH DE
-	LD (HL),0
-	INC B
-	LD A,B
-	LD HL,__interface___x80_spill_drawInput__lc
-	LD E,(HL)
-	LD D,0
-	LD H,D
-	LD L,E
-	ADD HL,HL
-	ADD HL,HL
-	ADD HL,DE
-	ADD HL,HL
-	ADD HL,HL
-	ADD HL,HL
-	ADD HL,HL
 	EX DE,HL
-	LD HL,__interface___x80_spill_drawInput__lc+1
+	LD HL,4
+	ADD HL,SP
+.b3:
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	POP DE
+	LD HL,_cmdline
+	ADD HL,BC
+	PUSH BC
+	LD (HL),0
+	LD A,E
+	INC A
+	LD HL,2
+	ADD HL,SP
+	LD C,(HL)
+	LD B,0
+	LD H,B
+	LD L,C
+	ADD HL,HL
+	ADD HL,HL
+	ADD HL,BC
+	ADD HL,HL
+	ADD HL,HL
+	ADD HL,HL
+	ADD HL,HL
+	LD B,H
+	LD C,L
+	LD HL,3
+	ADD HL,SP
 	LD L,(HL)
 	LD H,0
-	ADD HL,DE
+	ADD HL,BC
 	LD B,H
 	LD C,L
 	LD HL,_cmdline
-	EX DE,HL
-	LD HL,(__interface___x80_spill_drawInput__lc+2)
+	PUSH HL
+	LD HL,6
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
 	ADD HL,DE
 	EX DE,HL
 	LD H,B
 	LD L,C
 	CALL _print2m
-	POP DE
-	LD A,(__interface___x80_spill_drawInput__lc+1)
-	ADD A, E
-	LD HL,(__interface___x80_spill_drawInput__lc+2)
-	SUB L
-	LD HL,__interface___x80_spill_drawInput__lc
+	POP BC
+	LD HL,1
+	ADD HL,SP
+	LD A,(HL)
+	ADD A, C
+	LD HL,2
+	ADD HL,SP
+	LD C,(HL)
+	SUB C
+	LD HL,0
+	ADD HL,SP
 	LD L,(HL)
-	JP _gotoxy
+	CALL __interface_gotoxy__lc
+	INC SP
+	INC SP
+	INC SP
+	INC SP
+	RET
 .b1:
 	LD L,H
+	PUSH DE
+	EX DE,HL
+	LD HL,4
+	ADD HL,SP
 	JP .b3
+	ENDIF
+
+	IFUSED __interface_gotoxy__lc
+
+; ---- gotoxy__lc ----
+__interface_gotoxy__lc:
+.b0:
+	DEC SP
+	PUSH HL
+	LD HL,2
+	ADD HL,SP
+	LD (HL),A
+	POP HL
+	LD A,27
+	PUSH HL
+	CALL _putch
+	LD A,89
+	CALL _putch
+	POP HL
+	LD A,32
+	ADD A, L
+	CALL _putch
+	LD HL,0
+	ADD HL,SP
+	LD A,(HL)
+	ADD A, 32
+	CALL _putch
+	INC SP
+	RET
 	ENDIF
 
 	DEFINE __X80_DEF_drawFileInfo2
@@ -5579,15 +6260,8 @@ _drawFileInfo2:
 ; ---- drawFileInfoDir ----
 _drawFileInfoDir:
 .b0:
-	LD A,(_activePanel)
-	ADD A, 3
-	LD C,A
-	LD B,0
-	LD HL,7D0H
-	ADD HL,BC
-	LD A,10
-	LD DE,__interface_anon7
-	JP _print2m
+	LD HL,__interface_anon7
+	JP _drawFileInfo1
 	ENDIF
 
 	DEFINE __X80_DEF_drawFileInfo1
@@ -5613,11 +6287,21 @@ _drawFileInfo1:
 ; ---- drawColumn ----
 _drawColumn:
 .b0:
-	LD (__interface___x80_spill_drawColumn+3),A
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	LD HL,3
+	ADD HL,SP
+	LD (HL),A
 	LD HL,(_panelA+260)
 	LD B,H
 	LD C,L
-	LD E,A
+	LD HL,3
+	ADD HL,SP
+	LD E,(HL)
 	LD D,0
 	LD H,D
 	LD L,E
@@ -5630,7 +6314,13 @@ _drawColumn:
 	ADD HL,BC
 	EX DE,HL
 	LD HL,(_panelA)
-	LD (__interface___x80_spill_drawColumn+4),HL
+	LD B,H
+	LD C,L
+	LD HL,4
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
 	LD H,D
 	LD L,E
 	ADD HL,HL
@@ -5640,31 +6330,50 @@ _drawColumn:
 	ADD HL,HL
 	LD B,H
 	LD C,L
-	LD HL,(__interface___x80_spill_drawColumn+4)
+	LD HL,4
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	ADD HL,BC
-	LD (__interface___x80_spill_drawColumn),HL
+	LD B,H
+	LD C,L
+	LD HL,0
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
 	LD HL,_activePanel
 	LD B,(HL)
+	LD HL,3
+	ADD HL,SP
+	LD A,(HL)
 	ADD A, A
-	LD HL,__interface___x80_spill_drawColumn+3
 	LD C,(HL)
 	ADD A, C
 	ADD A, A
-	LD C,(HL)
 	ADD A, C
 	ADD A, A
-	LD C,(HL)
 	ADD A, C
 	ADD A, 3
 	ADD A, B
-	LD L,A
-	LD H,0
-	LD BC,160
+	LD C,A
+	LD B,0
+	LD HL,160
 	ADD HL,BC
 	LD B,H
 	LD C,L
 	LD A,22
-	LD (__interface___x80_spill_drawColumn+2),A
+	LD HL,2
+	ADD HL,SP
+.b1:
+	LD (HL),A
+	LD HL,2
+	ADD HL,SP
+	LD A,(HL)
+	OR A
+	JP Z,.b6
 .b2:
 	LD HL,(_panelA+262)
 	LD A,E
@@ -5675,32 +6384,46 @@ _drawColumn:
 .b4:
 	PUSH DE
 	PUSH BC
-	LD D,B
-	LD E,C
-	LD HL,(__interface___x80_spill_drawColumn)
-	EX DE,HL
+	PUSH BC
+	LD HL,6
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
 	CALL __interface_drawFile2__lc
-	LD HL,(__interface___x80_spill_drawColumn)
-	LD BC,20
+	LD HL,20
+	PUSH HL
+	LD HL,6
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD B,(HL)
+	POP HL
 	ADD HL,BC
 	POP BC
 	POP DE
 	INC DE
-	LD (__interface___x80_spill_drawColumn),HL
+	PUSH DE
+	EX DE,HL
+	LD HL,2
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	POP DE
 .b5:
-	LD A,(__interface___x80_spill_drawColumn+2)
+	LD HL,2
+	ADD HL,SP
+	LD A,(HL)
 	DEC A
-	LD H,B
-	LD L,C
-	LD BC,80
+	LD HL,80
 	ADD HL,BC
 	LD B,H
 	LD C,L
-	LD (__interface___x80_spill_drawColumn+2),A
-	OR A
-	JP NZ,.b2
-.b7:
-	RET
+	LD HL,2
+	ADD HL,SP
+	JP .b1
 .b3:
 	PUSH DE
 	LD H,B
@@ -5712,6 +6435,11 @@ _drawColumn:
 	POP BC
 	POP DE
 	JP .b5
+.b6:
+	LD HL,6
+	ADD HL,SP
+	LD SP,HL
+	RET
 	ENDIF
 
 	DEFINE __X80_DEF_drawFile
@@ -5840,7 +6568,12 @@ _drawScreenInt:
 ; ---- drawPanelTitle ----
 _drawPanelTitle:
 .b0:
-	LD (__interface___x80_spill_drawPanelTitle),A
+	DEC SP
+	DEC SP
+	DEC SP
+	LD HL,0
+	ADD HL,SP
+	LD (HL),A
 	LD A,(_activePanel)
 	ADD A, 2
 	LD L,A
@@ -5879,10 +6612,19 @@ _drawPanelTitle:
 	LD A,L
 	RRA
 	LD L,A
-	PUSH HL
+	PUSH DE
+	EX DE,HL
+	LD HL,3
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	POP DE
 	LD HL,_activePanel
 	LD B,(HL)
-	POP HL
+	LD HL,1
+	ADD HL,SP
+	LD L,(HL)
 	LD A,2
 	ADD A, L
 	ADD A, B
@@ -5893,10 +6635,15 @@ _drawPanelTitle:
 	LD A,C
 	CALL _print2n
 	POP BC
-	LD A,(__interface___x80_spill_drawPanelTitle)
+	LD HL,0
+	ADD HL,SP
+	LD A,(HL)
 	OR A
 	JP NZ,.b6
-.b5:
+.b9:
+	INC SP
+	INC SP
+	INC SP
 	RET
 .b1:
 	LD DE,__interface_anon9
@@ -5922,7 +6669,8 @@ _drawPanelTitle:
 	LD L,A
 	LD H,0
 	LD DE,__interface_anon11
-	JP _print2
+	CALL _print2
+	JP .b9
 	ENDIF
 
 	IFUSED __interface_drawPanel__lc
@@ -5930,9 +6678,11 @@ _drawPanelTitle:
 ; ---- drawPanel__lc ----
 __interface_drawPanel__lc:
 .b0:
+	LD B,H
+	LD C,L
 	PUSH HL
 	LD A,30
-	LD E,26
+	LD DE,1A1AH
 	CALL __interface_drawRect__lc
 	POP HL
 	LD BC,781H
@@ -6000,24 +6750,52 @@ vLine_l0:
 ; ---- drawRect__lc ----
 __interface_drawRect__lc:
 .b0:
-	LD (__interface___x80_spill_drawRect__lc+5),HL
-	LD (__interface___x80_spill_drawRect__lc+4),A
-	LD A,E
-	LD (__interface___x80_spill_drawRect__lc),A
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	LD HL,4
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
+	LD B,A
+	LD HL,0
+	ADD HL,SP
+	LD (HL),E
+	PUSH BC
+	LD HL,6
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	CALL _setaddr
+	POP BC
 	LD A,4
+	PUSH BC
 	CALL _setch
-	LD HL,__interface___x80_spill_drawRect__lc+4
-	LD B,(HL)
+	POP BC
 	LD A,B
 	DEC A
-	LD (__interface___x80_spill_drawRect__lc+1),A
-	LD L,B
-	LD H,0
-	LD (__interface___x80_spill_drawRect__lc+2),HL
-	LD B,A
+	LD HL,1
+	ADD HL,SP
+	LD (HL),A
+	LD C,B
+	LD B,0
+	LD HL,2
+	ADD HL,SP
+	LD (HL),C
+	INC HL
+	LD (HL),B
+	LD HL,1
+	ADD HL,SP
+	LD B,(HL)
 .b1:
-	OR A
+	XOR A
+	OR B
 	JP Z,.b3
 .b2:
 	LD A,28
@@ -6025,17 +6803,25 @@ __interface_drawRect__lc:
 	CALL _setch
 	POP BC
 	DEC B
-	JP NZ,.b2
+	JP .b1
 .b3:
 	LD A,16
 	CALL _setch
-	LD HL,(__interface___x80_spill_drawRect__lc+5)
-	LD DE,80
-	ADD HL,DE
+	LD HL,80
+	PUSH HL
+	LD HL,6
+	ADD HL,SP
+	LD C,(HL)
+	INC HL
+	LD B,(HL)
+	POP HL
+	ADD HL,BC
 	LD B,H
 	LD C,L
 .b4:
-	LD A,(__interface___x80_spill_drawRect__lc)
+	LD HL,0
+	ADD HL,SP
+	LD A,(HL)
 	OR A
 	JP Z,.b6
 .b5:
@@ -6046,32 +6832,42 @@ __interface_drawRect__lc:
 	LD A,6
 	CALL _setch
 	POP BC
-	LD HL,(__interface___x80_spill_drawRect__lc+2)
+	LD HL,2
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
 	ADD HL,BC
 	PUSH BC
 	CALL _setaddr
 	LD A,17
 	CALL _setch
-	LD A,(__interface___x80_spill_drawRect__lc)
+	LD HL,2
+	ADD HL,SP
+	LD A,(HL)
 	DEC A
 	LD HL,80
 	POP BC
 	ADD HL,BC
 	LD B,H
 	LD C,L
-	LD (__interface___x80_spill_drawRect__lc),A
-	OR A
-	JP NZ,.b5
+	LD HL,0
+	ADD HL,SP
+	LD (HL),A
+	JP .b4
 .b6:
 	LD H,B
 	LD L,C
 	CALL _setaddr
 	LD A,2
 	CALL _setch
-	LD A,(__interface___x80_spill_drawRect__lc+1)
-	LD B,A
+	LD HL,1
+	ADD HL,SP
+	LD B,(HL)
 .b7:
-	OR A
+	XOR A
+	OR B
 	JP Z,.b9
 .b8:
 	PUSH BC
@@ -6079,51 +6875,13 @@ __interface_drawRect__lc:
 	CALL _setch
 	POP BC
 	DEC B
-	JP NZ,.b8
+	JP .b7
 .b9:
-	LD A,1
-	JP _setch
-	ENDIF
-
-	DEFINE __X80_DEF_fillRect
-	IFUSED _fillRect
-
-; ---- fillRect ----
-_fillRect:
-_fillRect.b0:
-	LD (__interface_l16_a),HL
-	LD (__interface_l17_w),A
-	LD HL,__interface_l18_h
-	LD (HL),E
-	LD HL,__interface_l19_c
-	LD (HL),C
-	LD A,C
-	PUSH BC
-	LD A,(_radio86rkVideoBpl)
-	LD C,A
-	LD B,0
-	LD HL,(__interface_l16_a)
-	LD A,(__interface_l18_h)
-	LD D,A
-	LD A,(__interface_l17_w)
-	LD E,A
-fillRect_l1:
-	PUSH HL
-	LD A,L
-	OUT (98h+1),A
-	LD A,H
-	OR 40h
-	OUT (98h+1),A
-	LD A,(__interface_l19_c)
-fillRect_l0:
-	OUT (98h),A
-	DEC E
-	JP NZ,fillRect_l0
-	POP HL
-	ADD HL,BC
-	DEC D
-	JP NZ,fillRect_l1
-	POP BC
+	INC A
+	CALL _setch
+	LD HL,6
+	ADD HL,SP
+	LD SP,HL
 	RET
 	ENDIF
 
@@ -6225,13 +6983,13 @@ _hideFileCursor:
 ; ---- hLine ----
 _hLine:
 _hLine.b0:
-	LD (__interface_l20_a),HL
-	LD (__interface_l21_c),A
+	LD (__interface_l16_a),HL
+	LD (__interface_l17_c),A
 	LD A,E
 	LD E,A
-	LD A,(__interface_l21_c)
+	LD A,(__interface_l17_c)
 	LD D,A
-	LD HL,(__interface_l20_a)
+	LD HL,(__interface_l16_a)
 	DI
 	LD A,L
 	OUT (98h + 1),A
@@ -6325,11 +7083,22 @@ _initPalmiraScreen.b0:
 _i2s32:
 .b0:
 	PUSH HL
-	PUSH BC
 	LD (__interface___x80_spill_i2s32+4),A
-	LD HL,__interface_l22_v
-	CALL _set32
-	POP BC
+	EX DE,HL
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	DEC HL
+	PUSH DE
+	INC HL
+	INC HL
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	POP HL
+	LD (__interface_l18_v),HL
+	EX DE,HL
+	LD (__interface_l18_v+2),HL
 	POP HL
 	ADD HL,BC
 	LD (HL),0
@@ -6338,25 +7107,26 @@ _i2s32:
 	LD L,C
 .b1:
 	LD (__interface___x80_spill_i2s32),HL
-	LD HL,(__interface_l22_v+2)
+	LD HL,(__interface_l18_v+2)
 	EX DE,HL
-	LD HL,(__interface_l22_v)
+	LD HL,(__interface_l18_v)
 	LD BC,0
 	PUSH BC
 	LD C,10
 	CALL __x80_ludiv
 	POP BC
-	LD (__interface_l22_v),HL
+	LD (__interface_l18_v),HL
 	EX DE,HL
-	LD (__interface_l22_v+2),HL
+	LD (__interface_l18_v+2),HL
 	LD HL,(__interface___x80_spill_i2s32+2)
-	LD B,H
-	LD C,L
-	DEC BC
+	EX DE,HL
+	DEC DE
+	PUSH DE
 	CALL __x80_remainder
-	LD DE,__interface_anon23
-	ADD HL,DE
+	LD BC,__interface_anon19
+	ADD HL,BC
 	LD A,(HL)
+	POP BC
 	LD (BC),A
 	LD HL,(__interface___x80_spill_i2s32)
 	EX DE,HL
@@ -6365,7 +7135,7 @@ _i2s32:
 	OR D
 	RET Z
 .b3:
-	LD HL,(__interface_l22_v)
+	LD HL,(__interface_l18_v)
 	LD A,L
 	OR H
 	JP Z,.b4
@@ -6376,24 +7146,20 @@ _i2s32:
 	EX DE,HL
 	JP .b1
 .b4:
-	LD HL,(__interface_l22_v+2)
+	LD HL,(__interface_l18_v+2)
 	LD A,L
 	OR H
 	JP NZ,.b6
-.b8:
-	DEC DE
-	INC D
-	INC E
-.b7:
-	DEC BC
+.b5:
 	LD H,B
 	LD L,C
+.b7:
+	DEC HL
 	LD A,(__interface___x80_spill_i2s32+4)
 	LD (HL),A
-	DEC E
-	JP NZ,.b7
-.b9:
-	DEC D
+	DEC DE
+	LD A,E
+	OR D
 	JP NZ,.b7
 	RET
 	ENDIF
@@ -6423,7 +7189,7 @@ _i2s:
 	PUSH DE
 	LD DE,10
 	CALL __x80_urem16
-	LD BC,__interface_anon24
+	LD BC,__interface_anon20
 	ADD HL,BC
 	LD A,(HL)
 	POP DE
@@ -6442,24 +7208,20 @@ _i2s:
 	LD A,(__interface___x80_spill_i2s)
 	EX DE,HL
 	LD D,A
-	DEC BC
-	INC B
-	INC C
 .b6:
 	DEC HL
 	LD (HL),D
-	DEC C
-	JP NZ,.b6
-.b7:
-	DEC B
+	DEC BC
+	LD A,C
+	OR B
 	JP NZ,.b6
 	RET
 	ENDIF
 
 ; ---- data ----
-__interface_anon24:
+__interface_anon20:
 	DEFB 48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,0
-__interface_anon23:
+__interface_anon19:
 	DEFB 48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,0
 	DEFINE __X80_DEF_attrHidden
 _attrHidden:
@@ -6501,8 +7263,6 @@ __interface_anon13:
 	DEFB 105,109,113,0
 
 ; ---- zeros, below __x80_bss_top ----
-__x80_bss_off = __x80_bss_off + 2
-__interface___x80_spill_drawFile2__lc EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 7
 __interface___x80_spill_cmp32_32 EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 6
@@ -6515,40 +7275,18 @@ __x80_bss_off = __x80_bss_off + 1
 __interface___x80_spill_printm__lc EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 1
 __interface___x80_spill_printn__lc EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 4
-__interface___x80_spill_drawFilesCountInt EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 1
-__interface___x80_spill_drawWindowProgress EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 1
-__interface___x80_spill_drawWindowText EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 4
-__interface___x80_spill_drawInput__lc EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 6
-__interface___x80_spill_drawColumn EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 1
-__interface___x80_spill_drawPanelTitle EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 7
-__interface___x80_spill_drawRect__lc EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 5
 __interface___x80_spill_i2s32 EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 1
 __interface___x80_spill_i2s EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 1
-__interface_l19_c EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 1
-__interface_l18_h EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 1
-__interface_l17_w EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 2
-__interface_l16_a EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 1
 __interface_l15_h EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 2
 __interface_l14_a EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 1
-__interface_l21_c EQU __x80_bss_top - __x80_bss_off
+__interface_l17_c EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 2
-__interface_l20_a EQU __x80_bss_top - __x80_bss_off
+__interface_l16_a EQU __x80_bss_top - __x80_bss_off
 	DEFINE __X80_DEF_buf
 __x80_bss_off = __x80_bss_off + 16
 _buf EQU __x80_bss_top - __x80_bss_off
@@ -6558,7 +7296,11 @@ _fileCursorAddr EQU __x80_bss_top - __x80_bss_off
 	DEFINE __X80_DEF_activePanel
 __x80_bss_off = __x80_bss_off + 1
 _activePanel EQU __x80_bss_top - __x80_bss_off
-__interface_l22_v EQU __x80_frames+333
+__interface_l18_v EQU __x80_frames+11
+
+	IFNDEF X80_OPT_SIZE
+	DEFINE X80_OPT_SIZE
+	ENDIF
 
 ; ==== translation unit fs ====
 
@@ -6708,5 +7450,9 @@ _fs_high EQU __x80_bss_top - __x80_bss_off
 	DEFINE __X80_DEF_fs_low
 __x80_bss_off = __x80_bss_off + 2
 _fs_low EQU __x80_bss_top - __x80_bss_off
+
+	IFNDEF X80_OPT_SIZE
+	DEFINE X80_OPT_SIZE
+	ENDIF
 
 	END

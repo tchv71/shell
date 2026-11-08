@@ -6,41 +6,41 @@
 #include "mem.h"
 
 char cmd_new1(uchar dir) {
-  // Очищаем ком строку
-  cmdline[0] = 0;
+	//  ╬ўш∙рхь ъюь ёЄЁюъє
+	cmdline[0] = 0;
 
-  // Ввод имени файла
-  if(!inputBox(dir ? " sozdatx papku " : " sozdatx fajl ") && cmdline[0]!=0) return 0;
+	// ┬тюф шьхэш Їрщыр
+	if (!inputBox(dir ? " sozdatx papku " : " sozdatx fajl ") && cmdline[0] != 0) return 0;
 
-  if(!absolutePath(cmdline)) return ERR_RECV_STRING;
+	if (!absolutePath(cmdline)) return ERR_RECV_STRING;
 
-  // Если мы создаем файл
-  if(!dir) {
-    if(strlen(cmdline) >= 255) return ERR_RECV_STRING;
+	// ┼ёыш ь√ ёючфрхь Їрщы
+	if (!dir) {
+		if (strlen(cmdline) >= 255) return ERR_RECV_STRING;
 
-    // Добавляем в начало ком строки звездочку
-    memcpy_back(cmdline+1, cmdline, 255);
-    cmdline[0] = '*';
+		// ─юсрты хь т эрўрыю ъюь ёЄЁюъш чтхчфюўъє
+		memcpy_back(cmdline+1, cmdline, 255);
+		cmdline[0] = '*';
 
-    // Запуск редактора (внутри вызывается drawScreen)
-    run(editorApp, cmdline);
-    return 0;
-  }
+		// ╟ряєёъ ЁхфръЄюЁр (тэєЄЁш т√ч√трхЄё  drawScreen)
+		run(editorApp, cmdline);
+		return 0;
+	}
 
-  // Создание папки
-  dir = fs_mkdir(cmdline);
+	// ╤ючфрэшх яряъш
+	dir = fs_mkdir(cmdline);
 
-  // Обновление списка файлов, если не было ошибки
-  if(!dir) {
-    getFiles();
-    dupFiles(0);
-  }
+	// ╬сэютыхэшх ёяшёър Їрщыют, хёыш эх с√ыю ю°шсъш
+	if (!dir) {
+		getFiles();
+		dupFiles(0);
+	}
 
-  return dir;
+	return dir;
 }
 
 void cmd_new(uchar dir) {
-  drawError("o{ibka sozdaniq papki", cmd_new1(dir));
-  // Перериосвать экран
-  drawScreen();
+	drawError("o{ibka sozdaniq papki", cmd_new1(dir));
+	// ╧хЁхЁшёютрЄ№ ¤ъЁрэ
+	drawScreen();
 }

@@ -293,40 +293,6 @@ void drawRect(uchar* a, uchar w, uchar h) {
 
 //---------------------------------------------------------------------------
 
-void fillRect(uchar* a, uchar w, uchar h, uchar c) {
-  asm {
-    push b
-    lda radio86rkVideoBpl
-    mov c, a
-    mvi b, 0
-    lhld fillRect_1
-    lda fillRect_3
-    mov d, a
-    lda fillRect_2
-    mov e, a
-fillRect_l1:  
-    ;lda fillRect_2
-    push h
-    mov  a,l
-    out  98h+1
-    mov  a,h
-    ori  40h
-    out  98h+1
-    lda  fillRect_4
-
-fillRect_l0:
-    ;mov m, e
-    ;inx h
-    out 98h
-    dcr e
-    jnz fillRect_l0
-    pop h
-    dad b    
-    dcr d
-    jnz fillRect_l1
-    pop b
-  }
-}
 
 //---------------------------------------------------------------------------
 char buf[16];
@@ -360,6 +326,8 @@ void drawPanel(uchar* a) {
   print2(a + (VIDEO_BPL + 6 ), "imq");
   print2(a + (VIDEO_BPL + 21), "imq");  
 }
+
+void fillRect(uchar* a, uchar w, uchar h, uchar c);
 
 //---------------------------------------------------------------------------
 // Рисуем весь экран
@@ -623,9 +591,9 @@ void div32_16(ulong* a, ushort b) {
 }
 
 void i2s32(char* buf, ulong* src, uint n, uchar spc) {
-	ulong v;
+	ulong v = *src;
   ulong v1;
-	set32(&v, src);
+	//set32(&v, src);
 
 	buf += n;
 	*buf = 0;
@@ -633,9 +601,9 @@ void i2s32(char* buf, ulong* src, uint n, uchar spc) {
 	while (1) {
     v1 = v;
 		//div32_16(&v, 10);
-    v /= 10;
+    v /= (short)10;
 		--buf;
-		*buf = "0123456789ABCDEF"[/*op_div16_mod*/v1 % 10];
+		*buf = "0123456789ABCDEF"[/*op_div16_mod*/v1 % (short)10];
 		if (--n == 0) return;
 		if (((ushort*)&v)[0] == 0 && ((ushort*)&v)[1] == 0) break;
 	}
@@ -673,4 +641,11 @@ void printn(uchar x, uchar y, uchar len, const char* text)
 void printcn(uchar x, uchar y, uchar len, char c)
 {
 	print2cn(charAddr(x, y), len, c);
+}
+
+void gotoxy(char x, char y) {
+	putch(0x1B);
+	putch('Y');
+	putch(y + 0x20);
+	putch(x + 0x20);
 }

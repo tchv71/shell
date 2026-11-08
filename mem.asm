@@ -2,15 +2,15 @@
 _memswap:
     push bc
     ; bc = count
-    ; hl = from
-    ; de = to
+    ; hl = to
+    ; de = from
 memswap_l1:
     ; if(cnt==0) return
     ld a, b
     or c
     jp z, memswap_l2
     ; *dest = *src
-    ld a,(bc)
+    ld a,(de)
     ld (memswap_v1),a
     ld a, (hl)
     ld (de), a
@@ -92,54 +92,54 @@ print2_loop:
 
 ;void set32(ulong* a, ulong* b) {  
 ;  asm {
-_set32:
-    ld  a, (de)
-    ld  (hl), a
-    inc hl
-    inc de
-    ld  a, (de)
-    ld  (hl), a
-    inc hl
-    inc de
-    ld  a, (de)
-    ld  (hl), a
-    inc hl
-    inc de
-    ld  a, (de)
-    ld  (hl), a
-    ret
+;_set32:
+;    ld  a, (de)
+;    ld  (hl), a
+;    inc hl
+;    inc de
+;    ld  a, (de)
+;    ld  (hl), a
+;    inc hl
+;    inc de
+;    ld  a, (de)
+;    ld  (hl), a
+;    inc hl
+;    inc de
+;    ld  a, (de)
+;    ld  (hl), a
+;    ret
 ;  }
 ;}  
 
 ;void add32_16(ulong* a, ushort b) {
 ;  asm {
-_add32_16:
-    ; hl = *to
-    ld  c, (hl)
-    inc hl
-    ld  b, (hl)
-    dec hl
-
-    ; hl = de + from
-    ex  de, hl
-    add hl, bc
-
-    ; *hl = de
-    ex  de, hl
-    ld  (hl), e
-    inc hl
-    ld  (hl), d     
-
-    ; …б«Ё ЇҐаҐЇ®«­Ґ­ЁҐ, в® гўҐ«ЁзЁў Ґ¬ ўҐае­Ё© а §ап¤
-    ret nc
-    inc hl
-    inc (hl)    
-
-    ; …б«Ё ЇҐаҐЇ®«­Ґ­ЁҐ, в® гўҐ«ЁзЁў Ґ¬ ўҐае­Ё© а §ап¤
-    ret nz
-    inc hl
-    inc (hl)
-    ret
+;_add32_16:
+;    ; hl = *to
+;    ld  c, (hl)
+;    inc hl
+;    ld  b, (hl)
+;    dec hl
+;
+;    ; hl = de + from
+;    ex  de, hl
+;    add hl, bc
+;
+;    ; *hl = de
+;    ex  de, hl
+;    ld  (hl), e
+;    inc hl
+;    ld  (hl), d     
+;
+;    ; …б«Ё ЇҐаҐЇ®«­Ґ­ЁҐ, в® гўҐ«ЁзЁў Ґ¬ ўҐае­Ё© а §ап¤
+;    ret nc
+;    inc hl
+;    inc (hl)    
+;
+;    ; …б«Ё ЇҐаҐЇ®«­Ґ­ЁҐ, в® гўҐ«ЁзЁў Ґ¬ ўҐае­Ё© а §ап¤
+;    ret nz
+;    inc hl
+;    inc (hl)
+;    ret
 ;  }
 ;}
 
@@ -291,4 +291,56 @@ _fs_move:
     ld  A, 6
     jp  _fs_entry ; HL-из, DE-в / A-код ошибки
 
+;void clrscr() {
+;  asm {
+_clrscr:
+    ld  c, 1Fh
+    jp  0F809h
 
+;void putch(char) {
+;  asm {
+_putch:
+    ld   c, a
+    jp   0F809h
+
+_main:
+	CALL    _fs_init
+	JP	    _main2
+
+;void fillRect(uchar* a, uchar w, uchar h, uchar c) {
+;  asm {
+_fillRect:
+    push bc
+    ;lda fillRect_2
+    ld   e, a
+    ld   a, 80;radio86rkVideoBpl
+    ld   b, c
+    ld   c, a
+    ;ld   b, 0
+    ;lhld fillRect_1
+    ;lda fillRect_3
+    ld   d, e
+fillRect_l1:  
+    ;lda fillRect_2
+    push hl
+    ld   a,l
+    out  (98h + 1), a
+    ld   a,h
+    or   40h
+    out  (98h + 1), a
+    ;lda  fillRect_4
+    ld   a,b
+
+fillRect_l0:
+    out  (98h), a
+    dec  e
+    jp   nz, fillRect_l0
+    pop  hl
+    push bc
+    ld   b,0
+    add  hl, bc
+    pop  bc
+    dec  d
+    jp   nz, fillRect_l1
+    pop  bc
+    ret

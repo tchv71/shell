@@ -23,6 +23,8 @@
       <Filter>Source Files</Filter>
     </None>
     <None Include="shell.s" />
+    <None Include="make-rka.js" />
+    <None Include="shell.lst" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cmd_copymove.c">

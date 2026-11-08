@@ -4,101 +4,101 @@
 #include "shell.h"
 
 char cmd_deleteFile() {
-  // Удаление файла
-  drawWindow(" udalenie ");
-  drawWindowText(0, 1, cmdline);
-  drawEscButton();
+	// ╙фрыхэшх Їрщыр
+	drawWindow(" udalenie ");
+	drawWindowText(0, 1, cmdline);
+	drawEscButton();
 
-  // Прерывание
-  if(bioskey1() == KEY_ESC) return ERR_USER;
+	// ╧ЁхЁ√трэшх
+	if (bioskey1() == KEY_ESC) return ERR_USER;
 
-  // Удаление файла
-  return fs_delete(cmdline);
+	// ╙фрыхэшх Їрщыр
+	return fs_delete(cmdline);
 }
 
 //---------------------------------------------------------------------------
 
 char cmd_deleteFolder() {
-  uchar level; // 8 бит хватит, так как длина пути всего 255 символов.
-  char e;
-  FileInfo* p;
-  uint i;
+	uchar level; // 8 сшЄ їтрЄшЄ, Єръ ъръ фышэр яєЄш тёхую 255 ёшьтюыют.
+	char e;
+	FileInfo* p;
+	uint i;
 
-  level = 0;
+	level = 0;
 
-  while(1) {
-    // Получить список файлов этой папки
-    e = fs_findfirst(cmdline, panelB.files1, maxFiles);  
-    if(e != 0 && e != ERR_MAX_FILES) return e;
-    panelB.cnt = fs_low;
+	while (1) {
+		// ╧юыєўшЄ№ ёяшёюъ Їрщыют ¤Єющ яряъш
+		e = fs_findfirst(cmdline, panelB.files1, maxFiles);
+		if (e != 0 && e != ERR_MAX_FILES) return e;
+		panelB.cnt = fs_low;
 
-    // Удлаяем всё, пока оно удаляется
-    e = 0;
-    for(p=panelB.files1, i=panelB.cnt; i; --i, ++p) {
-      if(catPathAndUnpack(cmdline, p->fname)) return ERR_RECV_STRING;
-      e = cmd_deleteFile();
-      if(e == ERR_DIR_NOT_EMPTY) break;
-      dropPathInt(cmdline, 0);
-      // Если ошибка, выходим
-      if(e) return e;
-    }
+		// ╙фыр хь тё╕, яюър юэю єфры хЄё 
+		e = 0;
+		for (p = panelB.files1, i = panelB.cnt; i; --i, ++p) {
+			if (catPathAndUnpack(cmdline, p->fname)) return ERR_RECV_STRING;
+			e = cmd_deleteFile();
+			if (e == ERR_DIR_NOT_EMPTY) break;
+			dropPathInt(cmdline, 0);
+			// ┼ёыш ю°шсър, т√їюфшь
+			if (e) return e;
+		}
 
-    // Если удаляемая папка не пуста заходим в неё
-    if(e == ERR_DIR_NOT_EMPTY) { 
-      ++level;
-      continue;
-    }
+		// ┼ёыш єфры хьр  яряър эх яєёЄр чрїюфшь т эх╕
+		if (e == ERR_DIR_NOT_EMPTY) {
+			++level;
+			continue;
+		}
 
-    // Мы могли получили ERR_MAX_FILES, поэтому делаем повторный запрос.
-    if(panelB.cnt == maxFiles) continue;
+		// ╠√ ьюуыш яюыєўшыш ERR_MAX_FILES, яю¤Єюьє фхырхь яютЄюЁэ√щ чряЁюё.
+		if (panelB.cnt == maxFiles) continue;
 
-    // Удаляем эту папку
-    e = cmd_deleteFile();
-    if(e) return e;
+		// ╙фры хь ¤Єє яряъє
+		e = cmd_deleteFile();
+		if (e) return e;
 
-    // Выходим из папки
-    if(level == 0) return 0;
-    --level;
-    dropPathInt(cmdline, 0);
-  }
+		// ┬√їюфшь шч яряъш
+		if (level == 0) return 0;
+		--level;
+		dropPathInt(cmdline, 0);
+	}
 }
 
 //---------------------------------------------------------------------------
 
 void cmd_delete() {
-  uchar e, needRefresh2;
+	uchar e, needRefresh2;
 
-  // Спросить у пользователя 
-  if(confirm(" udalitx ", "wy hotite udalitx fail(y)?")) {
-    needRefresh2 = 0;
+	// ╤яЁюёшЄ№ є яюы№чютрЄхы  
+	if (confirm(" udalitx ", "wy hotite udalitx fail(y)?")) {
+		needRefresh2 = 0;
 
-    // Поместить в буфер имя без пути
-    if(getFirstSelected(cmdline)) {
-      for(;;) {
-        if(!absolutePath(cmdline)) { e = ERR_RECV_STRING; break; }
+		// ╧юьхёЄшЄ№ т сєЇхЁ шь  схч яєЄш
+		if (getFirstSelected(cmdline)) {
+			for (;;) {
+				if (!absolutePath(cmdline)) { e = ERR_RECV_STRING; break; }
 
-        // Удаление файла
-        e = cmd_deleteFile();
+				// ╙фрыхэшх Їрщыр
+				e = cmd_deleteFile();
 
-        // Если это папка с файлами, то удаляем её рекурсивно
-        if(e == ERR_DIR_NOT_EMPTY) {
-          needRefresh2 = 1; // Правая панель будет испорчена
-          e = cmd_deleteFolder();
-        }
-        if(e) break;
+				// ┼ёыш ¤Єю яряър ё Їрщырьш, Єю єфры хь х╕ ЁхъєЁёштэю
+				if (e == ERR_DIR_NOT_EMPTY) {
+					needRefresh2 = 1; // ╧Ёртр  ярэхы№ сєфхЄ шёяюЁўхэр
+					e = cmd_deleteFolder();
+				}
+				if (e) break;
 
-        // Следующий файл
-        if(!getNextSelected(cmdline)) break;
-      }
+				// ╤ыхфє■∙шщ Їрщы
+				if (!getNextSelected(cmdline)) break;
+			}
 
-      // Вывод ошибок
-      drawError("o{ibka udaleniq", e);
+			// ┬√тюф ю°шсюъ
+			drawError("o{ibka udaleniq", e);
 
-      // Обновление списка файлов
-      getFiles();
-      dupFiles(needRefresh2);
-    }
-  }
+			// ╬сэютыхэшх ёяшёър Їрщыют
+			getFiles();
+			dupFiles(needRefresh2);
+		}
+	}
 
-  drawScreen();
+	drawScreen();
 }

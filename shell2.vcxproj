@@ -96,8 +96,10 @@ make all</NMakeReBuildCommandLine>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="make-rka.js" />
     <None Include="Makefile" />
     <None Include="mem.asm" />
+    <None Include="shell.lst" />
     <None Include="shell.s" />
   </ItemGroup>
   <ItemGroup>

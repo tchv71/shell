@@ -458,8 +458,8 @@ void getFiles() {
         *n = *n-('a'-'A');
   }
 
-  if(panelA.cnt > 1)
-    sort(st, ((FileInfo*)panelA.files1) + (panelA.cnt-1));
+  //if(panelA.cnt > 1)
+  //  sort(st, ((FileInfo*)panelA.files1) + (panelA.cnt-1));
 }
 
 //---------------------------------------------------------------------------
@@ -875,11 +875,11 @@ void cmd_inverseAll() {
 //---------------------------------------------------------------------------
 // Главная программа
 
-void main() {
+void main2() {
   register uchar c;
 
   // Инициализация файловой системы (пока в регистрах нужные значения)
-  fs_init();
+  //fs_init();
 
   getPalmiraMode();
   setPalmiraMode(0);
