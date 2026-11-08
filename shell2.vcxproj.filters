@@ -159,5 +159,8 @@
     <ClInclude Include="Fs\fs_open0.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Radio86rk\bios.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

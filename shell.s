@@ -150,6 +150,15 @@ _selectFile:
 	JP __shell_selectFile__lc
 	ENDIF
 
+	DEFINE __X80_DEF_sort
+	IFUSED _sort
+
+; ---- sort ----
+_sort:
+.b0:
+	JP __shell_sort__lc
+	ENDIF
+
 	DEFINE __X80_DEF_processInput
 	IFUSED _processInput
 
@@ -219,6 +228,8 @@ _getSel:
 ; ---- main2 ----
 _main2:
 .b0:
+	LD HL,__shell_anon0
+	LD (_fs_selfName),HL
 	CALL _getPalmiraMode
 	XOR A
 	CALL _setPalmiraMode
@@ -610,7 +621,7 @@ __shell_cmd_enter__lc:
 	JP NZ,.b7
 .b8:
 	LD HL,_cmdline
-	LD DE,__shell_anon0
+	LD DE,__shell_anon1
 	CALL _run
 	JP .b12
 .b7:
@@ -668,32 +679,25 @@ __shell_loadState__lc:
 	SBC A, 0
 	RET C
 .b2:
-	LD B,H
-	LD C,L
-	PUSH HL
-	DEC BC
-	DEC BC
-	DEC BC
+	EX DE,HL
+	DEC DE
+	DEC DE
+	DEC DE
 	LD HL,(_fs_selfName)
-	ADD HL,BC
-	LD DE,__shell_anon1
+	ADD HL,DE
+	PUSH DE
+	LD DE,__shell_anon2
 	CALL _strcmp
 	LD A,L
 	OR H
-	POP HL
+	POP BC
 	RET NZ
 .b4:
-	PUSH HL
 	LD HL,(_fs_selfName)
-	EX DE,HL
-	LD HL,__shell_l2_fs_selfName2
-	CALL _strcpy
-	POP HL
-	LD BC,__shell_l2_fs_selfName2-3
 	ADD HL,BC
 	LD DE,__shell_anon3
 	CALL _strcpy
-	LD HL,__shell_l2_fs_selfName2
+	LD HL,(_fs_selfName)
 	CALL _fs_open
 	OR A
 	RET NZ
@@ -1228,112 +1232,6 @@ __shell_selectFile__lc:
 	JP .b7
 	ENDIF
 
-	DEFINE __X80_DEF_sort
-	IFUSED _sort
-
-; ---- sort ----
-_sort:
-.b0:
-	LD A,E
-	SUB L
-	LD C,A
-	LD A,D
-	SBC A, H
-	PUSH HL
-	RLCA
-	RRCA
-	RRA
-	LD B,A
-	LD A,C
-	RRA
-	LD C,A
-	LD A,B
-	RLCA
-	RRCA
-	RRA
-	LD B,A
-	LD A,C
-	RRA
-	LD DE,0CCCDH
-	LD H,B
-	LD L,A
-	CALL __x80_mul16
-	EX DE,HL
-	INC DE
-	LD BC,_cmpFileInfo
-	POP HL
-	PUSH BC
-	LD BC,20
-	CALL _qsort
-	POP BC
-	RET
-	ENDIF
-
-	DEFINE __X80_DEF_cmpFileInfo
-	IFUSED _cmpFileInfo
-
-; ---- cmpFileInfo ----
-_cmpFileInfo:
-.b0:
-	DEC SP
-	LD B,H
-	LD C,L
-	LD HL,11
-	ADD HL,BC
-	LD A,(HL)
-	AND 16
-	LD HL,0
-	ADD HL,SP
-	LD (HL),A
-	LD HL,11
-	ADD HL,DE
-	LD A,(HL)
-	AND 16
-	LD H,A
-	PUSH HL
-	LD HL,2
-	ADD HL,SP
-	LD A,(HL)
-	POP HL
-	CP H
-	JP C,.b1
-.b2:
-	LD A,H
-	LD HL,0
-	ADD HL,SP
-	LD H,(HL)
-	CP H
-	JP C,.b3
-.b4:
-	LD H,B
-	LD L,C
-	LD BC,11
-	CALL _memcmp
-	LD A,1
-	XOR L
-	JP NZ,.b6
-	XOR A
-	OR H
-.b7:
-	JP Z,.b5
-.b6:
-	LD HL,0
-	INC SP
-	RET
-.b1:
-	LD HL,1
-	INC SP
-	RET
-.b3:
-	LD HL,0
-	INC SP
-	RET
-.b5:
-	LD HL,1
-	INC SP
-	RET
-	ENDIF
-
 	IFUSED __shell_showFileCursorAndDrawFileInfo__lc
 
 ; ---- showFileCursorAndDrawFileInfo__lc ----
@@ -1620,6 +1518,10 @@ _getFiles:
 .b0:
 	DEC SP
 	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
+	DEC SP
 	CALL _hideTextCursor
 	LD HL,0
 	LD (_panelA+262),HL
@@ -1649,41 +1551,48 @@ _getFiles:
 	CP 10
 	POP DE
 	JP Z,.b6
-.b20:
+.b22:
 	OR A
 	JP Z,.b6
 .b7:
 	LD A,(_panelA+2)
 	OR A
-	JP Z,.b18
+	JP Z,.b20
 .b9:
 	XOR A
 	LD (_panelA+2),A
 	JP .b3
 .b6:
 	LD HL,(_fs_low)
-	EX DE,HL
-	LD HL,(_panelA+262)
-	ADD HL,DE
-	LD D,H
-	LD E,L
-	LD (_panelA+262),HL
-	LD HL,(_panelA)
-.b10:
 	LD B,H
 	LD C,L
-	LD A,E
-	OR D
+	LD HL,(_panelA+262)
+	ADD HL,BC
+	LD B,H
+	LD C,L
+	LD (_panelA+262),HL
+	LD HL,(_panelA)
+	PUSH HL
+	LD HL,2
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	POP HL
+.b10:
+	EX DE,HL
+	LD A,C
+	OR B
 	JP Z,.b18
 .b11:
 	LD HL,11
-	ADD HL,BC
+	ADD HL,DE
 	LD A,(HL)
 	AND 127
 	LD (HL),A
 	LD A,12
-	PUSH BC
-	LD HL,2
+	PUSH DE
+	LD HL,4
 	ADD HL,SP
 	LD (HL),E
 	INC HL
@@ -1718,14 +1627,14 @@ _getFiles:
 	LD (_panelA+262),HL
 	JP .b3
 .b17:
-	LD HL,0
+	LD HL,2
 	ADD HL,SP
 	LD E,(HL)
 	INC HL
 	LD D,(HL)
-	DEC DE
+	DEC BC
 	LD HL,20
-	ADD HL,BC
+	ADD HL,DE
 	JP .b10
 .b14:
 	CP 123
@@ -1735,9 +1644,149 @@ _getFiles:
 	LD (HL),A
 	JP .b16
 .b18:
-	INC SP
+	LD HL,0
+	ADD HL,SP
+	LD E,(HL)
+	INC HL
+	LD D,(HL)
+	LD HL,(_panelA+262)
+	LD B,H
+	LD C,L
+	LD A,C
+	SUB 2
+	LD A,B
+	SBC A, 0
+	JP C,.b20
+.b19:
+	LD HL,(_panelA)
+	PUSH DE
+	EX DE,HL
+	LD HL,6
+	ADD HL,SP
+	LD (HL),E
+	INC HL
+	LD (HL),D
+	POP DE
+	DEC BC
+	LD H,B
+	LD L,C
+	ADD HL,HL
+	ADD HL,HL
+	ADD HL,BC
+	ADD HL,HL
+	ADD HL,HL
+	LD B,H
+	LD C,L
+	LD HL,4
+	ADD HL,SP
+	LD A,(HL)
+	INC HL
+	LD H,(HL)
+	LD L,A
+	ADD HL,BC
+	LD B,H
+	LD C,L
+	EX DE,HL
+	LD D,B
+	LD E,C
+	CALL __shell_sort__lc
+.b20:
+	LD HL,6
+	ADD HL,SP
+	LD SP,HL
+	RET
+
+	IFUSED __shell_sort__lc
+
+; ---- sort__lc ----
+__shell_sort__lc:
+.b0:
+	LD A,E
+	SUB L
+	LD C,A
+	LD A,D
+	SBC A, H
+	PUSH HL
+	RLCA
+	RRCA
+	RRA
+	LD B,A
+	LD A,C
+	RRA
+	LD C,A
+	LD A,B
+	RLCA
+	RRCA
+	RRA
+	LD B,A
+	LD A,C
+	RRA
+	LD DE,0CCCDH
+	LD H,B
+	LD L,A
+	CALL __x80_mul16
+	EX DE,HL
+	INC DE
+	LD BC,_cmpFileInfo
+	POP HL
+	PUSH BC
+	LD BC,20
+	CALL _qsort
+	POP BC
+	RET
+	ENDIF
+
+	DEFINE __X80_DEF_cmpFileInfo
+	IFUSED _cmpFileInfo
+
+; ---- cmpFileInfo ----
+_cmpFileInfo:
+.b0:
+	DEC SP
+	LD B,H
+	LD C,L
+	LD HL,11
+	ADD HL,BC
+	LD A,(HL)
+	AND 16
+	LD HL,0
+	ADD HL,SP
+	LD (HL),A
+	LD HL,11
+	ADD HL,DE
+	LD A,(HL)
+	AND 16
+	LD H,A
+	PUSH HL
+	LD HL,2
+	ADD HL,SP
+	LD A,(HL)
+	POP HL
+	CP H
+	JP C,.b1
+.b2:
+	LD A,H
+	LD HL,0
+	ADD HL,SP
+	LD H,(HL)
+	CP H
+	JP C,.b3
+.b4:
+	LD H,B
+	LD L,C
+	LD BC,11
+	CALL _memcmp
 	INC SP
 	RET
+.b1:
+	LD HL,1
+	INC SP
+	RET
+.b3:
+	LD HL,0FFFFH
+	INC SP
+	RET
+	ENDIF
 
 	DEFINE __X80_DEF_packName
 
@@ -2107,8 +2156,6 @@ _run.b4:
 ; ---- setPalmiraMode ----
 _setPalmiraMode:
 _setPalmiraMode.b0:
-	LD (__shell_l10_md),A
-	LD A,(__shell_l10_md)
 	LD C,A
 	LD A,1
 	CALL 0F003h
@@ -2159,7 +2206,7 @@ _confirm:
 	CALL _drawWindowText
 	LD A,6
 	LD L,4
-	LD DE,__shell_anon11
+	LD DE,__shell_anon10
 	CALL _drawWindowText
 .b1:
 	CALL _getch1
@@ -2183,11 +2230,11 @@ _inputBox:
 	CALL _drawWindow
 	LD A,3
 	LD L,1
-	LD DE,__shell_anon12
+	LD DE,__shell_anon11
 	CALL _drawWindowText
 	LD A,6
 	LD L,4
-	LD DE,__shell_anon13
+	LD DE,__shell_anon12
 	CALL _drawWindowText
 	LD A,1
 	LD HL,0
@@ -2330,7 +2377,7 @@ _drawError:
 	OR A
 	JP Z,.b1
 .b2:
-	LD HL,__shell_anon14
+	LD HL,__shell_anon13
 	CALL _drawWindow
 	CALL _drawAnyKeyButton
 	XOR A
@@ -2368,7 +2415,7 @@ _drawError:
 	JP Z,.b12
 	JP .b13
 .b10:
-	LD DE,__shell_anon15
+	LD DE,__shell_anon14
 .b14:
 	XOR A
 	LD L,2
@@ -2380,31 +2427,31 @@ _drawError:
 	LD SP,HL
 	RET
 .b3:
-	LD DE,__shell_anon16
+	LD DE,__shell_anon15
 	JP .b14
 .b4:
-	LD DE,__shell_anon17
+	LD DE,__shell_anon16
 	JP .b14
 .b5:
-	LD DE,__shell_anon18
+	LD DE,__shell_anon17
 	JP .b14
 .b6:
-	LD DE,__shell_anon19
+	LD DE,__shell_anon18
 	JP .b14
 .b7:
-	LD DE,__shell_anon20
+	LD DE,__shell_anon19
 	JP .b14
 .b8:
-	LD DE,__shell_anon21
+	LD DE,__shell_anon20
 	JP .b14
 .b9:
-	LD DE,__shell_anon22
+	LD DE,__shell_anon21
 	JP .b14
 .b11:
-	LD DE,__shell_anon23
+	LD DE,__shell_anon22
 	JP .b14
 .b12:
-	LD DE,__shell_anon24
+	LD DE,__shell_anon23
 	JP .b14
 .b13:
 	LD HL,0
@@ -2963,33 +3010,33 @@ _parentDir:
 	DEFB 0
 	DEFB 0
 	DEFB 0
-__shell_anon14:
-	DEFB 32,111,123,105,98,107,97,32,0
-__shell_anon16:
-	DEFB 110,101,116,32,102,97,106,108,111,119,111,106,32,115,105,115,116,101,109,121,0
-__shell_anon17:
-	DEFB 111,123,105,98,107,97,32,110,97,107,111,112,105,116,101,108,113,0
-__shell_anon18:
-	DEFB 112,97,112,107,97,32,110,101,32,112,117,115,116,97,0
-__shell_anon19:
-	DEFB 102,97,106,108,32,110,101,32,111,116,107,114,121,116,0
-__shell_anon20:
-	DEFB 112,117,116,120,32,110,101,32,110,97,106,100,101,110,0
-__shell_anon21:
-	DEFB 109,97,107,115,105,109,117,109,32,102,97,106,108,111,119,32,119,32,112,97,112,107,101,0
-__shell_anon22:
-	DEFB 100,105,115,107,32,122,97,112,111,108,110,101,110,0
-__shell_anon15:
-	DEFB 102,97,105,108,32,115,117,125,101,115,116,119,117,101,116,0
-__shell_anon23:
-	DEFB 112,114,101,114,119,97,110,111,32,112,111,108,120,122,111,119,97,116,101,108,101,109,0
-__shell_anon24:
-	DEFB 112,117,116,120,32,98,111,108,120,123,101,32,50,53,53,32,115,105,109,119,111,108,111,119,0
-__shell_anon12:
-	DEFB 105,109,113,58,0
 __shell_anon13:
-	DEFB 91,32,119,107,32,45,32,111,107,32,93,32,32,91,32,97,114,50,32,45,32,111,116,109,101,110,97,32,93,0
+	DEFB 32,111,123,105,98,107,97,32,0
+__shell_anon15:
+	DEFB 110,101,116,32,102,97,106,108,111,119,111,106,32,115,105,115,116,101,109,121,0
+__shell_anon16:
+	DEFB 111,123,105,98,107,97,32,110,97,107,111,112,105,116,101,108,113,0
+__shell_anon17:
+	DEFB 112,97,112,107,97,32,110,101,32,112,117,115,116,97,0
+__shell_anon18:
+	DEFB 102,97,106,108,32,110,101,32,111,116,107,114,121,116,0
+__shell_anon19:
+	DEFB 112,117,116,120,32,110,101,32,110,97,106,100,101,110,0
+__shell_anon20:
+	DEFB 109,97,107,115,105,109,117,109,32,102,97,106,108,111,119,32,119,32,112,97,112,107,101,0
+__shell_anon21:
+	DEFB 100,105,115,107,32,122,97,112,111,108,110,101,110,0
+__shell_anon14:
+	DEFB 102,97,105,108,32,115,117,125,101,115,116,119,117,101,116,0
+__shell_anon22:
+	DEFB 112,114,101,114,119,97,110,111,32,112,111,108,120,122,111,119,97,116,101,108,101,109,0
+__shell_anon23:
+	DEFB 112,117,116,120,32,98,111,108,120,123,101,32,50,53,53,32,115,105,109,119,111,108,111,119,0
 __shell_anon11:
+	DEFB 105,109,113,58,0
+__shell_anon12:
+	DEFB 91,32,119,107,32,45,32,111,107,32,93,32,32,91,32,97,114,50,32,45,32,111,116,109,101,110,97,32,93,0
+__shell_anon10:
 	DEFB 91,32,119,107,32,45,32,111,107,32,93,32,32,91,32,97,114,50,32,45,32,111,116,109,101,110,97,32,93,0
 __shell_anon6:
 	DEFB 52,56,75,58,0
@@ -3001,12 +3048,14 @@ __shell_anon9:
 	DEFB 63,63,63,58,0
 __shell_anon4:
 	DEFB 0
-__shell_anon1:
+__shell_anon2:
 	DEFB 46,82,75,0
 __shell_anon3:
 	DEFB 46,73,78,0
-__shell_anon0:
+__shell_anon1:
 	DEFB 0
+__shell_anon0:
+	DEFB 66,79,79,84,47,83,72,69,76,76,46,82,75,0
 
 ; ---- zeros, below __x80_bss_top ----
 __x80_bss_off = __x80_bss_off + 2
@@ -3015,10 +3064,6 @@ __x80_bss_off = __x80_bss_off + 3
 __shell___x80_spill_getNextSelected EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 1
 __shell___x80_spill_unpackName EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 64
-__shell_l2_fs_selfName2 EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 1
-__shell_l10_md EQU __x80_bss_top - __x80_bss_off
 	DEFINE __X80_DEF_nextSelectedFile
 __x80_bss_off = __x80_bss_off + 2
 _nextSelectedFile EQU __x80_bss_top - __x80_bss_off
@@ -5168,6 +5213,17 @@ __interface_showTextCursor__lc:
 	JP __interface_gotoxy__lc
 	ENDIF
 
+	DEFINE __X80_DEF_putchar
+
+; ---- putchar ----
+_putchar:
+.b0:
+	LD A,L
+	PUSH HL
+	CALL _putch
+	POP HL
+	RET
+
 	IFUSED __interface_charAddr__lc
 
 ; ---- charAddr__lc ----
@@ -5402,17 +5458,28 @@ _drawFilesCountInt:
 	POP DE
 	POP BC
 .b2:
-	LD HL,18
-	ADD HL,DE
 	PUSH DE
+	LD HL,_buf
 	LD D,B
 	LD E,C
 	PUSH BC
 	LD BC,3
 	LD A,32
 	CALL _i2s
+	POP BC
+	POP DE
+	PUSH BC
+	LD HL,18
+	ADD HL,DE
+	PUSH DE
+	LD DE,_buf
+	CALL _print2
+	POP DE
+	POP BC
+	PUSH DE
 	LD DE,100
-	POP HL
+	LD H,B
+	LD L,C
 	CALL __x80_urem16
 	LD A,L
 	LD HL,22
@@ -6758,47 +6825,52 @@ _i2s32:
 ; ---- i2s ----
 _i2s:
 .b0:
+	LD (__interface___x80_spill_i2s+6),A
 	ADD HL,BC
 	LD (HL),0
-	PUSH HL
-	LD (__interface___x80_spill_i2s),A
 	EX DE,HL
-	POP DE
+	LD (__interface___x80_spill_i2s),HL
 .b1:
-	PUSH DE
-	PUSH BC
+	EX DE,HL
+	LD (__interface___x80_spill_i2s+4),HL
+	LD H,B
+	LD L,C
+	LD (__interface___x80_spill_i2s+2),HL
 	LD DE,10
-	CALL __x80_udiv16
-	POP BC
-	POP DE
-	PUSH BC
-	PUSH HL
-	DEC DE
-	PUSH DE
-	LD DE,10
+	LD HL,(__interface___x80_spill_i2s)
 	CALL __x80_urem16
+	PUSH HL
+	LD DE,10
+	LD HL,(__interface___x80_spill_i2s)
+	CALL __x80_udiv16
+	LD (__interface___x80_spill_i2s),HL
+	POP DE
+	LD HL,(__interface___x80_spill_i2s+4)
+	EX DE,HL
+	DEC DE
+	LD H,0
 	LD BC,__interface_anon20
 	ADD HL,BC
 	LD A,(HL)
-	POP DE
 	LD (DE),A
-	POP HL
-	POP BC
+	LD HL,(__interface___x80_spill_i2s+2)
+	LD B,H
+	LD C,L
 	DEC BC
 	LD A,C
 	OR B
 	RET Z
 .b3:
+	LD HL,(__interface___x80_spill_i2s)
 	LD A,L
 	OR H
 	JP NZ,.b1
-.b4:
-	LD A,(__interface___x80_spill_i2s)
-	EX DE,HL
-	LD D,A
 .b6:
-	DEC HL
-	LD (HL),D
+	DEC DE
+	LD H,D
+	LD L,E
+	LD A,(__interface___x80_spill_i2s+6)
+	LD (HL),A
 	DEC BC
 	LD A,C
 	OR B
@@ -6808,7 +6880,7 @@ _i2s:
 
 ; ---- data ----
 __interface_anon20:
-	DEFB 48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,0
+	DEFB 48,49,50,51,52,53,54,55,56,57,0
 __interface_anon19:
 	DEFB 48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,0
 	DEFINE __X80_DEF_attrHidden
@@ -6857,7 +6929,7 @@ __x80_bss_off = __x80_bss_off + 1
 __interface___x80_spill_printn__lc EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 5
 __interface___x80_spill_i2s32 EQU __x80_bss_top - __x80_bss_off
-__x80_bss_off = __x80_bss_off + 1
+__x80_bss_off = __x80_bss_off + 7
 __interface___x80_spill_i2s EQU __x80_bss_top - __x80_bss_off
 __x80_bss_off = __x80_bss_off + 1
 __interface_l15_h EQU __x80_bss_top - __x80_bss_off
@@ -6985,22 +7057,15 @@ _fs_open:
 	JP _fs_open0
 	ENDIF
 
-	DEFINE __X80_DEF_fs_exec
-	IFUSED _fs_exec
-
-; ---- fs_exec ----
-_fs_exec:
-.b0:
-	LD A,1
-	RET
-	ENDIF
-
 	DEFINE __X80_DEF_fs_reboot
 	IFUSED _fs_reboot
 
 ; ---- fs_reboot ----
 _fs_reboot:
 .b0:
+	LD HL,__fs_anon2
+	LD DE,__fs_anon3
+	CALL _fs_exec
 	jp 0F800h
 	RET
 	ENDIF
@@ -7008,14 +7073,18 @@ _fs_reboot:
 ; ---- data ----
 	DEFINE __X80_DEF_fs_cmdLine
 _fs_cmdLine:
-	DEFW __fs_anon2
-__fs_anon2:
+	DEFW __fs_anon4
+__fs_anon4:
 	DEFB 0
 	DEFINE __X80_DEF_fs_selfName
 _fs_selfName:
-	DEFW __fs_anon3
-__fs_anon3:
+	DEFW __fs_anon5
+__fs_anon5:
 	DEFB 83,72,69,76,76,46,82,75,0
+__fs_anon2:
+	DEFB 0
+__fs_anon3:
+	DEFB 0
 __fs_anon1:
 	DEFB 58,0
 __fs_anon0:

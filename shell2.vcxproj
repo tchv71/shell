@@ -148,6 +148,7 @@ make all</NMakeReBuildCommandLine>
     <ClInclude Include="Fs\fs.h" />
     <ClInclude Include="Fs\fs_open0.h" />
     <ClInclude Include="interface.h" />
+    <ClInclude Include="Radio86rk\bios.h" />
     <ClInclude Include="shell.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

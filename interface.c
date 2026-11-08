@@ -12,6 +12,7 @@
 #include "radio86rk/bios.h"
 #include "radio86rk/radio8screenvars.h"
 #include "stdlib.h"
+#include <stdio.h>
 
 uchar  activePanel;
 uchar* fileCursorAddr;
@@ -306,9 +307,11 @@ void drawFilesCountInt(ulong* total, uint filesCnt) {
   {
     //i2s((char*)a + 18, filesCnt, 3, ' ');
     i2s(buf, filesCnt, 3, ' ');
+    //sprintf(buf, "%d", filesCnt);
     print2(a + 18, buf);
   }
-  i2s((char*)a+18, filesCnt, 3, ' ');
+  i2s(buf, filesCnt, 3, ' ');
+  print2(a + 18, buf);
   v = filesCnt % 100;
   print2(a+22, (!(v >= 10 && v < 20) && v % 10 == 1) ? "fajle " : "fajlah ");
 }
@@ -550,13 +553,15 @@ void printm(uchar x, uchar y, uchar len,const char* text)
 	print2m(charAddr(x, y), len, text);
 }
 
-void i2s(char* buf, uint v, uint n, uchar spc) {
+void i2s(char* buf, uint v, uint n, uchar spc)
+{
 	buf += n;
 	*buf = 0;
 	while (1) {
+    uchar mod = v % 10;
 		v /= 10;
 		--buf;
-		*buf = "0123456789ABCDEF"[v % 10];
+		*buf = "0123456789"[mod];
 		--n;
 		if (n == 0) return;
 		if (v == 0) break;

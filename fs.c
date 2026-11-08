@@ -5,9 +5,7 @@
 #include "fs/fs_open0.h"
 
 #include "n.h"
-#include "string.h"
 #include "Radio86rk/video.h"
-#include "stdlib.h"
 
 const char* fs_cmdLine = "";
 const char* fs_selfName = "SHELL.RK";
@@ -54,10 +52,6 @@ uchar fs_getfree() { // fs_high:fs_low - размер в ћб
 
 uchar fs_findnext(FileInfo* dest, uint size) {
 	return fs_findfirst(":", dest, size);
-}
-
-uchar fs_exec(const char* fileName, const char* cmdLine) {
-  return 1;
 }
 
 uchar fs_delete(const char* name) {

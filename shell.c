@@ -37,8 +37,8 @@ mode = 0;
 
 
 void setPalmiraMode(uchar md) {
-  asm {
-    LDA setPalmiraMode_1 
+  asm{
+    ; LDA setPalmiraMode_1
     MOV C, A
     MVI A, 1
     CALL 0F003h
@@ -346,16 +346,16 @@ char getNextSelected(char* name) {
 
 #define SORT_STACK_MAX 128
 
-int cmpFileInfo(const void* _a, const void* _b) {
-  FileInfo* a = (FileInfo*)_a;
-  FileInfo* b = (FileInfo*)_b;
-  register uchar i, j;
-  i = (a->fattrib&0x10);
-  j = (b->fattrib&0x10);
-  if(i<j) return 1;
-  if(j<i) return 0;
-  if(1==memcmp(a->fname, b->fname, sizeof(a->fname))) return 1;
-  return 0;
+int cmpFileInfo(const void* _a, const void* _b)
+{
+	FileInfo* a = (FileInfo*)_a;
+	FileInfo* b = (FileInfo*)_b;
+	register uchar i, j;
+	i = (a->fattrib & 0x10);
+	j = (b->fattrib & 0x10);
+	if (i < j) return 1;
+	if (j < i) return -1;
+	return memcmp(a->fname, b->fname, sizeof(a->fname));
 }
 
 //---------------------------------------------------------------------------
@@ -462,8 +462,8 @@ void getFiles() {
         *n = *n-('a'-'A');
   }
 
-  //if(panelA.cnt > 1)
-  //  sort(st, ((FileInfo*)panelA.files1) + (panelA.cnt-1));
+  if(panelA.cnt > 1)
+    sort(st, ((FileInfo*)panelA.files1) + (panelA.cnt-1));
 }
 
 //---------------------------------------------------------------------------
@@ -736,16 +736,14 @@ void dupFiles(uchar reload) {
 void loadState() {
   uint i;
   i = strlen(fs_selfName);
-  if(i < 4) return;
+  if (i < 4) return;
   i -= 3;
-  if(0 != strcmp(fs_selfName + i, ".RK")) return;
-  static char fs_selfName2[64];
-	strcpy(fs_selfName2, fs_selfName);
-  strcpy(fs_selfName2 + i, ".IN");
+  if (0 != strcmp(fs_selfName + i, ".RK")) return;
+  strcpy((char*)fs_selfName + i, ".IN");
 
-  if(fs_open(fs_selfName2)) return;
+  if (fs_open(fs_selfName)) return;
   fs_read(cmdline, 12);
-  if(cmdline[11]) swapPanels();
+  if (cmdline[11]) swapPanels();
   fs_read(panelA.path1, 256); panelA.path1[255] = 0;
   fs_read(panelB.path1, 256); panelB.path1[255] = 0;
 }
@@ -802,11 +800,10 @@ void cmd_editview(char* app) {
 }
 
 //---------------------------------------------------------------------------
+void cmd_enter();
 
 void cmd_enter() {
-  //char *d, i;
   FileInfo* f;
-  //uint l, o;
 
   // Запуск ком строки
   if(cmdline[0]) {
@@ -884,7 +881,7 @@ void main2() {
 
   // Инициализация файловой системы (пока в регистрах нужные значения)
   //fs_init();
-
+  fs_selfName = "BOOT/SHELL.RK";
   getPalmiraMode();
   setPalmiraMode(0);
 

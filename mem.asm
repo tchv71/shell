@@ -26,10 +26,8 @@ memswap_v1:
 memswap_l2:
     pop bc
     ret
-;}
 
 ;void memcpy_back(void* arg1, void* arg2, uint arg3) {
-;  asm {
 _memcpy_back:
     ; if(cnt==0) return
     ld a, b
@@ -67,11 +65,8 @@ memcpy_back_l2:
     jp  nz, memcpy_back_l1
     pop bc
     ret
-;  }
-;}
 
 ;void print2(uchar* dest, char* text) {
-;  asm {
 _print2:
     di
     ld   a,l
@@ -87,64 +82,8 @@ print2_loop:
     out (98h), a
     inc de
     jp  print2_loop
-;  }
-;}
-
-;void set32(ulong* a, ulong* b) {  
-;  asm {
-;_set32:
-;    ld  a, (de)
-;    ld  (hl), a
-;    inc hl
-;    inc de
-;    ld  a, (de)
-;    ld  (hl), a
-;    inc hl
-;    inc de
-;    ld  a, (de)
-;    ld  (hl), a
-;    inc hl
-;    inc de
-;    ld  a, (de)
-;    ld  (hl), a
-;    ret
-;  }
-;}  
-
-;void add32_16(ulong* a, ushort b) {
-;  asm {
-;_add32_16:
-;    ; hl = *to
-;    ld  c, (hl)
-;    inc hl
-;    ld  b, (hl)
-;    dec hl
-;
-;    ; hl = de + from
-;    ex  de, hl
-;    add hl, bc
-;
-;    ; *hl = de
-;    ex  de, hl
-;    ld  (hl), e
-;    inc hl
-;    ld  (hl), d     
-;
-;    ; …б«Ё ЇҐаҐЇ®«­Ґ­ЁҐ, в® гўҐ«ЁзЁў Ґ¬ ўҐае­Ё© а §ап¤
-;    ret nc
-;    inc hl
-;    inc (hl)    
-;
-;    ; …б«Ё ЇҐаҐЇ®«­Ґ­ЁҐ, в® гўҐ«ЁзЁў Ґ¬ ўҐае­Ё© а §ап¤
-;    ret nz
-;    inc hl
-;    inc (hl)
-;    ret
-;  }
-;}
 
 ;void print2m(uchar* dest, uchar len, char* text) {
-;  asm {
 _print2m:
     ld   b, a
     ld   a,l
@@ -162,11 +101,8 @@ print2m_ret:
     dec  b
     jp   nz, print2m_loop
     ret 
-;  }
-;}
 
 ;void print2n(uchar* dest, uchar len, char* text) {
-;  asm {
 _print2n:
     ld   b, a
     ld   a,l
@@ -184,11 +120,8 @@ print2n_loop:
     jp   nz, print2n_loop 
 print2n_ret:
     ret
-;  }
-;}
 
 ;void print2cn(uchar* dest, uchar len, char c) {
-;  asm {
 _print2cn:
     ld   d, a
     ld   a,l
@@ -201,11 +134,9 @@ print2cn_loop:
     out  (98h), a
     dec  d
     jp   nz, print2cn_loop
-;  }
-;}
+    ret
 
 ;void fs_init() {
-;  asm {
 _fs_init:
     LD   (_fs_cmdLine), hl
     ex   de,hl
@@ -214,20 +145,19 @@ _fs_init:
     ld   l, c
     ld   (fs_entry_n+1), hl
     ret
-;  }
-;}
+
+;uchar fs_exec(const char* fileName, const char* cmdLine) {
+_fs_exec:
+    xor  a
+    jp   _fs_entry
 
 ;void fs_entry() {
-;  asm {
 _fs_entry:
 fs_entry_n:
     JP 0000h
-;  }
-;}
 
 ;uchar fs_findfirst(const char* path, FileInfo* dest, uint size) {
 ;  if(path[0] == '/') path++;
-;  asm {
 _fs_findfirst:
     ld   a,(hl)
     cp   '/'
@@ -243,11 +173,8 @@ fs_ff0:
     CALL _fs_entry
     ld   (_fs_low), hl
     ret
-;  }
-;}
 
 ;uchar fs_open0(const char* name, uchar mode) {
-;  asm {      
 _fs_open0:
     ; a = fs_open0_2
     ld   D, A 
@@ -256,7 +183,6 @@ _fs_open0:
 
 
 ;uchar fs_write(const void* buf, uint size) {
-;  asm {
 _fs_write:
     ; hl = fs_write_2
     ex   de, hl
@@ -264,7 +190,6 @@ _fs_write:
     jp   _fs_entry ; HL-размер, DE-адрес / A-код ошибки
 
 ;uchar fs_seek(uint low, uint high, uchar mode) {
-;  asm {
 _fs_seek:
     ; a = fs_seek_3
     ld   B, A
@@ -276,7 +201,6 @@ _fs_seek:
     ret
 
 ;uchar fs_read(void* buf, uint size) {
-;  asm {
 _fs_read:
     ; hl = fs_read_2
     ex   de, hl
@@ -286,19 +210,16 @@ _fs_read:
     ret
 
 ;uchar fs_move(const char* from, const char* to) {
-;  asm {
 _fs_move:
     ld  A, 6
     jp  _fs_entry ; HL-из, DE-в / A-код ошибки
 
 ;void clrscr() {
-;  asm {
 _clrscr:
     ld  c, 1Fh
     jp  0F809h
 
 ;void putch(char) {
-;  asm {
 _putch:
     ld   c, a
     jp   0F809h
@@ -308,7 +229,6 @@ _main:
 	JP	    _main2
 
 ;void fillRect(uchar* a, uchar w, uchar h, uchar c) {
-;  asm {
 _fillRect:
     push bc
     ;lda fillRect_2
