@@ -12,8 +12,6 @@
 #include "radio86rk/bios.h"
 #include "radio86rk/radio8screenvars.h"
 #include "stdlib.h"
-#include "Radio86rk/radio8screenvars.h"
-#include "32.h"
 
 uchar  activePanel;
 uchar* fileCursorAddr;
@@ -62,7 +60,6 @@ void initPalmiraScreen() {
     mvi  A,80h+1
     OUT  98h+1
     ;EI
-    ret
   }
 }
 
@@ -575,7 +572,7 @@ uchar* charAddr(uchar x, uchar y) {
 	return radio86rkVideoMem + y * radio86rkVideoBpl + x;
 }
 
-void div32_16(ulong* a, ushort b) {
+//void div32_16(ulong* a, ushort b) {
 	//uint tmp;
 
 	//((ushort*)a)[1] = ((ushort*)a)[1] / b;
@@ -587,8 +584,8 @@ void div32_16(ulong* a, ushort b) {
 	//((uchar*)&tmp)[1] = op_div16_mod;
 	//((uchar*)&tmp)[0] = ((uchar*)a)[0];
 	//((uchar*)a)[0] = tmp / b;
-  *a /= b;
-}
+//  *a /= b;
+//}
 
 void i2s32(char* buf, ulong* src, uint n, uchar spc) {
 	ulong v = *src;
@@ -616,22 +613,22 @@ void i2s32(char* buf, ulong* src, uint n, uchar spc) {
 }
 
 
-char cmp32_32(ulong* a, ulong* b)
-{
-  if (*a == *b)
-    return 0;
-  return (*a > *b) ? 1 : -1;
-}
+//char cmp32_32(ulong* a, ulong* b)
+//{
+//  if (*a == *b)
+//    return 0;
+//  return (*a > *b) ? 1 : -1;
+//}
 
-void sub32_32(ulong* a, ulong* b)
-{
-  *a -= *b;
-}
+//void sub32_32(ulong* a, ulong* b)
+//{
+//  *a -= *b;
+//}
 
-void sub32_16(ulong* a, ushort b)
-{
-	*a -= b;
-}
+//void sub32_16(ulong* a, ushort b)
+//{
+//	*a -= b;
+//}
 
 void printn(uchar x, uchar y, uchar len, const char* text)
 {

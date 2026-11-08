@@ -5,8 +5,7 @@
 #include "fs/fs_open0.h"
 
 #include "n.h"
-#include "../x80cc-0.8.0-r1902-win64/lib/include/string.h"
-#include "32.h"
+#include "string.h"
 #include "Radio86rk/video.h"
 #include "stdlib.h"
 

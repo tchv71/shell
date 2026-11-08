@@ -5,13 +5,10 @@
 
 
 #include "n.h"
-#include <stdlib.h>
-//#include "mem.h"
-#include "32.h"
+#include "stdlib.h"
 #include <string.h>
 #include "shell.h"
 #include "mem.h"
-//#include "mem.h"
 
 extern char  cmdline[256];
 extern uint op_div16_mod;
@@ -349,7 +346,9 @@ char getNextSelected(char* name) {
 
 #define SORT_STACK_MAX 128
 
-uchar cmpFileInfo(FileInfo* a, FileInfo* b) {
+int cmpFileInfo(const void* _a, const void* _b) {
+  FileInfo* a = (FileInfo*)_a;
+  FileInfo* b = (FileInfo*)_b;
   register uchar i, j;
   i = (a->fattrib&0x10);
   j = (b->fattrib&0x10);
@@ -361,7 +360,9 @@ uchar cmpFileInfo(FileInfo* a, FileInfo* b) {
 
 //---------------------------------------------------------------------------
 
-void sort(FileInfo* low, FileInfo* high) {
+void sort(FileInfo* low, FileInfo* high)
+{
+#if 0
   FileInfo *i, *j, *x;
   FileInfo *st_[SORT_STACK_MAX*2], **st = st_;
   uchar stc = 0;
@@ -391,6 +392,9 @@ void sort(FileInfo* low, FileInfo* high) {
     if(stc==0) break;
     --stc, --st, high = *st, --st, low = *st; 
   }
+#else
+  qsort(low, high - low + 1, sizeof(FileInfo), cmpFileInfo);
+#endif
 }
 
 //---------------------------------------------------------------------------

@@ -68,12 +68,12 @@
     <NMakeBuildCommandLine>make clean
 make all</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>make clean</NMakeCleanCommandLine>
-    <IncludePath>..\c8080\Include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\rk\sd_src\x80cc-0.8.0-r1902-win64\lib\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <NMakeOutput>shell.exe</NMakeOutput>
     <NMakePreprocessorDefinitions>_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <IncludePath>..\c8080\Include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\rk\sd_src\x80cc-0.8.0-r1902-win64\lib\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <NMakeOutput>shell.rk</NMakeOutput>
@@ -101,6 +101,7 @@ make all</NMakeReBuildCommandLine>
     <None Include="mem.asm" />
     <None Include="shell.lst" />
     <None Include="shell.s" />
+    <None Include="shell.sym" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\c8080\Include\Radio86rk\charAddr.c" />

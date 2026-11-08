@@ -3,9 +3,7 @@
 
 #include "n.h"
 #include "shell.h"
-#include "32.h"
 #include "string.h"
-#include "../x80cc-0.8.0-r1902-win64/lib/include/string.h"
 
 uchar cmd_copyFile(char* from, char* to) {
   char buf[16];
@@ -60,8 +58,9 @@ uchar cmd_copyFile(char* from, char* to) {
     // Прогресс
     //add32_16(&progress_x, fs_low);
     progress_x += fs_low;
-    while(progress_i < 40 && cmp32_32(&progress_x, &progress_step) != 1) {
-      sub32_32(&progress_x, &progress_step);
+    while(progress_i < 40 && /*cmp32_32(&progress_x, &progress_step) != 1*/ progress_x > progress_step) {
+      //sub32_32(&progress_x, &progress_step);
+			progress_x -= progress_step;
       drawWindowText(progress_i, 3, "\x17");
       ++progress_i;
     }
